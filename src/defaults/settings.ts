@@ -114,6 +114,9 @@ export const DEFAULT_SETTINGS: SettingsState = {
   tabUpdDelay: 150,
   forceUpdTooltip: false,
 
+  // When closing duplicate tabs, keep the newest one instead of the oldest
+  dedupKeepNewest: true,
+
   // New tab position
   moveNewTabPin: 'start',
   moveNewTabParent: 'last_child',
@@ -349,7 +352,7 @@ export const SETTINGS_OPTIONS = {
   snapLimitUnit: ['snap', 'kb', 'day'],
   moveNewTabPin: ['start', 'end'],
   moveNewTabParent: [
-    'before', 'sibling', 'first_child', 'last_child', 'start', 'end', 'default', 'none'
+    'before', 'sibling', 'first_child', 'last_child', 'after_last_sibling', 'start', 'end', 'default', 'none'
   ],
   moveNewTab: ['start', 'end', 'before', 'after', 'after_last_sibling', 'first_child', 'last_child', 'none'],
   moveNewTabActivePin: ['start', 'end'],

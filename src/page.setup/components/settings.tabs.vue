@@ -17,6 +17,12 @@ section(ref="el")
     :default="DEFAULT_SETTINGS.tabsRmUndoNote"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
+    label="settings.dedup_keep_newest"
+    dbg="dedupKeepNewest"
+    v-model:value="Settings.state.dedupKeepNewest"
+    :default="DEFAULT_SETTINGS.dedupKeepNewest"
+    @update:value="Settings.saveDebounced(150)")
+  ToggleField(
     label="settings.activate_last_tab_on_panel_switching"
     dbg="activateLastTabOnPanelSwitching"
     :value="Settings.state.activateLastTabOnPanelSwitching"

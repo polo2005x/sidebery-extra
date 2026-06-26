@@ -1327,10 +1327,13 @@ export function findAncestorId(tabId: ID, cb: (ancestorId: ID) => boolean): ID |
 export function dedupeTabs(tabIds: ID[]): void {
   if (!tabIds || !tabIds.length) return
 
+  // Keep the newest duplicate (iterate in reverse) or the oldest (forward)
+  const keepNewest = Settings.state.dedupKeepNewest
+  const len = tabIds.length
   const urls: string[] = []
   const toRemove = []
-  for (let i = tabIds.length - 1; i >= 0; i--) {
-    const tab = Tabs.byId[tabIds[i]]
+  for (let n = 0; n < len; n++) {
+    const tab = Tabs.byId[tabIds[keepNewest ? len - 1 - n : n]]
     if (!tab) return
 
     if (urls.includes(tab.url)) toRemove.push(tab.id)

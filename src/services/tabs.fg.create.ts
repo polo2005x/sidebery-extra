@@ -765,6 +765,19 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
         return index
       }
     }
+    if (Settings.state.moveNewTabParent === 'after_last_sibling' && !autoGroupped) {
+      if (Settings.state.tabsTree) {
+        // Skip the parent's subtree and all of its following siblings
+        let index = parent.index + 1
+        for (; index < nextIndex; index++) {
+          if (Tabs.list[index].lvl < parent.lvl) break
+        }
+        return index
+      } else {
+        // Flat list: all tabs share the same level, so the last sibling is the panel's end
+        return nextIndex
+      }
+    }
     if (Settings.state.moveNewTabParent === 'start' && !autoGroupped) return startIndex
     if (Settings.state.moveNewTabParent === 'end' && !autoGroupped) return nextIndex
     if (Settings.state.moveNewTabParent === 'default' && !autoGroupped) return fallbackIndex
@@ -872,6 +885,8 @@ export function getParentForNewTab(panel: Panel, conf?: ParentForNewTabConf): ID
     if (Settings.state.moveNewTabParent === 'sibling') return parent.parentId
     if (Settings.state.moveNewTabParent === 'first_child') return openerTabId
     if (Settings.state.moveNewTabParent === 'last_child') return openerTabId
+    // Placed at the parent's level, so it becomes a sibling of the parent
+    if (Settings.state.moveNewTabParent === 'after_last_sibling') return parent.parentId
     if (Settings.state.moveNewTabParent === 'start') return
     if (Settings.state.moveNewTabParent === 'end') return
     // Find appropriate parent for the unknown (not controlled by Sidebery) index
@@ -915,6 +930,7 @@ export function getParentForNewTab(panel: Panel, conf?: ParentForNewTabConf): ID
   if (activeTab && activeTab.panelId === panel.id && !activeTab.pinned) {
     if (moveNewTabSetting === 'before') return activeTab.parentId
     else if (moveNewTabSetting === 'after') return activeTab.parentId
+    else if (moveNewTabSetting === 'after_last_sibling') return activeTab.parentId
     else if (moveNewTabSetting === 'first_child') return activeTab.id
     else if (moveNewTabSetting === 'last_child') return activeTab.id
   }

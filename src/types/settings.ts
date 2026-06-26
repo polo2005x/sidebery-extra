@@ -112,6 +112,9 @@ export interface SettingsState {
   tabUpdDelay: number
   forceUpdTooltip: boolean
 
+  // Duplicate tabs
+  dedupKeepNewest: boolean
+
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]
   moveNewTabParent: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]
