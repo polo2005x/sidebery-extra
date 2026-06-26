@@ -7,7 +7,7 @@ updated when adding features — it makes pulling upstream updates much easier.
 - **What:** The "Deduplicate" action normally keeps the oldest copy of a duplicate
   URL and closes the rest. A new setting reverses the tab order so the newest copy
   is kept instead. Off by default (matches upstream).
-- **Setting:** Settings → Tabs → "Reverse tab order for Deduplicate" (`dedupKeepNewest`).
+- **Setting:** Settings → Tabs → "Reverse tab priority for 'Close duplicate tabs'" (`dedupKeepNewest`).
 - **Files:** `src/services/tabs.fg.ts` (`dedupeTabs`), `src/defaults/settings.ts`,
   `src/types/settings.ts`, `src/page.setup/components/settings.tabs.vue`,
   `src/_locales/dict.setup-page.ts`.
