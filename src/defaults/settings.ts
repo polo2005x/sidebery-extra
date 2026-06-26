@@ -351,7 +351,7 @@ export const SETTINGS_OPTIONS = {
   moveNewTabParent: [
     'before', 'sibling', 'first_child', 'last_child', 'start', 'end', 'default', 'none'
   ],
-  moveNewTab: ['start', 'end', 'before', 'after', 'first_child', 'last_child', 'none'],
+  moveNewTab: ['start', 'end', 'before', 'after', 'after_last_sibling', 'first_child', 'last_child', 'none'],
   moveNewTabActivePin: ['start', 'end'],
   warnOnMultiTabClose: ['any', 'collapsed', 'none'],
   warnOnMultiBookmarkDelete: ['any', 'collapsed', 'none'],

@@ -1329,8 +1329,8 @@ export function dedupeTabs(tabIds: ID[]): void {
 
   const urls: string[] = []
   const toRemove = []
-  for (const id of tabIds) {
-    const tab = Tabs.byId[id]
+  for (let i = tabIds.length - 1; i >= 0; i--) {
+    const tab = Tabs.byId[tabIds[i]]
     if (!tab) return
 
     if (urls.includes(tab.url)) toRemove.push(tab.id)

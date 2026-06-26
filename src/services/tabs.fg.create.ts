@@ -803,6 +803,21 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
       return index
     }
   }
+  if (moveNewTabSetting === 'after_last_sibling') {
+    if (!activeTab || activeTab.panelId !== panel.id) {
+      return nextIndex
+    } else if (activeTab.pinned) {
+      if (moveNewTabActivePinSetting === 'end') return nextIndex
+      return startIndex
+    } else {
+      // Scan forward past the active tab's own subtree and all following siblings
+      let index = activeTab.index + 1
+      for (; index < nextIndex; index++) {
+        if (Tabs.list[index].lvl < activeTab.lvl) break
+      }
+      return index
+    }
+  }
   if (moveNewTabSetting === 'first_child') {
     if (!activeTab || activeTab.panelId !== panel.id) {
       return nextIndex
