@@ -217,6 +217,16 @@ section(ref="el")
       :folded="true"
       @update:value="Settings.saveDebounced(150)")
     .sub-fields
+      SelectField(
+        label="settings.move_new_tab_parent_limited"
+        optLabel="settings.move_new_tab_parent_"
+        dbg="moveNewTabParentLimited"
+        :inactive="!Settings.state.tabsTree || Settings.state.tabsTreeLimit === 'none'"
+        v-model:value="Settings.state.moveNewTabParentLimited"
+        :default="DEFAULT_SETTINGS.moveNewTabParentLimited"
+        :opts="Settings.getOpts('moveNewTabParent')"
+        :folded="true"
+        @update:value="Settings.saveDebounced(150)")
       ToggleField(
         v-if="Settings.state.moveNewTabParent === 'default' && Settings.state.tabsTree"
         label="settings.move_new_tab_parent_indent"

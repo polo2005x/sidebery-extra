@@ -711,6 +711,24 @@ interface IndexForNewTabConf {
 }
 
 /**
+ * Get the effective "opened from another tab" placement setting.
+ * When the opener tab is at the tree depth limit, an alternative rule may apply
+ * so the deepest tabs can be placed differently (e.g. at the bottom of the group)
+ * while shallower tabs keep opening as children.
+ */
+function getParentPlacementSetting(parent: Tab): typeof Settings.state.moveNewTabParent {
+  const treeLimit = Settings.state.tabsTreeLimit
+  if (
+    typeof treeLimit === 'number' &&
+    parent.lvl >= treeLimit &&
+    Settings.state.moveNewTabParentLimited !== 'default'
+  ) {
+    return Settings.state.moveNewTabParentLimited
+  }
+  return Settings.state.moveNewTabParent
+}
+
+/**
  * Find and return index for new tab.
  */
 export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): number {
@@ -737,13 +755,11 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
 
   // Place new tab opened from another tab
   if (parent && !parent.pinned && parent.panelId === panel.id) {
-    if (Settings.state.moveNewTabParent === 'before' && !autoGroupped) return parent.index
-    if (Settings.state.moveNewTabParent === 'first_child') return parent.index + 1
-    if (
-      Settings.state.moveNewTabParent === 'sibling' ||
-      Settings.state.moveNewTabParent === 'last_child' ||
-      autoGroupped
-    ) {
+    const parentSetting = getParentPlacementSetting(parent)
+
+    if (parentSetting === 'before' && !autoGroupped) return parent.index
+    if (parentSetting === 'first_child') return parent.index + 1
+    if (parentSetting === 'sibling' || parentSetting === 'last_child' || autoGroupped) {
       if (Settings.state.tabsTree) {
         // Use levels to find the end of branch
         let t
@@ -765,7 +781,7 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
         return index
       }
     }
-    if (Settings.state.moveNewTabParent === 'after_last_sibling' && !autoGroupped) {
+    if (parentSetting === 'after_last_sibling' && !autoGroupped) {
       if (Settings.state.tabsTree) {
         // Skip the parent's subtree and all of its following siblings
         let index = parent.index + 1
@@ -778,9 +794,9 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
         return nextIndex
       }
     }
-    if (Settings.state.moveNewTabParent === 'start' && !autoGroupped) return startIndex
-    if (Settings.state.moveNewTabParent === 'end' && !autoGroupped) return nextIndex
-    if (Settings.state.moveNewTabParent === 'default' && !autoGroupped) return fallbackIndex
+    if (parentSetting === 'start' && !autoGroupped) return startIndex
+    if (parentSetting === 'end' && !autoGroupped) return nextIndex
+    if (parentSetting === 'default' && !autoGroupped) return fallbackIndex
   }
 
   // Place new tab (for the other cases)
@@ -881,16 +897,18 @@ export function getParentForNewTab(panel: Panel, conf?: ParentForNewTabConf): ID
 
   // Place new tab opened from another tab
   if (parent && !parent.pinned && parent.panelId === panel.id) {
-    if (Settings.state.moveNewTabParent === 'before') return parent.parentId
-    if (Settings.state.moveNewTabParent === 'sibling') return parent.parentId
-    if (Settings.state.moveNewTabParent === 'first_child') return openerTabId
-    if (Settings.state.moveNewTabParent === 'last_child') return openerTabId
+    const parentSetting = getParentPlacementSetting(parent)
+
+    if (parentSetting === 'before') return parent.parentId
+    if (parentSetting === 'sibling') return parent.parentId
+    if (parentSetting === 'first_child') return openerTabId
+    if (parentSetting === 'last_child') return openerTabId
     // Placed at the parent's level, so it becomes a sibling of the parent
-    if (Settings.state.moveNewTabParent === 'after_last_sibling') return parent.parentId
-    if (Settings.state.moveNewTabParent === 'start') return
-    if (Settings.state.moveNewTabParent === 'end') return
+    if (parentSetting === 'after_last_sibling') return parent.parentId
+    if (parentSetting === 'start') return
+    if (parentSetting === 'end') return
     // Find appropriate parent for the unknown (not controlled by Sidebery) index
-    if (Settings.state.moveNewTabParent === 'default') {
+    if (parentSetting === 'default') {
       const prevTab = conf?.index ? Tabs.list[conf.index - 1] : undefined
       const prevIsSiblingToParent = prevTab !== parent && prevTab?.parentId === parent.parentId
       const nextTab = conf?.index ? Tabs.list[conf.index] : undefined

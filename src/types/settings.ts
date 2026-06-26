@@ -118,6 +118,7 @@ export interface SettingsState {
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]
   moveNewTabParent: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]
+  moveNewTabParentLimited: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]
   moveNewTabParentIndent: boolean
   moveNewTabParentActPanel: boolean
   moveNewTabButton: (typeof SETTINGS_OPTIONS.moveNewTab)[number]
