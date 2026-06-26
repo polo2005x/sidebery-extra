@@ -115,7 +115,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   forceUpdTooltip: false,
 
   // When closing duplicate tabs, keep the newest one instead of the oldest
-  dedupKeepNewest: true,
+  dedupKeepNewest: false,
 
   // New tab position
   moveNewTabPin: 'start',
