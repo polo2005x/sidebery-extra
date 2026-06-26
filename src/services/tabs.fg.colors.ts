@@ -118,3 +118,27 @@ export function setCustomColor(tabIds: ID[], color: string): void {
 
   Tabs.cacheTabsData()
 }
+
+/**
+ * Toggle the "shared parent" flag on the given tabs. A shared-parent tab
+ * funnels newly opened tabs to become a child of the last shared parent at
+ * its level (see Tabs.getIndexForNewTab / getParentForNewTab).
+ */
+export function toggleSharedParent(tabIds: ID[]): void {
+  if (!tabIds.length) return
+
+  // Use the first tab's state to decide the target value for all selected tabs
+  const value = !Tabs.byId[tabIds[0]]?.sharedParent
+
+  for (const id of tabIds) {
+    const tab = Tabs.byId[id]
+    if (!tab) continue
+
+    tab.sharedParent = value || undefined
+    tab.reactive.sharedParent = value
+
+    Tabs.saveTabData(tab.id)
+  }
+
+  Tabs.cacheTabsData()
+}

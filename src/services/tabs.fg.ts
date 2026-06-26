@@ -152,6 +152,7 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
       flash: false,
       branchColor: null,
       color: null,
+      sharedParent: tab.sharedParent ?? false,
       isGroup: tab.isGroup,
     }
   }
@@ -504,6 +505,7 @@ function restoreTab(
     tab.reactive.folded = tab.folded = !!props.folded
     if (props.customTitle) tab.customTitle = props.customTitle
     if (props.customColor) tab.reactive.customColor = tab.customColor = props.customColor
+    if (props.sharedParent) tab.reactive.sharedParent = tab.sharedParent = props.sharedParent
   } else {
     Logs.warn(`Tabs.restoreTab: no props for: "${tab.id} i${tab.index} url${tab.url}"`)
   }
@@ -730,6 +732,7 @@ export function cacheTabsData(delay = 300): void {
       if (tab.cookieStoreId !== D.CONTAINER_ID) info.ctx = tab.cookieStoreId
       if (tab.customTitle) info.customTitle = tab.customTitle
       if (tab.customColor) info.customColor = tab.customColor
+      if (tab.sharedParent) info.sharedParent = tab.sharedParent
       data.push(info)
     }
 
@@ -787,7 +790,8 @@ function _saveTabData(tabId: ID, forced?: boolean): void {
       data.folded === tab.folded &&
       data.panelId === tab.panelId &&
       data.customColor === tab.customColor &&
-      data.customTitle === tab.customTitle
+      data.customTitle === tab.customTitle &&
+      data.sharedParent === tab.sharedParent
     ) {
       return
     }
@@ -810,6 +814,8 @@ function _saveTabData(tabId: ID, forced?: boolean): void {
   else delete data.customTitle
   if (tab.customColor) data.customColor = tab.customColor
   else delete data.customColor
+  if (tab.sharedParent) data.sharedParent = tab.sharedParent
+  else delete data.sharedParent
 
   // Logs.info('Tabs.saveTabData: Saving...', tabId, { ...data })
   browser.sessions.setTabValue(tabId, 'data', data).catch(err => {

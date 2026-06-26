@@ -343,6 +343,19 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  toggleSharedParent: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const isShared = !!firstTab?.sharedParent
+    const option: MenuOption = {
+      label: translate(isShared ? 'menu.tab.unset_shared_parent' : 'menu.tab.set_shared_parent'),
+      icon: 'icon_group_tabs',
+      onClick: () => Tabs.toggleSharedParent(Selection.ids()),
+    }
+    if (!Settings.state.tabsTree || firstTab?.pinned) option.inactive = true
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
   clearCookies: () => {
     return {
       label: translate('menu.tab.clear_cookies'),

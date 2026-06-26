@@ -183,6 +183,7 @@ const TABS_MENU_OPTS: Record<string, string> = {
   colorizeTab: 'menu.tab.colorize_colors',
   group: 'menu.tab.group',
   flatten: 'menu.tab.flatten',
+  toggleSharedParent: 'menu.tab.set_shared_parent',
   urlConf: 'menu.tab.url_conf',
   syncTabs: 'menu.tab.sync',
   sortTabsByTitleAscending: 'menu.tab.sort_by_title_asc',

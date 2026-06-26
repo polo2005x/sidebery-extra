@@ -19,6 +19,7 @@
   :data-color="tab.reactive.containerColor"
   :data-colorized="!!tabColor"
   :data-unread="tab.reactive.unread"
+  :data-shared-parent="tab.reactive.sharedParent"
   :data-edit="tab.reactive.customTitleEdit"
   :title="tab.reactive.tooltip"
   :draggable="!tab.reactive.customTitleEdit"
@@ -33,6 +34,7 @@
   .body
     .color-layer(v-if="tabColor" :style="{ '--tab-color': tabColor }")
     .flash-fx(ref="flashFxEl")
+    .shared-parent-mark(v-if="tab.reactive.sharedParent")
     .unread-mark(v-if="tab.reactive.unread")
     .fav(@dragstart.stop.prevent)
       img.fav-icon(ref="favImgEl" @error="onError" draggable="false")

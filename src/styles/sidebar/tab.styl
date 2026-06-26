@@ -681,6 +681,23 @@
     transform-origin: 0 0
     background-color: var(--tabs-normal-fg)
 
+// ---
+// -- Shared parent marker
+// -
+.Tab .shared-parent-mark
+  position: absolute
+  z-index: 2
+  top: 50%
+  left: 1px
+  width: 3px
+  height: 60%
+  border-radius: 3px
+  background-color: var(--tabs-activated-fg)
+  transform: translateY(-50%)
+  pointer-events: none
+.Tab[data-active="true"] .shared-parent-mark
+  background-color: var(--tabs-activated-fg)
+
 
 // ---
 // -- Keyframes

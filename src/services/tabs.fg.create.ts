@@ -711,6 +711,24 @@ interface IndexForNewTabConf {
 }
 
 /**
+ * For a "shared parent" opener, find the last shared-parent tab among its
+ * siblings at the same level. New tabs become children of this tab, so tabs
+ * opened from any tab in a shared-parent set collect under the last one.
+ */
+function getLastSharedSibling(opener: Tab): Tab {
+  let last = opener
+  for (let i = opener.index + 1; i < Tabs.list.length; i++) {
+    const t = Tabs.list[i]
+    if (t.lvl < opener.lvl) break // left the parent's branch
+    if (t.lvl === opener.lvl) {
+      if (t.parentId !== opener.parentId) break // different sibling group
+      if (t.sharedParent) last = t
+    }
+  }
+  return last
+}
+
+/**
  * Get the effective "opened from another tab" placement setting.
  * When the opener tab is at the tree depth limit, an alternative rule may apply
  * so the deepest tabs can be placed differently (e.g. at the bottom of the group)
@@ -755,6 +773,17 @@ export function getIndexForNewTab(panel: TabsPanel, conf?: IndexForNewTabConf): 
 
   // Place new tab opened from another tab
   if (parent && !parent.pinned && parent.panelId === panel.id) {
+    // Shared parent: place as the last child of the last shared parent at this level
+    if (parent.sharedParent && !autoGroupped) {
+      const host = getLastSharedSibling(parent)
+      let index = host.index + 1
+      for (let t; index < Tabs.list.length; index++) {
+        t = Tabs.list[index]
+        if (t.lvl <= host.lvl) break
+      }
+      return index
+    }
+
     const parentSetting = getParentPlacementSetting(parent)
 
     if (parentSetting === 'before' && !autoGroupped) return parent.index
@@ -897,6 +926,9 @@ export function getParentForNewTab(panel: Panel, conf?: ParentForNewTabConf): ID
 
   // Place new tab opened from another tab
   if (parent && !parent.pinned && parent.panelId === panel.id) {
+    // Shared parent: new tab becomes a child of the last shared parent at this level
+    if (parent.sharedParent) return getLastSharedSibling(parent).id
+
     const parentSetting = getParentPlacementSetting(parent)
 
     if (parentSetting === 'before') return parent.parentId
