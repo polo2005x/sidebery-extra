@@ -558,6 +558,27 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  dedupeBranchTabs: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const option: MenuOption = {
+      label: translate('menu.tab.dedupe_branch'),
+      icon: 'icon_dedup_tabs',
+      onClick: () => {
+        if (!firstTab) return
+        // Deduplicate the nested tabs of the group/parent (excluding the tab
+        // itself). Respects the "reverse" toggle via Tabs.dedupeTabs (dedupKeepNewest).
+        const nested = Tabs.getBranch(firstTab, false)
+        Tabs.dedupeTabs(nested.map(t => t.id))
+      },
+    }
+    // Only meaningful for a group or parent tab that actually has nested tabs
+    if (!firstTab || (!firstTab.isGroup && !firstTab.isParent) || firstTab.pinned) {
+      option.inactive = true
+    }
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
   sortTabsByTitleAscending: () => {
     const option: MenuOption = {
       label: translate('menu.tab.sort_by_title_asc'),

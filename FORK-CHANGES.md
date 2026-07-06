@@ -8,9 +8,14 @@ updated when adding features — it makes pulling upstream updates much easier.
   URL and closes the rest. A new setting reverses the tab order so the newest copy
   is kept instead. Off by default (matches upstream).
 - **Setting:** Settings → Tabs → "Reverse tab priority for 'Close duplicate tabs'" (`dedupKeepNewest`).
-- **Files:** `src/services/tabs.fg.ts` (`dedupeTabs`), `src/defaults/settings.ts`,
+- **Group dedupe:** right-click a group/parent tab → "Close duplicate tabs in group"
+  deduplicates only that tab's nested tabs (branch), and respects the reverse toggle.
+  Context-menu item `dedupeBranchTabs`; must be enabled via the Context Menu Editor.
+- **Files:** `src/services/tabs.fg.ts` (`dedupeTabs`, `getBranch`), `src/defaults/settings.ts`,
   `src/types/settings.ts`, `src/page.setup/components/settings.tabs.vue`,
-  `src/_locales/dict.setup-page.ts`.
+  `src/_locales/dict.setup-page.ts`; menu in `src/services/menu.fg.options.tabs.ts`,
+  `src/defaults/menu.ts`, `src/page.setup/components/menu-editor.vue`,
+  `src/_locales/dict.common.ts`.
 
 ## 2. New-tab position: "after last tab at same level"
 - **What:** A new position option for tabs opened from another tab / the New Tab

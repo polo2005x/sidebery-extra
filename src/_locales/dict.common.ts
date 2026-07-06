@@ -1988,6 +1988,17 @@ export const commonTranslations: Translations = {
     zh_TW: '樹序列化',
     ja: 'フラット化',
   },
+  'menu.tab.dedupe_branch': {
+    en: 'Close duplicate tabs in group',
+    de: 'Doppelte Tabs in Gruppe schließen',
+    fr: 'Fermer les onglets dupliqués du groupe',
+    hu: 'Másodpéldány lapok bezárása a csoportban',
+    pl: 'Zamknij zduplikowane karty w grupie',
+    ru: 'Закрыть дубликаты в группе',
+    zh_CN: '关闭组内重复的标签页',
+    zh_TW: '關閉群組內重複的分頁',
+    ja: 'グループ内の重複タブを閉じる',
+  },
   'menu.tab.set_shared_parent': {
     en: 'Mark as shared parent',
     de: 'Als gemeinsames Elternelement markieren',

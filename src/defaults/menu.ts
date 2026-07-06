@@ -44,6 +44,7 @@ export const TABS_MENU: MenuConf = [
   'group',
   'flatten',
   'toggleSharedParent',
+  'dedupeBranchTabs',
   'separator-4',
   'urlConf',
   'close',

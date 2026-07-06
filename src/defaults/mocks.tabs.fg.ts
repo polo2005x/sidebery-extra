@@ -34,6 +34,7 @@ export class MTab implements Tab {
   reopenInContainer?: string | undefined
   customTitle?: string | undefined
   customColor?: string | undefined
+  sharedParent?: boolean | undefined
   moving?: boolean | undefined
   previewImg?: string | undefined
   removing?: boolean | undefined
@@ -63,8 +64,8 @@ export class MTab implements Tab {
     color: null,
     branchColor: null,
     customColor: null,
+    sharedParent: false,
     isGroup: false,
-    preview: false,
   }
   sessionData?: TabSessionData | undefined
   titleEl?: HTMLElement | undefined
@@ -106,7 +107,7 @@ export class MTab implements Tab {
     if (ptab) {
       for (const k of Object.keys(ptab) as (keyof Tab)[]) {
         if (k === 'reactive') continue
-        if (ptab[k]) (this[k] as any) = ptab[k]
+        if (ptab[k]) (this as any)[k] = ptab[k]
       }
     }
     if (ptab?.reactive) {
