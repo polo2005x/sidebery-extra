@@ -11,6 +11,9 @@ updated when adding features — it makes pulling upstream updates much easier.
 - **Group dedupe:** right-click a group/parent tab → "Close duplicate tabs in group"
   deduplicates only that tab's nested tabs (branch), and respects the reverse toggle.
   Context-menu item `dedupeBranchTabs`; must be enabled via the Context Menu Editor.
+- **Subgroup dedupe:** "Close duplicate tabs in subgroups" (`dedupeSubgroupTabs`) does the
+  same but only closes duplicates that share the same parent (per subgroup), not across
+  the whole branch. Separate context-menu item; also respects the reverse toggle.
 - **Files:** `src/services/tabs.fg.ts` (`dedupeTabs`, `getBranch`), `src/defaults/settings.ts`,
   `src/types/settings.ts`, `src/page.setup/components/settings.tabs.vue`,
   `src/_locales/dict.setup-page.ts`; menu in `src/services/menu.fg.options.tabs.ts`,

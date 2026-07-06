@@ -1999,6 +1999,17 @@ export const commonTranslations: Translations = {
     zh_TW: '關閉群組內重複的分頁',
     ja: 'グループ内の重複タブを閉じる',
   },
+  'menu.tab.dedupe_subgroup': {
+    en: 'Close duplicate tabs in subgroups',
+    de: 'Doppelte Tabs in Untergruppen schließen',
+    fr: 'Fermer les onglets dupliqués dans les sous-groupes',
+    hu: 'Másodpéldány lapok bezárása az alcsoportokban',
+    pl: 'Zamknij zduplikowane karty w podgrupach',
+    ru: 'Закрыть дубликаты в подгруппах',
+    zh_CN: '关闭子组内重复的标签页',
+    zh_TW: '關閉子群組內重複的分頁',
+    ja: 'サブグループ内の重複タブを閉じる',
+  },
   'menu.tab.set_shared_parent': {
     en: 'Mark as shared parent',
     de: 'Als gemeinsames Elternelement markieren',

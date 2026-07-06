@@ -579,6 +579,34 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  dedupeSubgroupTabs: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const option: MenuOption = {
+      label: translate('menu.tab.dedupe_subgroup'),
+      icon: 'icon_dedup_tabs',
+      onClick: () => {
+        if (!firstTab) return
+        // Like dedupeBranchTabs, but only closes duplicates that share the same
+        // parent (per subgroup), not across the whole branch. Each subgroup goes
+        // through Tabs.dedupeTabs, so the "reverse" toggle (dedupKeepNewest) applies.
+        const nested = Tabs.getBranch(firstTab, false)
+        const bySubgroup = new Map<ID, ID[]>()
+        for (const t of nested) {
+          const ids = bySubgroup.get(t.parentId)
+          if (ids) ids.push(t.id)
+          else bySubgroup.set(t.parentId, [t.id])
+        }
+        for (const ids of bySubgroup.values()) Tabs.dedupeTabs(ids)
+      },
+    }
+    // Only meaningful for a group or parent tab that actually has nested tabs
+    if (!firstTab || (!firstTab.isGroup && !firstTab.isParent) || firstTab.pinned) {
+      option.inactive = true
+    }
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
   sortTabsByTitleAscending: () => {
     const option: MenuOption = {
       label: translate('menu.tab.sort_by_title_asc'),
