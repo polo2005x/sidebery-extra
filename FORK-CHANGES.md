@@ -54,3 +54,15 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/page.setup/components/menu-editor.vue`; marker in
   `src/sidebar/components/tab.vue` + `src/styles/sidebar/tab.styl`; labels in
   `src/_locales/dict.common.ts`.
+
+## 5. Extra delay between reload batches (bulk reload)
+- **What:** Sidebery already reloads tabs in batches of `tabsReloadLimit` (default 5). This
+  adds an optional extra pause between batches so large bulk reloads are gentler on
+  rate-limited / anti-bot sites. Off by default; only applies above a tab-count threshold.
+- **Settings:** Settings → Tabs (under the reload limit): "Extra delay between batches on
+  bulk reload" (`tabsReloadBatchDelay`) with sub-options — wait after every N batches
+  (`tabsReloadBatchDelayEvery`), delay duration in ms (`tabsReloadBatchDelayMs`), and a
+  minimum tab count to activate (`tabsReloadBatchDelayMin`).
+- **Files:** `src/services/tabs.fg.ts` (`reloadTabs` interval cooldown),
+  `src/defaults/settings.ts`, `src/types/settings.ts`,
+  `src/page.setup/components/settings.tabs.vue`, `src/_locales/dict.setup-page.ts`.

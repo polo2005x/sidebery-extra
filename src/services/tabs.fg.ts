@@ -1045,11 +1045,30 @@ export function reloadTabs(tabIds: ID[] = []): void {
 
   RELOADING_QUEUE.push(...tabs)
   if (RELOADING_QUEUE.length) {
+    // Optional extra pause between batches (gentler on rate-limited / anti-bot sites).
+    // Only kicks in for bulk reloads above the configured threshold.
+    const totalToReload = reloadingTabs.length + RELOADING_QUEUE.length
+    const batchDelayOn =
+      Settings.state.tabsReloadBatchDelay &&
+      Settings.state.tabsReloadBatchDelayMs > 0 &&
+      totalToReload > Settings.state.tabsReloadBatchDelayMin
+    // Pause after every N batches, where a batch is one full reload-limit worth of tabs
+    const batchStep = Math.max(
+      1,
+      Settings.state.tabsReloadLimit * Math.max(1, Settings.state.tabsReloadBatchDelayEvery)
+    )
+    let dispatched = reloadingTabs.length
+    let nextPauseAt = batchStep
+    let cooldownUntil = 0
+
     const interval = setInterval(() => {
       if (!RELOADING_QUEUE.length) {
         if (progressNotification) Notifications.finishProgress(progressNotification)
         return clearInterval(interval)
       }
+
+      // While in an inter-batch cooldown, skip refilling this tick
+      if (batchDelayOn && Date.now() < cooldownUntil) return
 
       const loading = reloadingTabs.filter(tab => {
         if (tab.reloadingChecks === undefined) return false
@@ -1061,6 +1080,14 @@ export function reloadTabs(tabIds: ID[] = []): void {
         if (!nextTab) break
         reloadingTabs.push(nextTab)
         reloadTab(nextTab)
+        dispatched++
+
+        // After every N batches, wait the configured delay before dispatching more
+        if (batchDelayOn && dispatched >= nextPauseAt) {
+          nextPauseAt += batchStep
+          cooldownUntil = Date.now() + Settings.state.tabsReloadBatchDelayMs
+          break
+        }
       }
 
       if (progressNotification) {

@@ -137,6 +137,38 @@ section(ref="el")
       :inactive="!(Settings.state.tabsReloadLimit > 0)"
       @update:value="Settings.saveDebounced(150)")
   ToggleField(
+    label="settings.tabs_reload_batch_delay"
+    dbg="tabsReloadBatchDelay"
+    v-model:value="Settings.state.tabsReloadBatchDelay"
+    :default="DEFAULT_SETTINGS.tabsReloadBatchDelay"
+    :inactive="!(Settings.state.tabsReloadLimit > 0)"
+    @update:value="Settings.saveDebounced(150)")
+  .sub-fields
+    CountField.-inline(
+      label="settings.tabs_reload_batch_delay_every"
+      dbg="tabsReloadBatchDelayEvery"
+      v-model:value="Settings.state.tabsReloadBatchDelayEvery"
+      :default="DEFAULT_SETTINGS.tabsReloadBatchDelayEvery"
+      :min="1"
+      :inactive="!Settings.state.tabsReloadBatchDelay"
+      @update:value="Settings.saveDebounced(500)")
+    CountField.-inline(
+      label="settings.tabs_reload_batch_delay_ms"
+      dbg="tabsReloadBatchDelayMs"
+      v-model:value="Settings.state.tabsReloadBatchDelayMs"
+      :default="DEFAULT_SETTINGS.tabsReloadBatchDelayMs"
+      :min="0"
+      :inactive="!Settings.state.tabsReloadBatchDelay"
+      @update:value="Settings.saveDebounced(500)")
+    CountField.-inline(
+      label="settings.tabs_reload_batch_delay_min"
+      dbg="tabsReloadBatchDelayMin"
+      v-model:value="Settings.state.tabsReloadBatchDelayMin"
+      :default="DEFAULT_SETTINGS.tabsReloadBatchDelayMin"
+      :min="0"
+      :inactive="!Settings.state.tabsReloadBatchDelay"
+      @update:value="Settings.saveDebounced(500)")
+  ToggleField(
     label="settings.tabs_panel_switch_act_move"
     dbg="tabsPanelSwitchActMove"
     :value="Settings.state.tabsPanelSwitchActMove"

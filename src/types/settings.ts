@@ -99,6 +99,10 @@ export interface SettingsState {
   tabsUpdateMarkFirst: boolean
   tabsReloadLimit: number
   tabsReloadLimitNotif: boolean
+  tabsReloadBatchDelay: boolean
+  tabsReloadBatchDelayEvery: number
+  tabsReloadBatchDelayMs: number
+  tabsReloadBatchDelayMin: number
   showNewTabBtns: boolean
   newTabBarPosition: (typeof SETTINGS_OPTIONS.newTabBarPosition)[number]
   tabsPanelSwitchActMove: boolean
