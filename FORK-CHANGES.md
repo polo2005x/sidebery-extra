@@ -55,14 +55,17 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/sidebar/components/tab.vue` + `src/styles/sidebar/tab.styl`; labels in
   `src/_locales/dict.common.ts`.
 
-## 5. Extra delay between reload batches (bulk reload)
-- **What:** Sidebery already reloads tabs in batches of `tabsReloadLimit` (default 5). This
-  adds an optional extra pause between batches so large bulk reloads are gentler on
-  rate-limited / anti-bot sites. Off by default; only applies above a tab-count threshold.
-- **Settings:** Settings → Tabs (under the reload limit): "Extra delay between batches on
-  bulk reload" (`tabsReloadBatchDelay`) with sub-options — wait after every N batches
-  (`tabsReloadBatchDelayEvery`), delay duration in ms (`tabsReloadBatchDelayMs`), and a
-  minimum tab count to activate (`tabsReloadBatchDelayMin`).
-- **Files:** `src/services/tabs.fg.ts` (`reloadTabs` interval cooldown),
+## 5. Per-site pacing on bulk reload
+- **What:** Sidebery reloads tabs with a global concurrency limit (`tabsReloadLimit`,
+  default 5). This adds optional **per-domain** pacing: after every N reloads of the same
+  site, that site cools down for a while, while other sites keep reloading. Gentler on
+  rate-limited / anti-bot sites. Off by default; only paces sites above a tab-count
+  threshold. `reloadTabs` was restructured to dispatch via a `fillSlots` helper that skips
+  domains currently cooling down (applies to the first batch too).
+- **Settings:** Settings → Tabs (under the reload limit): "Slow down bulk reloads per site"
+  (`tabsReloadBatchDelay`) with sub-options — pause after every N same-site reloads
+  (`tabsReloadBatchDelayEvery`), pause duration in ms (`tabsReloadBatchDelayMs`), and a
+  per-site minimum tab count to activate (`tabsReloadBatchDelayMin`).
+- **Files:** `src/services/tabs.fg.ts` (`reloadTabs`, `Utils.getDomainOf`),
   `src/defaults/settings.ts`, `src/types/settings.ts`,
   `src/page.setup/components/settings.tabs.vue`, `src/_locales/dict.setup-page.ts`.

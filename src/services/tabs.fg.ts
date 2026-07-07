@@ -1040,55 +1040,71 @@ export function reloadTabs(tabIds: ID[] = []): void {
     })
   }
 
-  const reloadingTabs = tabs.splice(0, Settings.state.tabsReloadLimit)
-  reloadingTabs.forEach(tab => reloadTab(tab))
-
   RELOADING_QUEUE.push(...tabs)
-  if (RELOADING_QUEUE.length) {
-    // Optional extra pause between batches (gentler on rate-limited / anti-bot sites).
-    // Only kicks in for bulk reloads above the configured threshold.
-    const totalToReload = reloadingTabs.length + RELOADING_QUEUE.length
-    const batchDelayOn =
-      Settings.state.tabsReloadBatchDelay &&
-      Settings.state.tabsReloadBatchDelayMs > 0 &&
-      totalToReload > Settings.state.tabsReloadBatchDelayMin
-    // Pause after every N batches, where a batch is one full reload-limit worth of tabs
-    const batchStep = Math.max(
-      1,
-      Settings.state.tabsReloadLimit * Math.max(1, Settings.state.tabsReloadBatchDelayEvery)
-    )
-    let dispatched = reloadingTabs.length
-    let nextPauseAt = batchStep
-    let cooldownUntil = 0
 
+  // Optional per-domain pacing (gentler on rate-limited / anti-bot sites): after every
+  // N reloads of the same domain, that domain cools down for a while, while other
+  // domains keep reloading. Only domains with more than the configured minimum number
+  // of tabs are paced. When off, behaviour matches upstream (plain concurrency limit).
+  const delayOn =
+    Settings.state.tabsReloadBatchDelay && Settings.state.tabsReloadBatchDelayMs > 0
+  const perDomainEvery = Math.max(1, Settings.state.tabsReloadBatchDelayEvery)
+  const perDomainMin = Settings.state.tabsReloadBatchDelayMin
+  const domainTotal = new Map<string, number>()
+  const domainCount = new Map<string, number>()
+  const domainCooldown = new Map<string, number>()
+  if (delayOn) {
+    for (const tab of RELOADING_QUEUE) {
+      const d = Utils.getDomainOf(tab.url)
+      domainTotal.set(d, (domainTotal.get(d) ?? 0) + 1)
+    }
+  }
+  const domainReady = (tab: T.Tab, now: number): boolean => {
+    if (!delayOn) return true
+    const d = Utils.getDomainOf(tab.url)
+    if ((domainTotal.get(d) ?? 0) <= perDomainMin) return true
+    const until = domainCooldown.get(d)
+    return until === undefined || now >= until
+  }
+  const noteDispatch = (tab: T.Tab, now: number): void => {
+    if (!delayOn) return
+    const d = Utils.getDomainOf(tab.url)
+    if ((domainTotal.get(d) ?? 0) <= perDomainMin) return
+    const c = (domainCount.get(d) ?? 0) + 1
+    domainCount.set(d, c)
+    if (c % perDomainEvery === 0) domainCooldown.set(d, now + Settings.state.tabsReloadBatchDelayMs)
+  }
+
+  // Dispatch as many queued tabs as the concurrency limit allows, skipping domains
+  // that are currently cooling down.
+  const reloadingTabs: T.Tab[] = []
+  const fillSlots = (): void => {
+    const now = Date.now()
+    const loading = reloadingTabs.filter(tab => {
+      if (tab.reloadingChecks === undefined) return false
+      return tab && tab.reloadingChecks++ <= MAX_CHECK_COUNT && tab.status === 'loading'
+    })
+    for (let i = Settings.state.tabsReloadLimit - loading.length; i-- > 0; ) {
+      const qi = delayOn ? RELOADING_QUEUE.findIndex(t => domainReady(t, now)) : 0
+      if (qi === -1) break // every remaining domain is cooling down; retry next tick
+      const nextTab = RELOADING_QUEUE.splice(qi, 1)[0]
+      if (!nextTab) break
+      reloadingTabs.push(nextTab)
+      reloadTab(nextTab)
+      noteDispatch(nextTab, now)
+    }
+  }
+
+  fillSlots()
+
+  if (RELOADING_QUEUE.length) {
     const interval = setInterval(() => {
       if (!RELOADING_QUEUE.length) {
         if (progressNotification) Notifications.finishProgress(progressNotification)
         return clearInterval(interval)
       }
 
-      // While in an inter-batch cooldown, skip refilling this tick
-      if (batchDelayOn && Date.now() < cooldownUntil) return
-
-      const loading = reloadingTabs.filter(tab => {
-        if (tab.reloadingChecks === undefined) return false
-        return tab && tab.reloadingChecks++ <= MAX_CHECK_COUNT && tab.status === 'loading'
-      })
-
-      for (let i = Settings.state.tabsReloadLimit - loading.length; i-- > 0; ) {
-        const nextTab = RELOADING_QUEUE.shift()
-        if (!nextTab) break
-        reloadingTabs.push(nextTab)
-        reloadTab(nextTab)
-        dispatched++
-
-        // After every N batches, wait the configured delay before dispatching more
-        if (batchDelayOn && dispatched >= nextPauseAt) {
-          nextPauseAt += batchStep
-          cooldownUntil = Date.now() + Settings.state.tabsReloadBatchDelayMs
-          break
-        }
-      }
+      fillSlots()
 
       if (progressNotification) {
         const all = RELOADING_QUEUE.length + reloadingTabs.length
