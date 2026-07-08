@@ -290,7 +290,8 @@ function applySearch(): void {
       const hay = `${tab.title}\n${tab.url}`
       match = matchers.every(re => re.test(hay))
     }
-    tab.el.classList.toggle('-search-hidden', !match)
+    // Inline style beats the stylesheet's per-layout .tab rules; '' restores default
+    tab.el.style.display = match ? '' : 'none'
     if (match) shown++
   }
 
