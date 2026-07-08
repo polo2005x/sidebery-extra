@@ -1489,5 +1489,71 @@
     "zh_CN": "搜索（支持正则）",
     "zh_TW": "搜尋（支援正規表達式）",
     "ja": "検索（正規表現対応）"
+  },
+  "group_sort_default": {
+    "en": "Default order",
+    "de": "Standardreihenfolge",
+    "fr": "Ordre par défaut",
+    "hu": "Alapértelmezett sorrend",
+    "pl": "Kolejność domyślna",
+    "ru": "Порядок по умолчанию",
+    "zh_CN": "默认顺序",
+    "zh_TW": "預設順序",
+    "ja": "デフォルト順"
+  },
+  "group_sort_reverse": {
+    "en": "Reverse order",
+    "de": "Umgekehrte Reihenfolge",
+    "fr": "Ordre inverse",
+    "hu": "Fordított sorrend",
+    "pl": "Odwrotna kolejność",
+    "ru": "Обратный порядок",
+    "zh_CN": "反向顺序",
+    "zh_TW": "反向順序",
+    "ja": "逆順"
+  },
+  "group_sort_domain": {
+    "en": "By domain",
+    "de": "Nach Domain",
+    "fr": "Par domaine",
+    "hu": "Domain szerint",
+    "pl": "Wg domeny",
+    "ru": "По домену",
+    "zh_CN": "按域名",
+    "zh_TW": "按網域",
+    "ja": "ドメイン順"
+  },
+  "group_sort_title": {
+    "en": "By title",
+    "de": "Nach Titel",
+    "fr": "Par titre",
+    "hu": "Cím szerint",
+    "pl": "Wg tytułu",
+    "ru": "По заголовку",
+    "zh_CN": "按标题",
+    "zh_TW": "按標題",
+    "ja": "タイトル順"
+  },
+  "group_sort_url": {
+    "en": "By URL",
+    "de": "Nach URL",
+    "fr": "Par URL",
+    "hu": "URL szerint",
+    "pl": "Wg adresu URL",
+    "ru": "По URL",
+    "zh_CN": "按网址",
+    "zh_TW": "按網址",
+    "ja": "URL順"
+  },
+  "group_sort_recent": {
+    "en": "Recently used",
+    "de": "Zuletzt verwendet",
+    "fr": "Récemment utilisés",
+    "hu": "Nemrég használt",
+    "pl": "Ostatnio używane",
+    "ru": "Недавно использованные",
+    "zh_CN": "最近使用",
+    "zh_TW": "最近使用",
+    "ja": "最近使用した順"
   }
 }

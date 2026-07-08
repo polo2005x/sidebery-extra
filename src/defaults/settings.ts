@@ -52,6 +52,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   // Group page
   groupLayout: 'grid',
   groupSearch: true,
+  groupSort: true,
 
   // Containers
   containersSortByName: false,

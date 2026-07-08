@@ -23,6 +23,12 @@ let searchQuery = ''
 let searchInputEl: HTMLInputElement | null = null
 let searchCountEl: HTMLElement | null = null
 
+const SORT_MODES = ['default', 'reverse', 'domain', 'title', 'url', 'recent'] as const
+type SortMode = (typeof SORT_MODES)[number]
+let sortEnabled = false
+let sortMode: SortMode = 'default'
+let sortSelectEl: HTMLSelectElement | null = null
+
 async function main() {
   try {
     parseUrl()
@@ -125,6 +131,7 @@ async function main() {
   createNewTabButton()
 
   if (initData.groupSearch) setupSearch()
+  if (initData.groupSort) setupSort()
 
   document.body.addEventListener('mousedown', e => {
     if (e.button === 2 && groupParentId !== undefined && groupParentId !== NOID) {
@@ -217,6 +224,7 @@ export function onGroupUpdMsg(upd: T.GroupUpdMsg) {
   else if (upd.updatedTabs) upd.updatedTabs.forEach(t => onTabUpdated(t))
   if (upd.removedTab !== undefined) onTabRemoved(upd.removedTab)
 
+  applySort()
   applySearch()
 }
 
@@ -296,6 +304,64 @@ function applySearch(): void {
   }
 
   if (searchCountEl) searchCountEl.textContent = query ? `${shown} / ${tabs.length}` : ''
+}
+
+/**
+ * Set up the group-page sort dropdown (optional; controlled by the groupSort setting)
+ */
+function setupSort(): void {
+  const boxEl = document.getElementById('sort_box')
+  sortSelectEl = document.getElementById('sort_select') as HTMLSelectElement | null
+  if (!boxEl || !sortSelectEl) return
+
+  sortEnabled = true
+  for (const mode of SORT_MODES) {
+    const optEl = document.createElement('option')
+    optEl.value = mode
+    optEl.textContent = getLabel('group_sort_' + mode)
+    sortSelectEl.appendChild(optEl)
+  }
+  sortSelectEl.value = sortMode
+  boxEl.style.display = ''
+
+  sortSelectEl.addEventListener('change', () => {
+    sortMode = (sortSelectEl?.value as SortMode) ?? 'default'
+    applySort()
+  })
+  sortSelectEl.addEventListener('mousedown', e => e.stopPropagation())
+}
+
+/**
+ * Reorder the displayed tab cards (view only; does not move the actual tabs)
+ */
+function applySort(): void {
+  if (!sortEnabled || !tabsBoxEl || !newTabEl) return
+
+  const sorted = tabs.slice()
+  switch (sortMode) {
+    case 'reverse':
+      sorted.reverse()
+      break
+    case 'domain':
+      sorted.sort((a, b) => getDomainOf(a.url).localeCompare(getDomainOf(b.url)) || a.index - b.index)
+      break
+    case 'title':
+      sorted.sort((a, b) => a.title.localeCompare(b.title))
+      break
+    case 'url':
+      sorted.sort((a, b) => a.url.localeCompare(b.url))
+      break
+    case 'recent':
+      sorted.sort((a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0))
+      break
+    default:
+      break // keep the original (tree/index) order
+  }
+
+  // Re-insert cards in the chosen order; keeps the new-tab button last
+  for (const tab of sorted) {
+    if (tab.el) tabsBoxEl.insertBefore(tab.el, newTabEl)
+  }
 }
 
 /**

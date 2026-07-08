@@ -105,38 +105,53 @@ body[data-pin="true"] .title-box
   opacity: 1
 
 // ---
-// -- Search bar
+// -- Search bar & sort controls
 // -
-.search-box
-  position: relative
+#root
+  --group-search-bg: var(--toolbar-bg)
+  --group-search-fg: var(--toolbar-fg)
+  --group-search-border: #8888
+  --group-search-border-focus: var(--toolbar-fg)
+  --group-search-radius: 10px
+  --group-search-height: 44px
+
+.controls-box
   display: flex
   align-items: center
+  gap: 10px
   width: calc(100% - 16px)
   max-width: var(--max-width)
   margin: 0 auto 24px
-
-body[data-pin="true"] .search-box
+body[data-pin="true"] .controls-box
   display: none
+
+.search-box
+  position: relative
+  flex: 1
+  min-width: 0
+  display: flex
+  align-items: center
 
 .search-input
   flex: 1
-  height: 44px
+  min-width: 0
+  height: var(--group-search-height)
   font-size: 1.15rem
-  color: var(--toolbar-fg)
-  background-color: var(--toolbar-bg)
-  border: 2px solid #8888
-  border-radius: 10px
+  color: var(--group-search-fg)
+  background-color: var(--group-search-bg)
+  border: 2px solid var(--group-search-border)
+  border-radius: var(--group-search-radius)
   padding: 0 16px
   box-sizing: border-box
   box-shadow: 0 2px 8px #00000028
   transition: border-color .15s, box-shadow .15s
 .search-input::placeholder
-  color: var(--toolbar-fg)
+  color: var(--group-search-fg)
   opacity: .45
 .search-input:hover
   border-color: #999b
 .search-input:focus
-  border-color: var(--toolbar-fg)
+  border-color: var(--group-search-border-focus)
   box-shadow: 0 0 0 3px #8884, 0 2px 8px #00000028
 
 .search-count
@@ -144,9 +159,30 @@ body[data-pin="true"] .search-box
   margin-left: 12px
   font-size: .9rem
   font-weight: 600
-  color: var(--toolbar-fg)
+  color: var(--group-search-fg)
   opacity: .6
   white-space: nowrap
+
+.sort-box
+  flex: none
+  display: flex
+  align-items: center
+
+.sort-select
+  height: var(--group-search-height)
+  font-size: 1rem
+  color: var(--group-search-fg)
+  background-color: var(--group-search-bg)
+  border: 2px solid var(--group-search-border)
+  border-radius: var(--group-search-radius)
+  padding: 0 8px
+  box-sizing: border-box
+  cursor: pointer
+  transition: border-color .15s
+.sort-select:hover
+  border-color: #999b
+.sort-select:focus
+  border-color: var(--group-search-border-focus)
 
 .disconnected-warn
   position: absolute

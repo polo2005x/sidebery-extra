@@ -112,6 +112,7 @@ const state = reactive({
     { id: '--slt-', label: translate('styles.vars_group.sub-list_title'), vars: [] },
     { id: '--search-', label: translate('styles.vars_group.search_bar'), vars: [] },
     { id: '--ntb-', label: translate('styles.vars_group.new-tab_bar'), vars: [] },
+    { id: '--group-', label: translate('styles.vars_group.group_page'), vars: [] },
     { id: '--notification-', label: translate('styles.vars_group.notification'), vars: [] },
     { id: '--btn-', label: translate('styles.vars_group.buttons'), vars: [] },
     { id: '--scroll-', label: translate('styles.vars_group.scroll'), vars: [] },

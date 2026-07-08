@@ -16,6 +16,12 @@ section(ref="el")
     v-model:value="Settings.state.groupSearch"
     :default="DEFAULT_SETTINGS.groupSearch"
     @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.group_sort"
+    dbg="groupSort"
+    v-model:value="Settings.state.groupSort"
+    :default="DEFAULT_SETTINGS.groupSort"
+    @update:value="Settings.saveDebounced(150)")
 </template>
 
 <script lang="ts" setup>

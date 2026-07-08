@@ -78,8 +78,28 @@ updated when adding features — it makes pulling upstream updates much easier.
   tabs that also mention salmon or fish. Shows a match count, Esc clears, auto-focused.
 - **Setting:** Settings → Group → "Show search bar on the group page" (`groupSearch`),
   default on. Passed to the group page via `getGroupPageInitData` like `groupLayout`.
+- **Theming:** the search bar reads `--group-search-*` CSS vars (bg, fg, border,
+  border-focus, radius, height) defined on `#root` in `group.styl`, so it's editable from
+  the built-in Styles editor (Group target). Those vars appear under a new "Group page"
+  group in `src/page.setup/components/styles-editor.vue`.
 - **Files:** `src/page.group/group.ts` (setup/parse/apply search) + `group.html`;
   `src/styles/page.group/group.styl`; `groupSearch` in `src/defaults/settings.ts`,
   `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`,
   `src/services/tabs.bg.ts`; toggle in `src/page.setup/components/settings.group.vue`;
   labels in `src/_locales/dict.setup-page.ts` and `dict.browser.json`.
+
+## 7. Sort dropdown on the group page
+- **What:** Optional sort dropdown on the group page that reorders the displayed tab cards
+  (view only — it does not move the actual tabs). Modes: default order, reverse, by domain,
+  by title, by URL, and recently used. Composes with the search filter.
+- **Setting:** Settings → Group → "Show sort dropdown on the group page" (`groupSort`),
+  default on. Passed via `getGroupPageInitData`.
+- **Notes:** "Recently used" uses `lastAccessed`, newly added to `GroupedTabInfo`
+  (populated in `getGroupedTabInfo`); it may lag until the group page next receives an
+  update. The chosen sort resets to default when the page is reopened.
+- **Files:** `src/page.group/group.ts` (`setupSort`/`applySort`) + `group.html`;
+  `src/styles/page.group/group.styl`; `groupSort` in `src/defaults/settings.ts`,
+  `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`; `lastAccessed` in
+  `src/types/tabs.ts` + `src/services/tabs.fg.groups.ts`; `src/services/tabs.bg.ts`;
+  toggle in `src/page.setup/components/settings.group.vue`; labels in
+  `src/_locales/dict.setup-page.ts` and `dict.browser.json`.

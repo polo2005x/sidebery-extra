@@ -149,6 +149,7 @@ export interface GroupPageInitData {
   customCSS?: string
   groupLayout?: (typeof D.SETTINGS_OPTIONS.groupLayout)[number]
   groupSearch?: boolean
+  groupSort?: boolean
   animations?: boolean
   groupInfo?: GroupInfo | null
   newTabPos?: 'first_child' | 'last_child'
@@ -172,6 +173,7 @@ export interface GroupedTabInfo {
   title: string
   url: string
   discarded: boolean
+  lastAccessed?: number
   favIconUrl?: string
   el?: HTMLElement
   bgEl?: HTMLElement

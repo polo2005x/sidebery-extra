@@ -371,6 +371,7 @@ export function getGroupedTabInfo(tab: T.Tab, groupTab: T.Tab): T.GroupedTabInfo
     index: tab.index - groupTab.index - 1,
     lvl: tab.lvl - groupTab.lvl - 1,
     discarded: !!tab.discarded,
+    lastAccessed: tab.lastAccessed,
     favIconUrl,
   }
 }

@@ -724,6 +724,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
     customCSS: await Styles.loadCustomGroupCSS(),
     groupLayout: Settings.state.groupLayout,
     groupSearch: Settings.state.groupSearch,
+    groupSort: Settings.state.groupSort,
     animations: Settings.state.animations,
     groupInfo,
     newTabPos: Settings.state.moveNewTabParent === 'first_child' ? 'first_child' : 'last_child',
@@ -737,6 +738,12 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
       group_tab_reload_tooltip: browser.i18n.getMessage('group_tab_reload_tooltip'),
       group_tab_close_tooltip: browser.i18n.getMessage('group_tab_close_tooltip'),
       group_search_placeholder: browser.i18n.getMessage('group_search_placeholder'),
+      group_sort_default: browser.i18n.getMessage('group_sort_default'),
+      group_sort_reverse: browser.i18n.getMessage('group_sort_reverse'),
+      group_sort_domain: browser.i18n.getMessage('group_sort_domain'),
+      group_sort_title: browser.i18n.getMessage('group_sort_title'),
+      group_sort_url: browser.i18n.getMessage('group_sort_url'),
+      group_sort_recent: browser.i18n.getMessage('group_sort_recent'),
     },
   }
 }
