@@ -10,6 +10,12 @@ section(ref="el")
     :default="DEFAULT_SETTINGS.groupLayout"
     :opts="Settings.getOpts('groupLayout')"
     @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.group_search"
+    dbg="groupSearch"
+    v-model:value="Settings.state.groupSearch"
+    :default="DEFAULT_SETTINGS.groupSearch"
+    @update:value="Settings.saveDebounced(150)")
 </template>
 
 <script lang="ts" setup>
@@ -19,6 +25,7 @@ import { DEFAULT_SETTINGS } from 'src/defaults'
 import * as Settings from 'src/services/settings.fg'
 import * as SetupPage from 'src/services/setup-page.fg'
 import SelectField from '../../components/select-field.vue'
+import ToggleField from '../../components/toggle-field.vue'
 
 const el = ref<HTMLElement | null>(null)
 

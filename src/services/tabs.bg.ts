@@ -723,6 +723,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
     toolbarColorScheme: winStyles?.toolbarColorScheme,
     customCSS: await Styles.loadCustomGroupCSS(),
     groupLayout: Settings.state.groupLayout,
+    groupSearch: Settings.state.groupSearch,
     animations: Settings.state.animations,
     groupInfo,
     newTabPos: Settings.state.moveNewTabParent === 'first_child' ? 'first_child' : 'last_child',
@@ -735,6 +736,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
       group_tab_discard_tooltip: browser.i18n.getMessage('group_tab_discard_tooltip'),
       group_tab_reload_tooltip: browser.i18n.getMessage('group_tab_reload_tooltip'),
       group_tab_close_tooltip: browser.i18n.getMessage('group_tab_close_tooltip'),
+      group_search_placeholder: browser.i18n.getMessage('group_search_placeholder'),
     },
   }
 }

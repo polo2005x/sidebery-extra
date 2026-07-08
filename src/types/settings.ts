@@ -53,6 +53,7 @@ export interface SettingsState {
 
   // Group page
   groupLayout: (typeof SETTINGS_OPTIONS.groupLayout)[number]
+  groupSearch: boolean
 
   // Containers
   containersSortByName: boolean

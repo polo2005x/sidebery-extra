@@ -148,6 +148,7 @@ export interface GroupPageInitData {
   toolbarColorScheme?: 'dark' | 'light'
   customCSS?: string
   groupLayout?: (typeof D.SETTINGS_OPTIONS.groupLayout)[number]
+  groupSearch?: boolean
   animations?: boolean
   groupInfo?: GroupInfo | null
   newTabPos?: 'first_child' | 'last_child'

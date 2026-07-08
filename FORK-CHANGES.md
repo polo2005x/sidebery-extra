@@ -69,3 +69,17 @@ updated when adding features — it makes pulling upstream updates much easier.
 - **Files:** `src/services/tabs.fg.ts` (`reloadTabs`, `Utils.getDomainOf`),
   `src/defaults/settings.ts`, `src/types/settings.ts`,
   `src/page.setup/components/settings.tabs.vue`, `src/_locales/dict.setup-page.ts`.
+
+## 6. Search bar on the group page
+- **What:** Optional search bar at the top of the group page. Typing filters the group's
+  tabs live by **title or URL**. Multiple space-separated terms are AND-ed, and each term
+  is a **case-insensitive regex** (invalid regex falls back to a literal match, so it never
+  breaks). Quotes group a term with spaces. Example: `youtube salmon|fish` shows YouTube
+  tabs that also mention salmon or fish. Shows a match count, Esc clears, auto-focused.
+- **Setting:** Settings → Group → "Show search bar on the group page" (`groupSearch`),
+  default on. Passed to the group page via `getGroupPageInitData` like `groupLayout`.
+- **Files:** `src/page.group/group.ts` (setup/parse/apply search) + `group.html`;
+  `src/styles/page.group/group.styl`; `groupSearch` in `src/defaults/settings.ts`,
+  `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`,
+  `src/services/tabs.bg.ts`; toggle in `src/page.setup/components/settings.group.vue`;
+  labels in `src/_locales/dict.setup-page.ts` and `dict.browser.json`.

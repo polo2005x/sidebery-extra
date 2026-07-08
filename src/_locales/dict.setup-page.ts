@@ -2075,6 +2075,17 @@ Vous pouvez également définir des préfixes pour chaque type de commande pour 
     zh_TW: '分頁的佈局',
     ja: 'タブのレイアウト',
   },
+  'settings.group_search': {
+    en: 'Show search bar on the group page',
+    de: 'Suchleiste auf der Gruppenseite anzeigen',
+    fr: 'Afficher la barre de recherche sur la page de groupe',
+    hu: 'Keresősáv megjelenítése a csoport oldalán',
+    pl: 'Pokaż pasek wyszukiwania na stronie grupy',
+    ru: 'Показывать строку поиска на странице группы',
+    zh_CN: '在群组页面显示搜索栏',
+    zh_TW: '在群組頁面顯示搜尋列',
+    ja: 'グループページに検索バーを表示',
+  },
   'settings.group_layout_grid': {
     en: 'grid',
     de: 'Gitter',

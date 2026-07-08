@@ -18,6 +18,10 @@ let pinTab: T.GroupPin | undefined
 let tabs: T.GroupedTabInfo[] = []
 let groupParentId: ID | undefined
 let labels: Record<string, string>
+let searchEnabled = false
+let searchQuery = ''
+let searchInputEl: HTMLInputElement | null = null
+let searchCountEl: HTMLElement | null = null
 
 async function main() {
   try {
@@ -120,6 +124,8 @@ async function main() {
 
   createNewTabButton()
 
+  if (initData.groupSearch) setupSearch()
+
   document.body.addEventListener('mousedown', e => {
     if (e.button === 2 && groupParentId !== undefined && groupParentId !== NOID) {
       e.preventDefault()
@@ -210,6 +216,85 @@ export function onGroupUpdMsg(upd: T.GroupUpdMsg) {
   if (upd.updatedTab) onTabUpdated(upd.updatedTab)
   else if (upd.updatedTabs) upd.updatedTabs.forEach(t => onTabUpdated(t))
   if (upd.removedTab !== undefined) onTabRemoved(upd.removedTab)
+
+  applySearch()
+}
+
+/**
+ * Set up the group-page search bar (optional; controlled by the groupSearch setting)
+ */
+function setupSearch(): void {
+  const boxEl = document.getElementById('search_box')
+  searchInputEl = document.getElementById('search_input') as HTMLInputElement | null
+  searchCountEl = document.getElementById('search_count')
+  if (!boxEl || !searchInputEl) return
+
+  searchEnabled = true
+  searchInputEl.placeholder = getLabel('group_search_placeholder')
+  boxEl.style.display = ''
+
+  searchInputEl.addEventListener('input', () => {
+    searchQuery = searchInputEl?.value ?? ''
+    applySearch()
+  })
+  searchInputEl.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation()
+      if (searchInputEl) searchInputEl.value = ''
+      searchQuery = ''
+      applySearch()
+    }
+  })
+  searchInputEl.addEventListener('mousedown', e => e.stopPropagation())
+
+  // Focus so the user can start typing immediately
+  setTimeout(() => searchInputEl?.focus(), 0)
+}
+
+const SEARCH_SPECIAL_RE = /[.*+?^${}()|[\]\\]/g
+
+/**
+ * Parse the query into terms (quote-aware). Each term is a case-insensitive regex;
+ * if it isn't valid regex it's matched literally instead (never throws).
+ */
+function parseSearchTerms(query: string): RegExp[] {
+  const terms: RegExp[] = []
+  const re = /"([^"]+)"|(\S+)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(query))) {
+    const term = m[1] ?? m[2]
+    if (!term) continue
+    try {
+      terms.push(new RegExp(term, 'i'))
+    } catch {
+      terms.push(new RegExp(term.replace(SEARCH_SPECIAL_RE, '\\$&'), 'i'))
+    }
+  }
+  return terms
+}
+
+/**
+ * Show only tabs whose title or url match every search term (AND). Empty = show all.
+ */
+function applySearch(): void {
+  if (!searchEnabled) return
+
+  const query = searchQuery.trim()
+  const matchers = query ? parseSearchTerms(query) : []
+
+  let shown = 0
+  for (const tab of tabs) {
+    if (!tab.el) continue
+    let match = true
+    if (matchers.length) {
+      const hay = `${tab.title}\n${tab.url}`
+      match = matchers.every(re => re.test(hay))
+    }
+    tab.el.classList.toggle('-search-hidden', !match)
+    if (match) shown++
+  }
+
+  if (searchCountEl) searchCountEl.textContent = query ? `${shown} / ${tabs.length}` : ''
 }
 
 /**

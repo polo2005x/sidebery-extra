@@ -104,6 +104,44 @@ body[data-pin="true"] .title-box
 .title-box .title:focus + .title-highlight
   opacity: 1
 
+// ---
+// -- Search bar
+// -
+.search-box
+  position: relative
+  display: flex
+  align-items: center
+  width: calc(100% - 16px)
+  max-width: var(--max-width)
+  margin: 0 0 20px
+body[data-pin="true"] .search-box
+  display: none
+
+.search-input
+  flex: 1
+  height: 34px
+  font-size: 1rem
+  color: var(--toolbar-fg)
+  background-color: var(--toolbar-bg)
+  border: 1px solid rgba(128, 128, 128, .35)
+  border-radius: var(--grid-card-border-radius)
+  padding: 0 12px
+  box-sizing: border-box
+  transition: border-color var(--d-fast)
+.search-input:focus
+  border-color: var(--toolbar-fg)
+
+.search-count
+  flex: none
+  margin-left: 10px
+  font-size: .85rem
+  color: var(--toolbar-fg)
+  opacity: .6
+  white-space: nowrap
+
+.tab.-search-hidden
+  display: none
+
 .disconnected-warn
   position: absolute
   top: 0
