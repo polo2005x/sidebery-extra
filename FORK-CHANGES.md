@@ -104,7 +104,8 @@ updated when adding features — it makes pulling upstream updates much easier.
 ## 8. "Recently active tabs" box on the group page
 - **What:** Optional box between the group title and the search bar showing the N
   most-recently-active tabs in the group (by `lastAccessed`, added to `GroupedTabInfo`).
-  Cards reuse the `.tab` styling so the box follows the grid/list layout. Clicking a card
+  Rendered as a compact two-column list of short rows (fav + title). The box is
+  collapsible (click the header; state persisted in `localStorage`). Clicking a row
   activates that tab. It refreshes when the group page becomes visible again (re-pulls fresh
   last-active times via `getGroupPageInitData`), so opening the group shows a current list.
 - **Settings:** Settings → Group → "Show Recently active tabs box" (`groupRecent`, default

@@ -381,6 +381,27 @@ function setupRecent(count?: number): void {
   if (typeof count === 'number' && count > 0) recentCount = count
   if (titleEl) titleEl.textContent = getLabel('group_recent_title')
 
+  // Collapsible; remember the state across sessions
+  let collapsed = false
+  try {
+    collapsed = localStorage.getItem('groupRecentCollapsed') === '1'
+  } catch {
+    // localStorage may be unavailable; default to expanded
+  }
+  recentBoxEl.setAttribute('data-collapsed', String(collapsed))
+  if (titleEl) {
+    titleEl.addEventListener('mousedown', e => e.stopPropagation())
+    titleEl.addEventListener('click', () => {
+      const next = recentBoxEl?.getAttribute('data-collapsed') !== 'true'
+      recentBoxEl?.setAttribute('data-collapsed', String(next))
+      try {
+        localStorage.setItem('groupRecentCollapsed', next ? '1' : '0')
+      } catch {
+        // ignore persistence failure
+      }
+    })
+  }
+
   renderRecent()
 
   // Refresh the list whenever the group page becomes visible again (e.g. after
@@ -424,8 +445,8 @@ function renderRecent(): void {
 }
 
 /**
- * Build a standalone card for the recent box (separate element from the main list,
- * so it never disturbs the main list's tab elements).
+ * Build a compact standalone row for the recent box (separate element from the
+ * main list, so it never disturbs the main list's tab elements).
  */
 function createRecentCard(info: T.GroupedTabInfo): HTMLElement {
   let normURL
@@ -436,40 +457,19 @@ function createRecentCard(info: T.GroupedTabInfo): HTMLElement {
   }
 
   const el = document.createElement('div')
-  el.classList.add('tab')
+  el.classList.add('recent-tab')
   el.title = normURL
-  el.setAttribute('data-lvl', '0')
-  el.setAttribute('data-discarded', String(info.discarded))
-  el.setAttribute('data-fav', String(!!info.favIconUrl))
-
-  const bgEl = document.createElement('div')
-  bgEl.classList.add('bg')
-  el.appendChild(bgEl)
 
   const favEl = document.createElement('div')
-  favEl.classList.add('fav')
-  favEl.style.backgroundImage = `url(${info.favIconUrl})`
+  favEl.classList.add('recent-tab-fav')
+  if (info.favIconUrl) favEl.style.backgroundImage = `url(${info.favIconUrl})`
+  else favEl.appendChild(createSvgIcon(getFavPlaceholder(info.url)))
   el.appendChild(favEl)
 
-  const favPlaceholderEl = document.createElement('div')
-  favPlaceholderEl.classList.add('fav-placeholder')
-  favPlaceholderEl.appendChild(createSvgIcon(getFavPlaceholder(info.url)))
-  el.appendChild(favPlaceholderEl)
-
-  const infoEl = document.createElement('div')
-  infoEl.classList.add('info')
-  el.appendChild(infoEl)
-
-  const titleEl = document.createElement('h3')
-  titleEl.classList.add('tab-title')
-  titleEl.textContent = info.title
-  infoEl.appendChild(titleEl)
-
-  const urlEl = document.createElement('span')
-  urlEl.classList.add('tab-url')
-  if (info.url.startsWith('moz-ext')) urlEl.textContent = ''
-  else urlEl.textContent = normURL
-  infoEl.appendChild(urlEl)
+  const titleEl = document.createElement('span')
+  titleEl.classList.add('recent-tab-title')
+  titleEl.textContent = info.title || normURL
+  el.appendChild(titleEl)
 
   el.addEventListener('mousedown', e => e.stopPropagation())
   el.addEventListener('click', (event: MouseEvent) => onTabClick(event, info))
