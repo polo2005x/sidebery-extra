@@ -53,6 +53,8 @@ export const DEFAULT_SETTINGS: SettingsState = {
   groupLayout: 'grid',
   groupSearch: true,
   groupSort: true,
+  groupRecent: true,
+  groupRecentCount: 5,
 
   // Containers
   containersSortByName: false,

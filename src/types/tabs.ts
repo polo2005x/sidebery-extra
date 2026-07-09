@@ -150,6 +150,8 @@ export interface GroupPageInitData {
   groupLayout?: (typeof D.SETTINGS_OPTIONS.groupLayout)[number]
   groupSearch?: boolean
   groupSort?: boolean
+  groupRecent?: boolean
+  groupRecentCount?: number
   animations?: boolean
   groupInfo?: GroupInfo | null
   newTabPos?: 'first_child' | 'last_child'

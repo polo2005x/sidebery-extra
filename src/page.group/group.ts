@@ -23,11 +23,16 @@ let searchQuery = ''
 let searchInputEl: HTMLInputElement | null = null
 let searchCountEl: HTMLElement | null = null
 
-const SORT_MODES = ['default', 'reverse', 'domain', 'title', 'url', 'recent'] as const
+const SORT_MODES = ['default', 'reverse', 'domain', 'title', 'url'] as const
 type SortMode = (typeof SORT_MODES)[number]
 let sortEnabled = false
 let sortMode: SortMode = 'default'
 let sortSelectEl: HTMLSelectElement | null = null
+
+let recentEnabled = false
+let recentCount = 5
+let recentBoxEl: HTMLElement | null = null
+let recentTabsEl: HTMLElement | null = null
 
 async function main() {
   try {
@@ -132,6 +137,7 @@ async function main() {
 
   if (initData.groupSearch) setupSearch()
   if (initData.groupSort) setupSort()
+  if (initData.groupRecent) setupRecent(initData.groupRecentCount)
 
   document.body.addEventListener('mousedown', e => {
     if (e.button === 2 && groupParentId !== undefined && groupParentId !== NOID) {
@@ -226,6 +232,7 @@ export function onGroupUpdMsg(upd: T.GroupUpdMsg) {
 
   applySort()
   applySearch()
+  renderRecent()
 }
 
 /**
@@ -351,9 +358,6 @@ function applySort(): void {
     case 'url':
       sorted.sort((a, b) => a.url.localeCompare(b.url))
       break
-    case 'recent':
-      sorted.sort((a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0))
-      break
     default:
       break // keep the original (tree/index) order
   }
@@ -362,6 +366,115 @@ function applySort(): void {
   for (const tab of sorted) {
     if (tab.el) tabsBoxEl.insertBefore(tab.el, newTabEl)
   }
+}
+
+/**
+ * Set up the "Recently active tabs" box (optional; controlled by the groupRecent setting)
+ */
+function setupRecent(count?: number): void {
+  recentBoxEl = document.getElementById('recent_box')
+  recentTabsEl = document.getElementById('recent_tabs')
+  const titleEl = document.getElementById('recent_title')
+  if (!recentBoxEl || !recentTabsEl) return
+
+  recentEnabled = true
+  if (typeof count === 'number' && count > 0) recentCount = count
+  if (titleEl) titleEl.textContent = getLabel('group_recent_title')
+
+  renderRecent()
+
+  // Refresh the list whenever the group page becomes visible again (e.g. after
+  // switching to another tab and back), by re-pulling fresh last-active times.
+  document.addEventListener('visibilitychange', onGroupVisible)
+}
+
+async function onGroupVisible(): Promise<void> {
+  if (!recentEnabled || document.visibilityState !== 'visible') return
+
+  const fresh = await IPPC.bg('getGroupPageInitData', groupTabId).catch(() => undefined)
+  const freshTabs = fresh?.groupInfo?.tabs
+  if (!freshTabs) return
+
+  const lastAccessedById = new Map<ID, number | undefined>()
+  for (const t of freshTabs) lastAccessedById.set(t.id, t.lastAccessed)
+  for (const tab of tabs) {
+    const la = lastAccessedById.get(tab.id)
+    if (la !== undefined) tab.lastAccessed = la
+  }
+
+  renderRecent()
+}
+
+/**
+ * (Re)render the recent-tabs box: the N most-recently-active tabs in the group.
+ * Reuses the .tab card classes so it follows the grid/list layout.
+ */
+function renderRecent(): void {
+  if (!recentEnabled || !recentTabsEl) return
+
+  const top = tabs
+    .slice()
+    .sort((a, b) => (b.lastAccessed ?? 0) - (a.lastAccessed ?? 0))
+    .slice(0, recentCount)
+
+  while (recentTabsEl.lastChild) recentTabsEl.removeChild(recentTabsEl.lastChild)
+  for (const info of top) recentTabsEl.appendChild(createRecentCard(info))
+
+  if (recentBoxEl) recentBoxEl.style.display = top.length ? '' : 'none'
+}
+
+/**
+ * Build a standalone card for the recent box (separate element from the main list,
+ * so it never disturbs the main list's tab elements).
+ */
+function createRecentCard(info: T.GroupedTabInfo): HTMLElement {
+  let normURL
+  try {
+    normURL = decodeURI(info.url)
+  } catch {
+    normURL = info.url
+  }
+
+  const el = document.createElement('div')
+  el.classList.add('tab')
+  el.title = normURL
+  el.setAttribute('data-lvl', '0')
+  el.setAttribute('data-discarded', String(info.discarded))
+  el.setAttribute('data-fav', String(!!info.favIconUrl))
+
+  const bgEl = document.createElement('div')
+  bgEl.classList.add('bg')
+  el.appendChild(bgEl)
+
+  const favEl = document.createElement('div')
+  favEl.classList.add('fav')
+  favEl.style.backgroundImage = `url(${info.favIconUrl})`
+  el.appendChild(favEl)
+
+  const favPlaceholderEl = document.createElement('div')
+  favPlaceholderEl.classList.add('fav-placeholder')
+  favPlaceholderEl.appendChild(createSvgIcon(getFavPlaceholder(info.url)))
+  el.appendChild(favPlaceholderEl)
+
+  const infoEl = document.createElement('div')
+  infoEl.classList.add('info')
+  el.appendChild(infoEl)
+
+  const titleEl = document.createElement('h3')
+  titleEl.classList.add('tab-title')
+  titleEl.textContent = info.title
+  infoEl.appendChild(titleEl)
+
+  const urlEl = document.createElement('span')
+  urlEl.classList.add('tab-url')
+  if (info.url.startsWith('moz-ext')) urlEl.textContent = ''
+  else urlEl.textContent = normURL
+  infoEl.appendChild(urlEl)
+
+  el.addEventListener('mousedown', e => e.stopPropagation())
+  el.addEventListener('click', (event: MouseEvent) => onTabClick(event, info))
+
+  return el
 }
 
 /**

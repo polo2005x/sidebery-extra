@@ -725,6 +725,8 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
     groupLayout: Settings.state.groupLayout,
     groupSearch: Settings.state.groupSearch,
     groupSort: Settings.state.groupSort,
+    groupRecent: Settings.state.groupRecent,
+    groupRecentCount: Settings.state.groupRecentCount,
     animations: Settings.state.animations,
     groupInfo,
     newTabPos: Settings.state.moveNewTabParent === 'first_child' ? 'first_child' : 'last_child',
@@ -743,7 +745,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
       group_sort_domain: browser.i18n.getMessage('group_sort_domain'),
       group_sort_title: browser.i18n.getMessage('group_sort_title'),
       group_sort_url: browser.i18n.getMessage('group_sort_url'),
-      group_sort_recent: browser.i18n.getMessage('group_sort_recent'),
+      group_recent_title: browser.i18n.getMessage('group_recent_title'),
     },
   }
 }

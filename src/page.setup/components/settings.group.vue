@@ -22,6 +22,21 @@ section(ref="el")
     v-model:value="Settings.state.groupSort"
     :default="DEFAULT_SETTINGS.groupSort"
     @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.group_recent"
+    dbg="groupRecent"
+    v-model:value="Settings.state.groupRecent"
+    :default="DEFAULT_SETTINGS.groupRecent"
+    @update:value="Settings.saveDebounced(150)")
+  .sub-fields
+    CountField.-inline(
+      label="settings.group_recent_count"
+      dbg="groupRecentCount"
+      v-model:value="Settings.state.groupRecentCount"
+      :default="DEFAULT_SETTINGS.groupRecentCount"
+      :min="1"
+      :inactive="!Settings.state.groupRecent"
+      @update:value="Settings.saveDebounced(500)")
 </template>
 
 <script lang="ts" setup>
@@ -32,6 +47,7 @@ import * as Settings from 'src/services/settings.fg'
 import * as SetupPage from 'src/services/setup-page.fg'
 import SelectField from '../../components/select-field.vue'
 import ToggleField from '../../components/toggle-field.vue'
+import CountField from '../../components/count-field.vue'
 
 const el = ref<HTMLElement | null>(null)
 

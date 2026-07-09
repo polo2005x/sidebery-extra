@@ -91,15 +91,27 @@ updated when adding features — it makes pulling upstream updates much easier.
 ## 7. Sort dropdown on the group page
 - **What:** Optional sort dropdown on the group page that reorders the displayed tab cards
   (view only — it does not move the actual tabs). Modes: default order, reverse, by domain,
-  by title, by URL, and recently used. Composes with the search filter.
+  by title, by URL. Composes with the search filter, and sits to the right of the search bar.
 - **Setting:** Settings → Group → "Show sort dropdown on the group page" (`groupSort`),
-  default on. Passed via `getGroupPageInitData`.
-- **Notes:** "Recently used" uses `lastAccessed`, newly added to `GroupedTabInfo`
-  (populated in `getGroupedTabInfo`); it may lag until the group page next receives an
-  update. The chosen sort resets to default when the page is reopened.
+  default on. Passed via `getGroupPageInitData`. The chosen sort resets to default when the
+  page is reopened.
 - **Files:** `src/page.group/group.ts` (`setupSort`/`applySort`) + `group.html`;
   `src/styles/page.group/group.styl`; `groupSort` in `src/defaults/settings.ts`,
-  `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`; `lastAccessed` in
-  `src/types/tabs.ts` + `src/services/tabs.fg.groups.ts`; `src/services/tabs.bg.ts`;
-  toggle in `src/page.setup/components/settings.group.vue`; labels in
+  `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`;
+  `src/services/tabs.bg.ts`; toggle in `src/page.setup/components/settings.group.vue`;
+  labels in `src/_locales/dict.setup-page.ts` and `dict.browser.json`.
+
+## 8. "Recently active tabs" box on the group page
+- **What:** Optional box between the group title and the search bar showing the N
+  most-recently-active tabs in the group (by `lastAccessed`, added to `GroupedTabInfo`).
+  Cards reuse the `.tab` styling so the box follows the grid/list layout. Clicking a card
+  activates that tab. It refreshes when the group page becomes visible again (re-pulls fresh
+  last-active times via `getGroupPageInitData`), so opening the group shows a current list.
+- **Settings:** Settings → Group → "Show Recently active tabs box" (`groupRecent`, default
+  on) and "How many recent tabs to show" (`groupRecentCount`, default 5).
+- **Files:** `src/page.group/group.ts` (`setupRecent`/`renderRecent`/`createRecentCard`/
+  `onGroupVisible`) + `group.html`; `src/styles/page.group/group.styl`; `groupRecent` +
+  `groupRecentCount` in `src/defaults/settings.ts`, `src/types/settings.ts`,
+  `GroupPageInitData` in `src/types/tabs.ts`; `src/services/tabs.bg.ts`; toggle + count in
+  `src/page.setup/components/settings.group.vue`; labels in
   `src/_locales/dict.setup-page.ts` and `dict.browser.json`.

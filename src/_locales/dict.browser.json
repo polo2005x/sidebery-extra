@@ -1545,15 +1545,15 @@
     "zh_TW": "按網址",
     "ja": "URL順"
   },
-  "group_sort_recent": {
-    "en": "Recently used",
-    "de": "Zuletzt verwendet",
-    "fr": "Récemment utilisés",
-    "hu": "Nemrég használt",
-    "pl": "Ostatnio używane",
-    "ru": "Недавно использованные",
-    "zh_CN": "最近使用",
-    "zh_TW": "最近使用",
-    "ja": "最近使用した順"
+  "group_recent_title": {
+    "en": "Recently active tabs",
+    "de": "Kürzlich aktive Tabs",
+    "fr": "Onglets récemment actifs",
+    "hu": "Nemrég használt lapok",
+    "pl": "Ostatnio aktywne karty",
+    "ru": "Недавно активные вкладки",
+    "zh_CN": "最近活动的标签页",
+    "zh_TW": "最近活動的分頁",
+    "ja": "最近アクティブなタブ"
   }
 }

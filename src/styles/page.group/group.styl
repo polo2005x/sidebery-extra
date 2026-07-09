@@ -184,6 +184,32 @@ body[data-pin="true"] .controls-box
 .sort-select:focus
   border-color: var(--group-search-border-focus)
 
+// ---
+// -- Recently active tabs box
+// -
+.recent-box
+  width: calc(100% - 16px)
+  max-width: var(--max-width)
+  margin: 0 auto 20px
+body[data-pin="true"] .recent-box
+  display: none
+
+.recent-title
+  font-size: .95rem
+  font-weight: 600
+  color: var(--toolbar-fg)
+  opacity: .6
+  margin: 0 0 8px 2px
+
+.recent-tabs
+  display: grid
+  gap: 8px
+body[data-layout="grid"] .recent-tabs
+  grid-template-columns: 1fr 1fr 1fr
+body[data-layout="list"] .recent-tabs
+  grid-template-columns: 1fr
+  gap: 6px
+
 .disconnected-warn
   position: absolute
   top: 0
