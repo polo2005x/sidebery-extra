@@ -2032,6 +2032,15 @@ export const commonTranslations: Translations = {
     zh_TW: '取消標記共享父級',
     ja: '共有親の設定を解除',
   },
+  'menu.tab.shared_parent_new_group': {
+    en: 'New shared group',
+  },
+  'menu.tab.shared_parent_group': {
+    en: 'Group',
+  },
+  'menu.tab.shared_parent_remove': {
+    en: 'Remove from shared group',
+  },
   'menu.tab.url_conf': {
     en: 'Configure site...',
     de: 'Seite konfigurieren...',

@@ -34,7 +34,7 @@ export class MTab implements Tab {
   reopenInContainer?: string | undefined
   customTitle?: string | undefined
   customColor?: string | undefined
-  sharedParent?: boolean | undefined
+  sharedParent?: number | undefined
   moving?: boolean | undefined
   previewImg?: string | undefined
   removing?: boolean | undefined
@@ -64,7 +64,7 @@ export class MTab implements Tab {
     color: null,
     branchColor: null,
     customColor: null,
-    sharedParent: false,
+    sharedParent: 0,
     isGroup: false,
   }
   sessionData?: TabSessionData | undefined

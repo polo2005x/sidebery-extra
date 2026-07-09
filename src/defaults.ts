@@ -40,6 +40,17 @@ export const COLOR_NAMES: browser.ColorName[] = [
   'purple',
   'toolbar',
 ]
+/** Accent palette for shared-parent groups; group N uses index (N-1) % length. */
+export const SHARED_GROUP_COLORS: browser.ColorName[] = [
+  'blue',
+  'orange',
+  'green',
+  'pink',
+  'purple',
+  'turquoise',
+  'yellow',
+  'red',
+]
 export const IMG_RE = /(\.png|\.jpe?g|\.gif|\.webp|\.svg)([?#].*)?$/i
 export const VID_RE = /(\.mp4|\.webm)([?#].*)?$/i
 export const MUS_RE = /(\.mp3|\.flac)([?#].*)?$/i

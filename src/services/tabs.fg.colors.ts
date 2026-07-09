@@ -120,25 +120,67 @@ export function setCustomColor(tabIds: ID[], color: string): void {
 }
 
 /**
- * Toggle the "shared parent" flag on the given tabs. A shared-parent tab
- * funnels newly opened tabs to become a child of the last shared parent at
- * its level (see Tabs.getIndexForNewTab / getParentForNewTab).
+ * Assign the given tabs to a shared-parent group. Tabs opened from any member
+ * of a group funnel to become a child of that group's last member at its level
+ * (see Tabs.getIndexForNewTab / getParentForNewTab). Multiple groups coexist,
+ * each identified by its own positive id.
  */
-export function toggleSharedParent(tabIds: ID[]): void {
-  if (!tabIds.length) return
-
-  // Use the first tab's state to decide the target value for all selected tabs
-  const value = !Tabs.byId[tabIds[0]]?.sharedParent
+export function setSharedParentGroup(tabIds: ID[], group: number): void {
+  if (!tabIds.length || group <= 0) return
 
   for (const id of tabIds) {
     const tab = Tabs.byId[id]
     if (!tab) continue
 
-    tab.sharedParent = value || undefined
-    tab.reactive.sharedParent = value
+    tab.sharedParent = group
+    tab.reactive.sharedParent = group
 
     Tabs.saveTabData(tab.id)
   }
 
   Tabs.cacheTabsData()
+}
+
+/**
+ * Remove the given tabs from any shared-parent group.
+ */
+export function clearSharedParent(tabIds: ID[]): void {
+  if (!tabIds.length) return
+
+  for (const id of tabIds) {
+    const tab = Tabs.byId[id]
+    if (!tab) continue
+
+    tab.sharedParent = undefined
+    tab.reactive.sharedParent = 0
+
+    Tabs.saveTabData(tab.id)
+  }
+
+  Tabs.cacheTabsData()
+}
+
+/**
+ * All shared-parent group ids currently in use, sorted ascending.
+ */
+export function getUsedSharedGroups(): number[] {
+  const set = new Set<number>()
+  for (const tab of Tabs.list) {
+    if (tab.sharedParent) set.add(tab.sharedParent)
+  }
+  return [...set].sort((a, b) => a - b)
+}
+
+/**
+ * Smallest positive group id not currently in use (reuses freed ids).
+ */
+export function getNextSharedGroup(): number {
+  const used = getUsedSharedGroups()
+  let n = 1
+  for (const g of used) {
+    if (g < n) continue
+    if (g === n) n++
+    else break
+  }
+  return n
 }

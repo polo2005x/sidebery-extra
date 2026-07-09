@@ -34,7 +34,7 @@
   .body
     .color-layer(v-if="tabColor" :style="{ '--tab-color': tabColor }")
     .flash-fx(ref="flashFxEl")
-    .shared-parent-mark(v-if="tab.reactive.sharedParent")
+    .shared-parent-mark(v-if="tab.reactive.sharedParent" :style="sharedParentColor ? { backgroundColor: sharedParentColor } : undefined")
     .unread-mark(v-if="tab.reactive.unread")
     .fav(@dragstart.stop.prevent)
       img.fav-icon(ref="favImgEl" @error="onError" draggable="false")
@@ -92,7 +92,7 @@ import * as Tabs from 'src/services/tabs.fg'
 import * as Mouse from 'src/services/mouse.fg'
 import * as DnD from 'src/services/drag-and-drop.fg'
 import * as Search from 'src/services/search.fg'
-import { NOID, RGB_COLORS } from 'src/defaults'
+import { NOID, RGB_COLORS, SHARED_GROUP_COLORS } from 'src/defaults'
 import * as Utils from 'src/utils'
 import * as Logs from 'src/services/logs'
 import * as Preview from 'src/services/tabs.fg.preview'
@@ -123,6 +123,13 @@ const tabColor = computed<string>(() => {
   } else {
     return ''
   }
+})
+
+// Per-group accent color for the shared-parent marker (empty = use theme default)
+const sharedParentColor = computed<string>(() => {
+  const g = tab.reactive.sharedParent
+  if (!g) return ''
+  return RGB_COLORS[SHARED_GROUP_COLORS[(g - 1) % SHARED_GROUP_COLORS.length]] ?? ''
 })
 
 onMounted(() => {

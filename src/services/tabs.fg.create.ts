@@ -711,9 +711,10 @@ interface IndexForNewTabConf {
 }
 
 /**
- * For a "shared parent" opener, find the last shared-parent tab among its
- * siblings at the same level. New tabs become children of this tab, so tabs
- * opened from any tab in a shared-parent set collect under the last one.
+ * For a "shared parent" opener, find the last tab in the SAME shared-parent
+ * group among its siblings at the same level. New tabs become children of this
+ * tab, so tabs opened from any member of a group collect under that group's
+ * last member. Distinct groups (different `sharedParent` ids) stay separate.
  */
 function getLastSharedSibling(opener: Tab): Tab {
   let last = opener
@@ -722,7 +723,7 @@ function getLastSharedSibling(opener: Tab): Tab {
     if (t.lvl < opener.lvl) break // left the parent's branch
     if (t.lvl === opener.lvl) {
       if (t.parentId !== opener.parentId) break // different sibling group
-      if (t.sharedParent) last = t
+      if (t.sharedParent === opener.sharedParent) last = t
     }
   }
   return last

@@ -35,7 +35,8 @@ export interface Tab extends NativeTab {
   reopenInContainer?: string
   customTitle?: string
   customColor?: string
-  sharedParent?: boolean
+  /** Shared-parent group id (>= 1). Undefined/0 means "not a shared parent". */
+  sharedParent?: number
   moving?: boolean
   removing?: boolean
   flashAnimationTimeout?: number
@@ -77,7 +78,8 @@ export interface ReactiveTabProps {
   color: string | null
   branchColor: string | null
   customColor: string | null
-  sharedParent: boolean
+  /** Shared-parent group id (>= 1); 0 means "not a shared parent". */
+  sharedParent: number
   isGroup: boolean
 }
 
@@ -113,7 +115,7 @@ export interface TabCache {
   uniqWinId?: ID /* only for the first tab of window */
   customTitle?: string
   customColor?: string
-  sharedParent?: boolean
+  sharedParent?: number
 
   index?: number
   isMissedGroup?: boolean
@@ -126,7 +128,7 @@ export interface TabSessionData {
   folded: boolean
   customTitle?: string
   customColor?: string
-  sharedParent?: boolean
+  sharedParent?: number
 }
 
 export interface ActiveTabsHistory {

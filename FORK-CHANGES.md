@@ -39,21 +39,28 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/defaults/settings.ts`, `src/types/settings.ts`,
   `src/page.setup/components/settings.tabs.vue`, `src/_locales/dict.setup-page.ts`.
 
-## 4. "Shared parent" tabs
-- **What:** Right-click a tab → "Mark as shared parent". New tabs opened from a shared
-  parent (or any of its shared siblings at the same level) become the last child of the
-  last shared parent at that level. A left accent bar marks shared-parent tabs. The flag
-  persists across restarts. Children of a shared parent are not auto-shared.
+## 4. "Shared parent" tab groups
+- **What:** Right-click a tab → "Mark as shared parent" opens a submenu to assign the
+  selected tab(s) to a shared-parent **group** — "New shared group", any existing group,
+  or "Remove from shared group". New tabs opened from any member of a group become the
+  last child of that group's last member. **Multiple groups coexist**: each group funnels
+  independently, so you can have tabs #1/#2/#3 in group 1 and another set in group 2. Each
+  group gets its own accent-bar color (left of the favicon). Groups persist across restarts
+  and are per-window. Children of a shared parent are not auto-shared.
 - **How to use:** Requires Tab Tree mode. The "Mark as shared parent" context-menu item
   must be enabled/added via Settings → Context Menu Editor → Tabs (Sidebery keeps a saved
-  menu layout, so new default items don't appear automatically).
-- **Files:** per-tab `sharedParent` flag in `src/types/tabs.ts` + persistence in
-  `src/services/tabs.fg.ts`; `toggleSharedParent` in `src/services/tabs.fg.colors.ts`;
-  placement in `src/services/tabs.fg.create.ts` (`getLastSharedSibling`); menu in
-  `src/services/menu.fg.options.tabs.ts`, `src/defaults/menu.ts`,
-  `src/page.setup/components/menu-editor.vue`; marker in
-  `src/sidebar/components/tab.vue` + `src/styles/sidebar/tab.styl`; labels in
-  `src/_locales/dict.common.ts`.
+  menu layout, so new default items don't appear automatically). Select the tabs, then pick
+  a group from the submenu.
+- **Data model:** `sharedParent` is a per-tab group id (`number`, >= 1; 0/undefined = not
+  shared). Old boolean data is coerced to group 1 on load.
+- **Files:** `sharedParent` group id in `src/types/tabs.ts` + persistence in
+  `src/services/tabs.fg.ts`; group API (`setSharedParentGroup`, `clearSharedParent`,
+  `getUsedSharedGroups`, `getNextSharedGroup`) in `src/services/tabs.fg.colors.ts`;
+  placement in `src/services/tabs.fg.create.ts` (`getLastSharedSibling`, now matches on
+  group id); submenu in `src/services/menu.fg.options.tabs.ts`, `src/defaults/menu.ts`,
+  `src/page.setup/components/menu-editor.vue`; per-group color palette
+  `SHARED_GROUP_COLORS` in `src/defaults.ts`; marker in `src/sidebar/components/tab.vue`
+  + `src/styles/sidebar/tab.styl`; labels in `src/_locales/dict.common.ts`.
 
 ## 5. Per-site pacing on bulk reload
 - **What:** Sidebery reloads tabs with a global concurrency limit (`tabsReloadLimit`,

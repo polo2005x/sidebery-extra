@@ -152,7 +152,7 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
       flash: false,
       branchColor: null,
       color: null,
-      sharedParent: tab.sharedParent ?? false,
+      sharedParent: tab.sharedParent ?? 0,
       isGroup: tab.isGroup,
     }
   }
@@ -505,7 +505,11 @@ function restoreTab(
     tab.reactive.folded = tab.folded = !!props.folded
     if (props.customTitle) tab.customTitle = props.customTitle
     if (props.customColor) tab.reactive.customColor = tab.customColor = props.customColor
-    if (props.sharedParent) tab.reactive.sharedParent = tab.sharedParent = props.sharedParent
+    if (props.sharedParent) {
+      // Back-compat: old data persisted a boolean; treat any truthy non-number as group 1.
+      const group = typeof props.sharedParent === 'number' ? props.sharedParent : 1
+      tab.reactive.sharedParent = tab.sharedParent = group
+    }
   } else {
     Logs.warn(`Tabs.restoreTab: no props for: "${tab.id} i${tab.index} url${tab.url}"`)
   }

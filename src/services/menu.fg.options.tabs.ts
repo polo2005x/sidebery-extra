@@ -345,13 +345,48 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
 
   toggleSharedParent: () => {
     const firstTab = Tabs.byId[Selection.getFirst()]
-    const isShared = !!firstTab?.sharedParent
+    const currentGroup = firstTab?.sharedParent ?? 0
+
     const option: MenuOption = {
-      label: translate(isShared ? 'menu.tab.unset_shared_parent' : 'menu.tab.set_shared_parent'),
+      label: translate('menu.tab.set_shared_parent'),
       icon: 'icon_group_tabs',
-      onClick: () => Tabs.toggleSharedParent(Selection.ids()),
     }
     if (!Settings.state.tabsTree || firstTab?.pinned) option.inactive = true
+
+    if (!option.inactive) {
+      const ids = Selection.ids()
+      const sub: MenuOption[] = [
+        {
+          label: translate('menu.tab.shared_parent_new_group'),
+          icon: 'icon_plus',
+          onClick: () => Tabs.setSharedParentGroup(ids, Tabs.getNextSharedGroup()),
+        },
+      ]
+
+      // Existing groups the selection can be assigned to
+      for (const g of Tabs.getUsedSharedGroups()) {
+        sub.push({
+          label: `${translate('menu.tab.shared_parent_group')} ${g}`,
+          icon: 'icon_group_tabs',
+          color: D.SHARED_GROUP_COLORS[(g - 1) % D.SHARED_GROUP_COLORS.length],
+          badge: currentGroup === g ? 'icon_ok' : undefined,
+          onClick: () => Tabs.setSharedParentGroup(ids, g),
+        })
+      }
+
+      // Remove the selection from its group
+      if (currentGroup) {
+        sub.push({ type: 'separator' })
+        sub.push({
+          label: translate('menu.tab.shared_parent_remove'),
+          icon: 'icon_close',
+          onClick: () => Tabs.clearSharedParent(ids),
+        })
+      }
+
+      option.sub = sub
+    }
+
     if (!Settings.state.ctxMenuRenderInact && option.inactive) return
     return option
   },
