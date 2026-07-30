@@ -125,6 +125,9 @@ export const DEFAULT_SETTINGS: SettingsState = {
   // When closing duplicate tabs, keep the newest one instead of the oldest
   dedupKeepNewest: false,
 
+  // "Go to top of group": true = switch to the group tab, false = just scroll to it
+  groupTopActivate: true,
+
   // New tab position
   moveNewTabPin: 'start',
   moveNewTabParent: 'last_child',

@@ -343,6 +343,22 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  goToGroupTop: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const groupTab = Tabs.getGroupTab(firstTab)
+    const option: MenuOption = {
+      label: translate('menu.tab.go_to_group_top'),
+      icon: 'icon_group',
+      onClick: () => {
+        if (firstTab) Tabs.activateGroupTop(firstTab.id)
+      },
+    }
+    // Only meaningful when the tab actually sits inside a group (tree mode)
+    if (!groupTab) option.inactive = true
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
   toggleSharedParent: () => {
     const firstTab = Tabs.byId[Selection.getFirst()]
     const currentGroup = firstTab?.sharedParent ?? 0

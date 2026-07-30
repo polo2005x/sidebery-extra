@@ -319,6 +319,9 @@
     "switch_to_parent_tab": {
       "description": "__MSG_KbSwitchToParentTab__"
     },
+    "switch_to_group_tab": {
+      "description": "__MSG_KbSwitchToGroupTab__"
+    },
     "switch_to_unpinned_tab_0": {
       "description": "__MSG_KbSwitchToUnpinnedTab0__"
     },

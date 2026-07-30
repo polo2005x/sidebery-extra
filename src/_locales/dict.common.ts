@@ -1988,6 +1988,17 @@ export const commonTranslations: Translations = {
     zh_TW: '樹序列化',
     ja: 'フラット化',
   },
+  'menu.tab.go_to_group_top': {
+    en: 'Go to top of group',
+    de: 'Zum Gruppenanfang',
+    fr: 'Aller en haut du groupe',
+    hu: 'Ugrás a csoport tetejére',
+    pl: 'Przejdź na górę grupy',
+    ru: 'Перейти к началу группы',
+    zh_CN: '转到组顶部',
+    zh_TW: '跳到群組頂部',
+    ja: 'グループの先頭へ',
+  },
   'menu.tab.dedupe_branch': {
     en: 'Close duplicate tabs in group',
     de: 'Doppelte Tabs in Gruppe schließen',

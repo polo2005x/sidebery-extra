@@ -239,6 +239,8 @@ function onCmd(name: string): void {
     Search.start()
   } else if (name === 'switch_to_parent_tab') {
     Tabs.activateParent(Selection.ids()[0])
+  } else if (name === 'switch_to_group_tab') {
+    Tabs.activateGroupTop(Selection.ids()[0])
   } else if (name === 'switch_to_last_tab') {
     onKeySwitchToTab()
   } else if (name.startsWith('switch_to_tab_')) {

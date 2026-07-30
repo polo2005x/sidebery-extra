@@ -125,6 +125,9 @@ export interface SettingsState {
   // Duplicate tabs
   dedupKeepNewest: boolean
 
+  // "Go to top of group" action
+  groupTopActivate: boolean
+
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]
   moveNewTabParent: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]

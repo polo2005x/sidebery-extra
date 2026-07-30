@@ -23,6 +23,12 @@ section(ref="el")
     :default="DEFAULT_SETTINGS.dedupKeepNewest"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
+    label="settings.group_top_activate"
+    dbg="groupTopActivate"
+    v-model:value="Settings.state.groupTopActivate"
+    :default="DEFAULT_SETTINGS.groupTopActivate"
+    @update:value="Settings.saveDebounced(150)")
+  ToggleField(
     label="settings.activate_last_tab_on_panel_switching"
     dbg="activateLastTabOnPanelSwitching"
     :value="Settings.state.activateLastTabOnPanelSwitching"

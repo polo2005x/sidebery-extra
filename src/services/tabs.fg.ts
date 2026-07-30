@@ -1911,6 +1911,29 @@ export function activateParent(tabId?: ID): void {
 }
 
 /**
+ * Jump to the top of the active tab's group: the group tab that owns it
+ * (walking up the tree). With `groupTopActivate` on (default) it switches to
+ * that group tab; otherwise it just scrolls the group tab into view without
+ * changing the active tab. No-op outside tree mode or when the tab is not in
+ * a group. Used by the "Go to top of group" context-menu item and keybinding.
+ */
+export function activateGroupTop(tabId?: ID): void {
+  if (!Settings.state.tabsTree) return
+  if (tabId === undefined) tabId = Tabs.activeId
+  const tab = Tabs.byId[tabId]
+  const groupTab = Tabs.getGroupTab(tab)
+  if (!groupTab) return
+
+  if (Settings.state.groupTopActivate) {
+    browser.tabs.update(groupTab.id, { active: true }).catch(err => {
+      Logs.err('Tabs.activateGroupTop: Cannot activate group tab', err)
+    })
+  } else {
+    Tabs.scrollToTab(groupTab.id, true)
+  }
+}
+
+/**
  * Flatten tabs tree
  */
 export function flattenTabs(tabIds: ID[]): void {

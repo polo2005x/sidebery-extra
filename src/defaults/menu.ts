@@ -43,6 +43,7 @@ export const TABS_MENU: MenuConf = [
   'separator-3',
   'group',
   'flatten',
+  'goToGroupTop',
   'toggleSharedParent',
   'dedupeBranchTabs',
   'dedupeSubgroupTabs',

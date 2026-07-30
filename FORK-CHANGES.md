@@ -123,3 +123,26 @@ updated when adding features — it makes pulling upstream updates much easier.
   `GroupPageInitData` in `src/types/tabs.ts`; `src/services/tabs.bg.ts`; toggle + count in
   `src/page.setup/components/settings.group.vue`; labels in
   `src/_locales/dict.setup-page.ts` and `dict.browser.json`.
+
+## 9. "Go to top of group"
+- **What:** Jump from the active (or right-clicked) tab to the **group tab** that owns it —
+  the top of its group — by walking up the tree (reuses `getGroupTab`). Two independent,
+  opt-in entry points: a **context-menu item** ("Go to top of group") and a **keyboard
+  shortcut** (`switch_to_group_tab`, "Go to top of group (group tab)"). Only active when the
+  tab actually sits inside a group; the menu item greys out / hides otherwise. Requires Tab
+  Tree mode (no tree = no group tab to go to).
+- **How to enable:** The menu item must be added via Settings → Context Menu Editor → Tabs
+  (Sidebery keeps a saved menu layout, so new default items don't appear automatically). The
+  shortcut is unbound by default — assign a key in Settings → Keybindings → "Go to top of
+  group (group tab)". Each is optional and enabled separately.
+- **Setting:** Settings → Tabs → "'Go to top of group' switches to the group tab (off = just
+  scroll to it)" (`groupTopActivate`, default on). On = activate the group tab; off = only
+  scroll it into view without changing the active tab.
+- **Files:** `Tabs.activateGroupTop` in `src/services/tabs.fg.ts` (uses `getGroupTab` +
+  `scrollToTab`); menu option `goToGroupTop` in `src/services/menu.fg.options.tabs.ts`,
+  `src/defaults/menu.ts`, `src/page.setup/components/menu-editor.vue`; keybinding handler in
+  `src/services/keybindings.fg.ts`, command in `src/manifest.json`, list entry in
+  `src/page.setup/components/keybindings.vue`; `groupTopActivate` in `src/defaults/settings.ts`,
+  `src/types/settings.ts`, toggle in `src/page.setup/components/settings.tabs.vue`; labels in
+  `src/_locales/dict.common.ts` (`menu.tab.go_to_group_top`), `dict.setup-page.ts`
+  (`settings.group_top_activate`), and `dict.browser.json` (`KbSwitchToGroupTab`).

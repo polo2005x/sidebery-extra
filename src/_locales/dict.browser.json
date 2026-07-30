@@ -807,6 +807,17 @@
     "zh_TW": "切換到父分頁",
     "ja": "親タブに切り替え"
   },
+  "KbSwitchToGroupTab": {
+    "en": "Go to top of group (group tab)",
+    "de": "Zum Gruppenanfang (Gruppen-Tab)",
+    "fr": "Aller en haut du groupe (onglet de groupe)",
+    "hu": "Ugrás a csoport tetejére (csoportlap)",
+    "pl": "Przejdź na górę grupy (karta grupy)",
+    "ru": "Перейти к началу группы (вкладка группы)",
+    "zh_CN": "转到组顶部（组标签页）",
+    "zh_TW": "跳到群組頂部（群組分頁）",
+    "ja": "グループの先頭へ（グループタブ）"
+  },
   "KbSwitchToUnpinnedTab0": {
     "en": "Switch to first unpinned tab of active panel",
     "de": "Zum ersten unangehefteten Tab des aktiven Panels wechseln",
