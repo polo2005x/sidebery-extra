@@ -11,7 +11,7 @@
   :data-muted="tab.reactive.mediaMuted"
   :data-paused="tab.reactive.mediaPaused"
   :data-discarded="tab.reactive.discarded"
-  :data-updated="tab.reactive.updated"
+  :data-urgent-descendant="tab.reactive.hasUrgentDescendant"
   :data-lvl="tab.reactive.lvl"
   :data-group="tab.reactive.isGroup"
   :data-parent="tab.reactive.isParent"
@@ -45,7 +45,12 @@
         @mousedown.stop="onExpandMouseDown"
         @mouseup="onExpandMouseUp")
         svg.exp-icon: use(href="#icon_expand")
-      .badge
+      .badge(
+        v-if="tab.reactive.badge || tab.reactive.badgeUrgent"
+        :data-urgent="tab.reactive.badgeUrgent"
+        :style="{ '--bg': tab.reactive.badgeBg ?? '', '--fg': tab.reactive.badgeFg ?? '' }")
+        template(v-if="tab.reactive.badge !== true") {{tab.reactive.badge}}
+      .pending-mark
       .progress-spinner(v-if="Settings.state.animations")
       svg.progress-spinner(v-else): use(href="#icon_hourglass")
       .child-count(v-if="tab.reactive.folded && tab.reactive.branchLen") {{tab.reactive.branchLen}}

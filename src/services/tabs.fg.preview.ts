@@ -30,7 +30,6 @@ export const state = {
   mode: Mode.Nope,
   modeFallback: false,
 
-  popupWinId: NOID,
   targetTabId: NOID,
 
   openTimeout: undefined as number | undefined,
@@ -52,14 +51,14 @@ let deadOnArrival = false
 let tooltipUpdTimeout: number | undefined = undefined
 
 function dbgStr() {
-  let m = state.mode === Mode.Nope ? 'Nope' : 'Inline'
-  if (state.mode === Mode.InPage) m = 'InPage'
+  let m = state.mode === Mode.Nope ? 'Nope' : 'Sidebar'
+  if (state.mode === Mode.InPage) m = 'Page'
 
   let s = state.status === Status.Closed ? 'Closed' : 'Closing'
   if (state.status === Status.Open) s = 'Open'
   else if (state.status === Status.Opening) s = 'Opening'
 
-  return `mode: ${m}, status: ${s}`
+  return `mode: ${m}, status: ${s}, targetTabId: ${state.targetTabId}, doa: ${deadOnArrival}`
 }
 
 export function setTargetTab(tabId: ID) {
@@ -313,13 +312,11 @@ export async function closePPreview() {
 
   if (state.status === Status.Open) {
     state.status = Status.Closing
-    if (state.popupWinId !== NOID) await browser.windows.remove(state.popupWinId)
-    else if (Settings.state.previewTabsMode === 'p' && IPC.state.previewConnection) {
+    if (Settings.state.previewTabsMode === 'p' && IPC.state.previewConnection) {
       IPC.sendToPreview('close')
     } else {
       Tabs.reactive.inlinePreviewImg = ''
     }
-    state.popupWinId = NOID
     state.status = Status.Closed
   }
 }
@@ -335,7 +332,7 @@ async function showSPreview(tab: Tab) {
     closeSPreview()
     return
   }
-
+  if (state.mode !== Mode.InSidebar) return
   if (sPreviewTabId === tab.id) return
   if (!sPreviewEl) return
 

@@ -99,8 +99,10 @@ export interface SettingsState {
   activateAfterClosingNoDiscarded: boolean
   tabsRmUndoNote: boolean
   tabsUnreadMark: boolean
-  tabsUpdateMark: (typeof SETTINGS_OPTIONS.tabsUpdateMark)[number]
-  tabsUpdateMarkFirst: boolean
+  tabsUpdateMark?: (typeof SETTINGS_OPTIONS.tabsUpdateMark)[number] // DEPR
+  tabsUpdateMarkFirst?: boolean // DEPR
+  tabsBadge: boolean
+  tabsBadgeRules: string
   tabsReloadLimit: number
   tabsReloadLimitNotif: boolean
   tabsReloadBatchDelay: boolean
@@ -208,7 +210,8 @@ export interface SettingsState {
   oldBookmarksAfterSave: (typeof SETTINGS_OPTIONS.oldBookmarksAfterSave)[number]
 
   // History
-  loadHistoryOnDemand: boolean
+  // loadHistoryOnDemand: boolean
+  historyTitleUpdInterval: number
 
   // Appearance
   fontSize: (typeof SETTINGS_OPTIONS.fontSize)[number]

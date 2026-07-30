@@ -101,8 +101,8 @@ export const DEFAULT_SETTINGS: SettingsState = {
   askNewBookmarkPlace: true,
   tabsRmUndoNote: true,
   tabsUnreadMark: false,
-  tabsUpdateMark: 'all',
-  tabsUpdateMarkFirst: true,
+  tabsBadge: true,
+  tabsBadgeRules: 'minIdleTime:5000; urgent',
   tabsReloadLimit: 5,
   tabsReloadLimitNotif: true,
   tabsReloadBatchDelay: false,
@@ -208,7 +208,8 @@ export const DEFAULT_SETTINGS: SettingsState = {
   oldBookmarksAfterSave: 'ask',
 
   // History
-  loadHistoryOnDemand: true,
+  // loadHistoryOnDemand: true,
+  historyTitleUpdInterval: 1_100,
 
   // Appearance
   fontSize: 'm',
@@ -344,7 +345,7 @@ export const SETTINGS_OPTIONS = {
   historyMidClickAction: ['open_in_new', 'forget_visit'],
   tabRmBtn: ['always', 'hover', 'none'],
   activateAfterClosing: ['prev_act', 'next', 'prev', 'none'],
-  tabsUpdateMark: ['all', 'pin', 'norm', 'none'],
+  tabsUpdateMark: ['all', 'pin', 'norm', 'none'], // DEPR
   pinnedTabsPosition: ['panel', 'top', 'left', 'right'],
   tabsTreeLimit: [1, 2, 3, 4, 5, 'none'],
   previewTabsMode: ['i', 'p'],

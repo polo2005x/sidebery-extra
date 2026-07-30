@@ -2956,18 +2956,60 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '在未讀分頁上顯示標記',
     ja: '未読タブにマークを表示する',
   },
-  'settings.tabs_update_mark': {
-    en: 'Show mark on tabs with updated title',
-    de: 'Zeige Markierung an Tabs mit aktualisiertem Titel',
-    fr: 'Afficher un indicateur sur les onglets dont le titre a changé',
-    hu: 'A frissített oldalcímű lapok megjelölése',
-    pl: 'Pokaż znacznik na kartach z zaaktualizowanym tytułem',
-    ru: 'Показывать метку на вкладках с обновленным заголовком',
-    zh_CN: '在更新标题的标签页上显示标记',
-    zh_TW: '在更新標題的分頁上顯示標記',
-    ja: '更新されたタブにマークを表示する',
+
+  'settings.tabs_badge': {
+    en: 'Show badges over tab favicons on URL or title update',
+    de: 'Badges über Tab-Favicons bei Aktualisierung von URL oder Titel anzeigen',
+    fr: `Afficher des badges sur les favicons des onglets lors de la mise à jour de l'URL ou du titre`,
+    hu: 'Jelvények megjelenítése a lapok faviconjain az URL vagy a cím frissülésekor',
+    pl: 'Pokazuj plakietki na ikonach kart przy aktualizacji adresu URL lub tytułu',
+    ru: 'Показывать индикаторы на значках вкладок при обновлении URL или заголовка',
+    zh_CN: '当 URL 或标题更新时在标签页图标上显示徽标',
+    zh_TW: '當 URL 或標題更新時在分頁圖標上顯示徽章',
+    ja: 'URLまたはタイトルが更新されたとき、タブのファビコンにバッジを表示する',
   },
-  'settings.tabs_update_mark_all': {
+  'settings.tabs_badge_rules': {
+    en: 'Badge rules',
+    de: 'Badge-Regeln',
+    fr: 'Règles des badges',
+    hu: 'Jelvényszabályok',
+    pl: 'Reguły plakietek',
+    ru: 'Правила индикаторов',
+    zh_CN: '徽标规则',
+    zh_TW: '徽章規則',
+    ja: 'バッジのルール',
+  },
+  'settings.tabs_badge_rules_note': {
+    en: `A newline-separated list of badge rules. Each rule consists of optional parameters separated by a semicolon and a space: \`; \`.
+Examples:
+\`\`\`
+title:\\((?<v>\\d+)\\)|\\[(?<v>\\d+)\\]; urgent
+minIdleTime:5000; urgent
+url:github\\.com\\/.+\\/\\d+; title:(?<v>#\\d+); bg:#fff; fg:#000
+\`\`\`
+Available parameters:
+- \`url:{RegExp}\` and/or \`title:{RegExp}\`: A regular expression to match the tab and optionally retrieve the badge value via a named group: \`(?<v>...)\`. If your \`{RegExp}\` contains a semicolon followed by a space \`; \`, escape the space with a backslash: \`;\\ \`. The default \`{RegExp}\` is an empty string, so any URL or title will match if these parameters are omitted. A badge without a value is ignored for unloaded or active tabs and is reset when the tab unloads or becomes active.
+- \`bg:{Color}\` and/or \`fg:{Color}\`: The color of the badge background or text.
+- \`urgent\`: Makes the badge urgent and propagates this status to parent elements (folded tabs, inactive panels). Ignored for unloaded and active tabs. After tab activation: a badge without a value will be hidden completely, and a badge with the value will be downgraded to a normal badge.
+- \`notify\`: Shows a notification.
+- \`pinned\`: Applies the rule only to pinned tabs.
+- \`normal\`: Applies the rule only to non-pinned tabs.
+- \`value:{Text}\`: Sets a static value for the badge.
+- \`minIdleTime:{Milliseconds}\`: Applies the rule when the tab title changes after the tab has been idle for at least \`{Milliseconds}\`.`,
+  },
+
+  'settings.tabs_notification_badge_scope': {
+    en: 'Show notification badges over tab favicons',
+    de: 'Benachrichtigungs-Badges auf Tab-Favicons anzeigen',
+    fr: "Afficher les badges de notification sur les favicons d'onglet",
+    hu: 'Értesítési jelzők megjelenítése a lap ikonjain',
+    pl: 'Pokaż oznaczenia powiadomień na ikonach kart',
+    ru: 'Показывать бейджи уведомлений на иконках вкладок',
+    zh_CN: '在标签页图标上显示通知标记',
+    zh_TW: '在分頁圖示上顯示通知標記',
+    ja: 'タブのファビコンに通知バッジを表示する',
+  },
+  'settings.tabs_notification_badge_scope_all': {
     en: 'on',
     de: 'Ein',
     fr: 'tous',
@@ -2978,7 +3020,7 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '開啟',
     ja: 'オン',
   },
-  'settings.tabs_update_mark_pin': {
+  'settings.tabs_notification_badge_scope_pin': {
     en: 'only for pinned',
     de: 'Nur für angeheftete',
     fr: 'onglets épinglés seulement',
@@ -2989,7 +3031,7 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '僅釘選',
     ja: '固定のみ',
   },
-  'settings.tabs_update_mark_norm': {
+  'settings.tabs_notification_badge_scope_norm': {
     en: 'only for not pinned',
     de: 'Nur für nicht angeheftete',
     fr: 'onlets non épinglés seulement',
@@ -3000,7 +3042,7 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '僅未釘選',
     ja: '固定以外のみ',
   },
-  'settings.tabs_update_mark_none': {
+  'settings.tabs_notification_badge_scope_none': {
     en: 'off',
     de: 'Aus',
     fr: 'aucun',
@@ -3011,16 +3053,60 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '關閉',
     ja: 'オフ',
   },
-  'settings.tabs_update_mark_first': {
-    en: 'Including the first title change with new URL',
-    de: 'Einschließlich der ersten Titeländerung bei einer neuen URL',
-    fr: 'Incluant le premier changement de titre d’une nouvelle URL',
-    hu: 'Az új URL első címváltozásakor is',
-    pl: 'Uwzględnij pierwszą zmianę tytułu z nowym URL',
-    ru: 'Включая первое изменение заголовка с новым URL',
-    zh_CN: '包括使用新 URL 的第一次标题更改',
-    zh_TW: '包括輸入新網址的第一次標題更新',
-    ja: '新しいURLの最初のタイトル変更を含む',
+  'settings.tabs_notification_badge_style': {
+    en: 'Show notification badge with count or a dot',
+    de: 'Benachrichtigungs-Badge mit Zähler oder Punkt anzeigen',
+    fr: 'Afficher le badge de notification avec compteur ou point',
+    hu: 'Értesítési jelző megjelenítése számlálóval vagy ponttal',
+    pl: 'Pokaż powiadomienie z liczbą lub kropką',
+    ru: 'Показывать бейдж уведомлений с числом или точкой',
+    zh_CN: '显示带计数或点的通知标记',
+    zh_TW: '顯示帶計數或點的通知標記',
+    ja: '通知バッジをカウントまたはドットで表示する',
+  },
+  'settings.tabs_notification_badge_style_count': {
+    en: 'count',
+    de: 'Zähler',
+    fr: 'compteur',
+    hu: 'számláló',
+    pl: 'licznik',
+    ru: 'счётчик',
+    zh_CN: '计数',
+    zh_TW: '計數',
+    ja: 'カウント',
+  },
+  'settings.tabs_notification_badge_style_dot': {
+    en: 'dot',
+    de: 'Punkt',
+    fr: 'point',
+    hu: 'pont',
+    pl: 'kropka',
+    ru: 'точка',
+    zh_CN: '点',
+    zh_TW: '點',
+    ja: 'ドット',
+  },
+  'settings.tabs_notification_badge_regexp_pattern': {
+    en: 'Regular expression for matching notification count in tab title',
+    de: 'Regulärer Ausdruck zur Übereinstimmung der Benachrichtigungszahl im Tab-Titel',
+    fr: "Expression régulière pour correspondre au nombre de notifications dans le titre de l'onglet",
+    hu: 'Reguláris kifejezés az értesítések számának megfeleltetéséhez a lap címében',
+    pl: 'Wyrażenie regularne dla dopasowania liczby powiadomień w tytule karty',
+    ru: 'Регулярное выражение для сопоставления количества уведомлений в заголовке вкладки',
+    zh_CN: '用于匹配标签页标题中通知数的正则表达式',
+    zh_TW: '用於匹配分頁標題中通知數的規則運算式',
+    ja: 'タブのタイトルで通知数をマッチするための正規表現',
+  },
+  'settings.tabs_notification_badge_regexp_pattern_info': {
+    en: 'Returns the first found capturing group in the pattern',
+    de: 'Gibt die erste gefundene Erfassungsgruppe im Muster zurück',
+    fr: 'Renvoie le premier groupe de capture trouvé dans le motif',
+    hu: 'Visszaadja a minta első megtalált rögzítő csoportját',
+    pl: 'Zwraca pierwszą znalezioną grupę przechwytującą we wzorcu',
+    ru: 'Возвращает первую найденную группу захвата в шаблоне',
+    zh_CN: '返回模式中找到的第一个捕获组',
+    zh_TW: '返回模式中找到的第一個捕獲組',
+    ja: 'パターン内で最初に見つかったキャプチャグループを返します',
   },
   'settings.tabs_reload_limit': {
     en: 'Limit the count of simultaneously reloading tabs',
