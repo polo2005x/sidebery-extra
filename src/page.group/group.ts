@@ -132,6 +132,10 @@ async function main() {
     tabsBoxEl.removeChild(tabsBoxEl.lastChild)
   }
 
+  // Must run before the tab loop so `favEnabled` is set when the cards (and
+  // their star buttons) are built.
+  if (initData.groupFav) setupFav()
+
   for (const tab of tabs) {
     createTabEl(tab, (event: MouseEvent) => onTabClick(event, tab))
     if (tab.el) tabsBoxEl.appendChild(tab.el)
@@ -141,7 +145,6 @@ async function main() {
 
   if (initData.groupSearch) setupSearch()
   if (initData.groupSort) setupSort()
-  if (initData.groupFav) setupFav()
   if (initData.groupRecent) setupRecent(initData.groupRecentCount)
 
   document.body.addEventListener('mousedown', e => {
