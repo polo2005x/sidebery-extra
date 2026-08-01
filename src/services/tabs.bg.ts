@@ -727,6 +727,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
     groupSort: Settings.state.groupSort,
     groupRecent: Settings.state.groupRecent,
     groupRecentCount: Settings.state.groupRecentCount,
+    groupFav: Settings.state.groupFav,
     animations: Settings.state.animations,
     groupInfo,
     newTabPos: Settings.state.moveNewTabParent === 'first_child' ? 'first_child' : 'last_child',
@@ -746,8 +747,25 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
       group_sort_title: browser.i18n.getMessage('group_sort_title'),
       group_sort_url: browser.i18n.getMessage('group_sort_url'),
       group_recent_title: browser.i18n.getMessage('group_recent_title'),
+      group_fav_title: browser.i18n.getMessage('group_fav_title'),
+      group_tab_fav_tooltip: browser.i18n.getMessage('group_tab_fav_tooltip'),
     },
   }
+}
+
+/**
+ * Relay a favourite-flag toggle from the group page to the sidebar (where the
+ * live tab state lives). Returns the resulting fav state.
+ */
+export async function setTabFav(tabId: ID, value?: boolean): Promise<boolean> {
+  const tab = Tabs.byId[tabId]
+  if (!tab) return false
+  const winId = tab.windowId
+  if (!IPC.isConnected(InstanceType.sidebar, winId)) return false
+  return IPC.sidebar(winId, 'setTabFav', tabId, value).catch(err => {
+    Logs.err('Tabs.setTabFav: Cannot set fav via sidebar', err)
+    return false
+  })
 }
 
 export function tabsApiProxy<T extends Array<any>>(method: string, ...args: T): any {

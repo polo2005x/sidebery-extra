@@ -29,6 +29,17 @@ export const sidebarTranslations: Translations = {
     zh: '警告',
     ja: '警告',
   },
+  'confirm.group_close': {
+    en: 'Close this group?',
+    de: 'Diese Gruppe schließen?',
+    fr: 'Fermer ce groupe ?',
+    hu: 'Bezárja ezt a csoportot?',
+    pl: 'Zamknąć tę grupę?',
+    ru: 'Закрыть эту группу?',
+    zh_CN: '关闭此组？',
+    zh_TW: '關閉此群組？',
+    ja: 'このグループを閉じますか？',
+  },
   'confirm.tabs_close': {
     en: n => `Are you sure you want to close ${n} tabs?`,
     de: n => `Möchten Sie diese ${n} Tabs wirklich schließen?`,

@@ -53,6 +53,7 @@ async function main(): Promise<void> {
     stopDrag: DnD.onExternalStop,
     setDragInfo: DnD.setDragInfo,
     getGroupInfo: Tabs.getGroupInfo,
+    setTabFav: Tabs.setTabFav,
     loadFavicons: Favicons.load,
     reloadFavicons: Favicons.load,
     setFavicon: Favicons.set,

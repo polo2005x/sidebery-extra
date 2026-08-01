@@ -1566,5 +1566,27 @@
     "zh_CN": "最近活动的标签页",
     "zh_TW": "最近活動的分頁",
     "ja": "最近アクティブなタブ"
+  },
+  "group_fav_title": {
+    "en": "Favourites",
+    "de": "Favoriten",
+    "fr": "Favoris",
+    "hu": "Kedvencek",
+    "pl": "Ulubione",
+    "ru": "Избранное",
+    "zh_CN": "收藏",
+    "zh_TW": "收藏",
+    "ja": "お気に入り"
+  },
+  "group_tab_fav_tooltip": {
+    "en": "Favourite (mark this tab)",
+    "de": "Favorit (diesen Tab markieren)",
+    "fr": "Favori (marquer cet onglet)",
+    "hu": "Kedvenc (lap megjelölése)",
+    "pl": "Ulubiony (oznacz tę kartę)",
+    "ru": "Избранное (отметить вкладку)",
+    "zh_CN": "收藏（标记此标签页）",
+    "zh_TW": "收藏（標記此分頁）",
+    "ja": "お気に入り（このタブを登録）"
   }
 }

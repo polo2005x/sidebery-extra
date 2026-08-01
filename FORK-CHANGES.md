@@ -146,3 +146,41 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/types/settings.ts`, toggle in `src/page.setup/components/settings.tabs.vue`; labels in
   `src/_locales/dict.common.ts` (`menu.tab.go_to_group_top`), `dict.setup-page.ts`
   (`settings.group_top_activate`), and `dict.browser.json` (`KbSwitchToGroupTab`).
+
+## 10. "Favourites" box on the group page
+- **What:** A ⭐ button on each tab card (in the `.ctrls` row, next to discard/reload/close)
+  marks that tab as a **favourite**. Favourites show in a collapsible **Favourites** box above
+  the "Recently active tabs" box (compact two-column rows like Recent; click a row to activate).
+  The favourite is a **flag on the tab itself** (`fav` in `TabSessionData`/`TabCache`, mirroring
+  the `sharedParent` pattern), so it **follows the tab through URL changes** (favourite a forum
+  post, navigate to a different page in the same tab — still favourited) and **survives a browser
+  restart** (Firefox session-restore). It is dropped when the tab is closed or unfavourited — for
+  permanent favourites, bookmark the page instead. Not a real bookmark.
+- **Data flow:** the flag lives in the sidebar (`Tabs.byId`). The group page toggles it via
+  `IPPC.bg('setTabFav', id, value)` → bg relay `Tabs.setTabFav` → `IPC.sidebar(win,'setTabFav')`
+  → `Tabs.setTabFav` (sidebar) sets `tab.fav`, `saveTabData` + `cacheTabsData`. `getGroupedTabInfo`
+  includes `fav` so the page shows the correct star on load / reopen.
+- **Setting:** Settings → Group → "Show 'Favourites' box on the group page" (`groupFav`, default
+  on). Passed via `getGroupPageInitData`; gates both the star buttons and the box.
+- **Files:** `fav` in `src/types/tabs.ts` (`Tab`, `TabCache`, `TabSessionData`, `GroupedTabInfo`);
+  persist/restore in `src/services/tabs.fg.ts` (`restoreTab`, `cacheTabsData`, `_saveTabData`);
+  `getGroupedTabInfo` + `setTabFav` in `src/services/tabs.fg.groups.ts`; bg relay + `groupFav` +
+  labels in `src/services/tabs.bg.ts`; action registration in `src/sidebar/sidebar.ts`,
+  `src/bg/background.ts`, types in `src/types/ipc.ts`; group page `setupFav`/`renderFav`/
+  `toggleFav` + star button in `src/page.group/group.ts`, box markup + `#icon_star` inject in
+  `group.html`, `.fav-btn` styles in `src/styles/page.group/group.styl`; `groupFav` in
+  `src/defaults/settings.ts`, `src/types/settings.ts`, toggle in
+  `src/page.setup/components/settings.group.vue`; labels in `dict.setup-page.ts`
+  (`settings.group_fav`) and `dict.browser.json` (`group_fav_title`, `group_tab_fav_tooltip`).
+
+## 11. Confirm before closing a group
+- **What:** Optional confirmation popup when closing a **group tab** (a tab whose removal set
+  includes an `isGroup` tab). Reuses the existing `Popups.confirm` path in `removeTabs`; fires
+  independently of the "Confirmation of multiple tabs closing" setting and shows a group-specific
+  message. Off by default.
+- **Setting:** Settings → Group → "Confirm before closing a group" (`warnOnCloseGroup`, default off).
+- **Files:** `warnGroup` branch in `src/services/tabs.fg.rm.ts` (`removeTabs`); `warnOnCloseGroup`
+  in `src/defaults/settings.ts`, `src/types/settings.ts`, toggle in
+  `src/page.setup/components/settings.group.vue`; message `confirm.group_close` in
+  `src/_locales/dict.sidebar.ts`, setting label `settings.warn_on_close_group` in
+  `dict.setup-page.ts`.

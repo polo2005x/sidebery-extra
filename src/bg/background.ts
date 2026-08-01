@@ -36,6 +36,7 @@ void (async function main() {
     getGroupPageInitData: Tabs.getGroupPageInitData,
     getPlaceholderPageInitData: Tabs.getPlaceholderPageInitData,
     tabsApiProxy: Tabs.tabsApiProxy,
+    setTabFav: Tabs.setTabFav,
     getSidebarTabs: Tabs.getSidebarTabs,
     detachSidebarTabs: Tabs.detachSidebarTabs,
     openTabs: Tabs.openTabs,

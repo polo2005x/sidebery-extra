@@ -37,6 +37,18 @@ section(ref="el")
       :min="1"
       :inactive="!Settings.state.groupRecent"
       @update:value="Settings.saveDebounced(500)")
+  ToggleField(
+    label="settings.group_fav"
+    dbg="groupFav"
+    v-model:value="Settings.state.groupFav"
+    :default="DEFAULT_SETTINGS.groupFav"
+    @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.warn_on_close_group"
+    dbg="warnOnCloseGroup"
+    v-model:value="Settings.state.warnOnCloseGroup"
+    :default="DEFAULT_SETTINGS.warnOnCloseGroup"
+    @update:value="Settings.saveDebounced(150)")
 </template>
 
 <script lang="ts" setup>

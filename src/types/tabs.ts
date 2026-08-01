@@ -39,6 +39,8 @@ export interface Tab extends NativeTab {
   customColor?: string
   /** Shared-parent group id (>= 1). Undefined/0 means "not a shared parent". */
   sharedParent?: number
+  /** Marked as a "favourite" tab (group-page only). Persists with the tab. */
+  fav?: boolean
   moving?: boolean
   removing?: boolean
   flashAnimationTimeout?: number
@@ -123,6 +125,7 @@ export interface TabCache {
   customTitle?: string
   customColor?: string
   sharedParent?: number
+  fav?: boolean
 
   index?: number
   isMissedGroup?: boolean
@@ -136,6 +139,7 @@ export interface TabSessionData {
   customTitle?: string
   customColor?: string
   sharedParent?: number
+  fav?: boolean
 }
 
 export interface ActiveTabsHistory {
@@ -161,6 +165,7 @@ export interface GroupPageInitData {
   groupSort?: boolean
   groupRecent?: boolean
   groupRecentCount?: number
+  groupFav?: boolean
   animations?: boolean
   groupInfo?: GroupInfo | null
   newTabPos?: 'first_child' | 'last_child'
@@ -186,6 +191,7 @@ export interface GroupedTabInfo {
   discarded: boolean
   lastAccessed?: number
   favIconUrl?: string
+  fav?: boolean
   el?: HTMLElement
   bgEl?: HTMLElement
   favEl?: HTMLElement

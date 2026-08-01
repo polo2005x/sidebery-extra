@@ -36,6 +36,7 @@
     <inject>svg://src/assets/close.svg#icon_close</inject>
     <inject>svg://src/assets/discard.svg#icon_discard</inject>
     <inject>svg://src/assets/reload.svg#icon_reload</inject>
+    <inject>svg://src/assets/star.svg#icon_star</inject>
     <inject>svg://src/assets/sidebery.svg#icon_sidebery</inject>
     <inject>svg://src/assets/firefox.svg#icon_ff</inject>
     <inject>svg://src/assets/favicon-group.svg#icon_group</inject>
@@ -53,6 +54,11 @@
   <div class="title-box">
     <input type="text" id="title" class="title" value="Group" placeholder="---">
     <div class="title-highlight"></div>
+  </div>
+
+  <div id="fav_box" class="recent-box fav-box" style="display: none;">
+    <div id="fav_title" class="recent-title"></div>
+    <div id="fav_tabs" class="recent-tabs"></div>
   </div>
 
   <div id="recent_box" class="recent-box" style="display: none;">

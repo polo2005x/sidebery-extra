@@ -373,7 +373,23 @@ export function getGroupedTabInfo(tab: T.Tab, groupTab: T.Tab): T.GroupedTabInfo
     discarded: !!tab.discarded,
     lastAccessed: tab.lastAccessed,
     favIconUrl,
+    fav: !!tab.fav,
   }
+}
+
+/**
+ * Toggle (or set) the "favourite" flag on a tab and persist it. Called from the
+ * group page (relayed through the background). Returns the resulting state so the
+ * page can update without a round-trip refresh.
+ */
+export function setTabFav(tabId: ID, value?: boolean): boolean {
+  const tab = Tabs.byId[tabId]
+  if (!tab) return false
+  const next = value ?? !tab.fav
+  tab.fav = next
+  Tabs.saveTabData(tabId, true)
+  Tabs.cacheTabsData()
+  return next
 }
 
 export async function setGroupName(groupTabId: ID, newName: string) {

@@ -244,8 +244,12 @@ export async function removeTabs(
   const warn =
     Settings.state.warnOnMultiTabClose === 'any' ||
     (hasInvisibleTab && Settings.state.warnOnMultiTabClose === 'collapsed')
-  if (!silent && warn && count > 1) {
-    const ok = await Popups.confirm(translate('confirm.tabs_close', count), ConfirmationType.RmTab)
+  const warnGroup = Settings.state.warnOnCloseGroup && tabs.some(t => t.isGroup)
+  if (!silent && ((warn && count > 1) || warnGroup)) {
+    const confirmMsg = warnGroup
+      ? translate('confirm.group_close')
+      : translate('confirm.tabs_close', count)
+    const ok = await Popups.confirm(confirmMsg, ConfirmationType.RmTab)
     // Cancel
     if (!ok) {
       // Parent tab was closed which is the cause of removing its children

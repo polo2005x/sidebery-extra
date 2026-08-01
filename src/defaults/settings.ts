@@ -55,6 +55,8 @@ export const DEFAULT_SETTINGS: SettingsState = {
   groupSort: true,
   groupRecent: true,
   groupRecentCount: 5,
+  groupFav: true,
+  warnOnCloseGroup: false,
 
   // Containers
   containersSortByName: false,

@@ -40,6 +40,7 @@ export type BgActions = {
   getGroupPageInitData: typeof Tabs.getGroupPageInitData
   getPlaceholderPageInitData: typeof Tabs.getPlaceholderPageInitData
   tabsApiProxy: typeof Tabs.tabsApiProxy
+  setTabFav: typeof Tabs.setTabFav
   getSidebarTabs: typeof Tabs.getSidebarTabs
   detachSidebarTabs: typeof Tabs.detachSidebarTabs
   openTabs: typeof Tabs.openTabs
@@ -96,6 +97,7 @@ export type SidebarActions = {
   stopDrag: () => void
   setDragInfo: (dragInfo: T.DragInfo) => void
   getGroupInfo: (groupTabId: ID) => Promise<T.GroupInfo | null>
+  setTabFav: (tabId: ID, value?: boolean) => boolean
   handleReopening: (tabId: ID, dstContainerId?: string) => Promise<number | undefined>
 
   loadFavicons: () => void

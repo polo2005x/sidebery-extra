@@ -57,6 +57,8 @@ export interface SettingsState {
   groupSort: boolean
   groupRecent: boolean
   groupRecentCount: number
+  groupFav: boolean
+  warnOnCloseGroup: boolean
 
   // Containers
   containersSortByName: boolean

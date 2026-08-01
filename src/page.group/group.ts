@@ -34,6 +34,10 @@ let recentCount = 5
 let recentBoxEl: HTMLElement | null = null
 let recentTabsEl: HTMLElement | null = null
 
+let favEnabled = false
+let favBoxEl: HTMLElement | null = null
+let favTabsEl: HTMLElement | null = null
+
 async function main() {
   try {
     parseUrl()
@@ -137,6 +141,7 @@ async function main() {
 
   if (initData.groupSearch) setupSearch()
   if (initData.groupSort) setupSort()
+  if (initData.groupFav) setupFav()
   if (initData.groupRecent) setupRecent(initData.groupRecentCount)
 
   document.body.addEventListener('mousedown', e => {
@@ -233,6 +238,7 @@ export function onGroupUpdMsg(upd: T.GroupUpdMsg) {
   applySort()
   applySearch()
   renderRecent()
+  renderFav()
 }
 
 /**
@@ -477,6 +483,75 @@ function createRecentCard(info: T.GroupedTabInfo): HTMLElement {
   return el
 }
 
+// --- Favourites box -------------------------------------------------------
+// A collapsible box (above Recent) listing the tabs the user has starred. The
+// favourite flag lives on the tab itself (persisted via the sidebar), so it
+// follows the tab through URL changes and survives a restart, and it's dropped
+// when the tab is closed.
+
+function setupFav(): void {
+  favBoxEl = document.getElementById('fav_box')
+  favTabsEl = document.getElementById('fav_tabs')
+  const titleEl = document.getElementById('fav_title')
+  if (!favBoxEl || !favTabsEl) return
+
+  favEnabled = true
+  if (titleEl) titleEl.textContent = getLabel('group_fav_title')
+
+  // Collapsible; remember the state across sessions
+  let collapsed = false
+  try {
+    collapsed = localStorage.getItem('groupFavCollapsed') === '1'
+  } catch {
+    // localStorage may be unavailable; default to expanded
+  }
+  favBoxEl.setAttribute('data-collapsed', String(collapsed))
+  if (titleEl) {
+    titleEl.addEventListener('mousedown', e => e.stopPropagation())
+    titleEl.addEventListener('click', () => {
+      const next = favBoxEl?.getAttribute('data-collapsed') !== 'true'
+      favBoxEl?.setAttribute('data-collapsed', String(next))
+      try {
+        localStorage.setItem('groupFavCollapsed', next ? '1' : '0')
+      } catch {
+        // ignore persistence failure
+      }
+    })
+  }
+
+  renderFav()
+}
+
+/** (Re)render the favourites box: the group's tabs whose `fav` flag is set. */
+function renderFav(): void {
+  if (!favEnabled || !favTabsEl) return
+
+  const marked = tabs.filter(t => t.fav)
+
+  while (favTabsEl.lastChild) favTabsEl.removeChild(favTabsEl.lastChild)
+  for (const info of marked) favTabsEl.appendChild(createRecentCard(info))
+
+  if (favBoxEl) favBoxEl.style.display = marked.length ? '' : 'none'
+}
+
+/**
+ * Toggle the favourite flag on a tab: update the tab card, persist via the
+ * background (which relays to the sidebar), and refresh the favourites box.
+ */
+function toggleFav(info: T.GroupedTabInfo): void {
+  const next = !info.fav
+  info.fav = next
+  info.el?.setAttribute('data-favourite', String(next))
+  renderFav()
+  IPPC.bg('setTabFav', info.id, next).catch(err => {
+    // Roll back the optimistic change if persistence failed
+    Logs.err('group: setTabFav failed', err)
+    info.fav = !next
+    info.el?.setAttribute('data-favourite', String(!next))
+    renderFav()
+  })
+}
+
 /**
  * Handle creating tab
  */
@@ -534,6 +609,9 @@ function onTabUpdated(upd: T.GroupedTabInfo) {
 
   tab.el.setAttribute('data-lvl', String(upd.lvl))
   tab.lvl = upd.lvl
+
+  tab.fav = upd.fav
+  tab.el.setAttribute('data-favourite', String(!!upd.fav))
 }
 
 /**
@@ -626,9 +704,20 @@ function createTabEl(info: T.GroupedTabInfo, clickHandler: (e: MouseEvent) => vo
   else info.urlEl.textContent = normURL
   infoEl.appendChild(info.urlEl)
 
+  info.el.setAttribute('data-favourite', String(!!info.fav))
+
   const ctrlsEl = document.createElement('div')
   ctrlsEl.classList.add('ctrls')
   info.el.appendChild(ctrlsEl)
+
+  if (favEnabled) {
+    const favBtnEl = createTabButton('#icon_star', 'fav-btn', event => {
+      event.stopPropagation()
+      toggleFav(info)
+    })
+    favBtnEl.title = getLabel('group_tab_fav_tooltip')
+    ctrlsEl.appendChild(favBtnEl)
+  }
 
   const discardBtnEl = createTabButton('#icon_discard', 'discard-btn', event => {
     event.stopPropagation()

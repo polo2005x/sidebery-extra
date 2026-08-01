@@ -265,6 +265,18 @@ body[data-pin="true"] .recent-box
   text-overflow: ellipsis
   color: var(--toolbar-fg)
 
+// -- Favourite (star) button on tab cards
+// -
+// The star reuses .tab-btn styling; when the tab is favourited it turns gold
+// and stays fully opaque.
+.ctrls .tab-btn.fav-btn svg
+  opacity: .55
+.tab[data-favourite="true"] .ctrls .tab-btn.fav-btn svg
+  fill: #f0b400
+  opacity: 1
+.ctrls .tab-btn.fav-btn:hover svg
+  opacity: 1
+
 .disconnected-warn
   position: absolute
   top: 0

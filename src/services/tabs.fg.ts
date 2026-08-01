@@ -523,6 +523,7 @@ function restoreTab(
       const group = typeof props.sharedParent === 'number' ? props.sharedParent : 1
       tab.reactive.sharedParent = tab.sharedParent = group
     }
+    if (props.fav) tab.fav = true
   } else {
     Logs.warn(`Tabs.restoreTab: no props for: "${tab.id} i${tab.index} url${tab.url}"`)
   }
@@ -750,6 +751,7 @@ export function cacheTabsData(delay = 300): void {
       if (tab.customTitle) info.customTitle = tab.customTitle
       if (tab.customColor) info.customColor = tab.customColor
       if (tab.sharedParent) info.sharedParent = tab.sharedParent
+      if (tab.fav) info.fav = tab.fav
       data.push(info)
     }
 
@@ -808,7 +810,8 @@ function _saveTabData(tabId: ID, forced?: boolean): void {
       data.panelId === tab.panelId &&
       data.customColor === tab.customColor &&
       data.customTitle === tab.customTitle &&
-      data.sharedParent === tab.sharedParent
+      data.sharedParent === tab.sharedParent &&
+      !!data.fav === !!tab.fav
     ) {
       return
     }
@@ -833,6 +836,8 @@ function _saveTabData(tabId: ID, forced?: boolean): void {
   else delete data.customColor
   if (tab.sharedParent) data.sharedParent = tab.sharedParent
   else delete data.sharedParent
+  if (tab.fav) data.fav = true
+  else delete data.fav
 
   // Logs.info('Tabs.saveTabData: Saving...', tabId, { ...data })
   browser.sessions.setTabValue(tabId, 'data', data).catch(err => {
