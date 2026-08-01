@@ -143,9 +143,17 @@ async function main() {
 
   createNewTabButton()
 
+  // Default sort order for the group page. Applies whether or not the live sort
+  // dropdown is shown; the dropdown (if enabled) starts from this value.
+  if (initData.groupSortDefault && SORT_MODES.includes(initData.groupSortDefault as SortMode)) {
+    sortMode = initData.groupSortDefault as SortMode
+  }
+
   if (initData.groupSearch) setupSearch()
   if (initData.groupSort) setupSort()
   if (initData.groupRecent) setupRecent(initData.groupRecentCount)
+
+  if (sortMode !== 'default') applySort()
 
   document.body.addEventListener('mousedown', e => {
     if (e.button === 2 && groupParentId !== undefined && groupParentId !== NOID) {
@@ -351,7 +359,9 @@ function setupSort(): void {
  * Reorder the displayed tab cards (view only; does not move the actual tabs)
  */
 function applySort(): void {
-  if (!sortEnabled || !tabsBoxEl || !newTabEl) return
+  // Note: not gated on `sortEnabled` — a configured default order applies even
+  // when the live sort dropdown is hidden.
+  if (!tabsBoxEl || !newTabEl) return
 
   const sorted = tabs.slice()
   switch (sortMode) {

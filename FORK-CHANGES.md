@@ -100,13 +100,20 @@ updated when adding features — it makes pulling upstream updates much easier.
   (view only — it does not move the actual tabs). Modes: default order, reverse, by domain,
   by title, by URL. Composes with the search filter, and sits to the right of the search bar.
 - **Setting:** Settings → Group → "Show sort dropdown on the group page" (`groupSort`),
-  default on. Passed via `getGroupPageInitData`. The chosen sort resets to default when the
-  page is reopened.
-- **Files:** `src/page.group/group.ts` (`setupSort`/`applySort`) + `group.html`;
-  `src/styles/page.group/group.styl`; `groupSort` in `src/defaults/settings.ts`,
-  `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`;
-  `src/services/tabs.bg.ts`; toggle in `src/page.setup/components/settings.group.vue`;
-  labels in `src/_locales/dict.setup-page.ts` and `dict.browser.json`.
+  default on. Passed via `getGroupPageInitData`. When the page is reopened the dropdown resets
+  to the configured default order (see below).
+- **Default order (`groupSortDefault`):** Settings → Group → "Default sort order on the group
+  page" — a select (default / reverse / by domain / by title / by URL), default `default`
+  (tree order). This is the order the group page uses on load, and it applies **even when the
+  sort dropdown is hidden** (`applySort` is no longer gated on the dropdown being enabled); when
+  the dropdown is shown it starts from this value. Passed via `getGroupPageInitData`.
+- **Files:** `src/page.group/group.ts` (`setupSort`/`applySort`, initial `sortMode` from
+  `groupSortDefault` + apply on load) + `group.html`; `src/styles/page.group/group.styl`;
+  `groupSort` + `groupSortDefault` (and `SETTINGS_OPTIONS.groupSortDefault`) in
+  `src/defaults/settings.ts`, `src/types/settings.ts`, `GroupPageInitData` in `src/types/tabs.ts`;
+  `src/services/tabs.bg.ts`; toggle + select in `src/page.setup/components/settings.group.vue`;
+  labels in `src/_locales/dict.setup-page.ts` (`settings.group_sort_default`,
+  `settings.group_sort_mode_*`) and `dict.browser.json`.
 
 ## 8. "Recently active tabs" box on the group page
 - **What:** Optional box between the group title and the search bar showing the N

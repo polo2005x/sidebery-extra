@@ -163,6 +163,7 @@ export interface GroupPageInitData {
   groupLayout?: (typeof D.SETTINGS_OPTIONS.groupLayout)[number]
   groupSearch?: boolean
   groupSort?: boolean
+  groupSortDefault?: string
   groupRecent?: boolean
   groupRecentCount?: number
   groupFav?: boolean

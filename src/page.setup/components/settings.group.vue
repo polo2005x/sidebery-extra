@@ -22,6 +22,14 @@ section(ref="el")
     v-model:value="Settings.state.groupSort"
     :default="DEFAULT_SETTINGS.groupSort"
     @update:value="Settings.saveDebounced(150)")
+  SelectField(
+    label="settings.group_sort_default"
+    optLabel="settings.group_sort_mode_"
+    dbg="groupSortDefault"
+    v-model:value="Settings.state.groupSortDefault"
+    :default="DEFAULT_SETTINGS.groupSortDefault"
+    :opts="Settings.getOpts('groupSortDefault')"
+    @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.group_recent"
     dbg="groupRecent"

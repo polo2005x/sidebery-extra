@@ -55,6 +55,7 @@ export interface SettingsState {
   groupLayout: (typeof SETTINGS_OPTIONS.groupLayout)[number]
   groupSearch: boolean
   groupSort: boolean
+  groupSortDefault: (typeof SETTINGS_OPTIONS.groupSortDefault)[number]
   groupRecent: boolean
   groupRecentCount: number
   groupFav: boolean

@@ -725,6 +725,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
     groupLayout: Settings.state.groupLayout,
     groupSearch: Settings.state.groupSearch,
     groupSort: Settings.state.groupSort,
+    groupSortDefault: Settings.state.groupSortDefault,
     groupRecent: Settings.state.groupRecent,
     groupRecentCount: Settings.state.groupRecentCount,
     groupFav: Settings.state.groupFav,
