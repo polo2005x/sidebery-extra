@@ -160,6 +160,7 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
       branchColor: null,
       color: null,
       sharedParent: tab.sharedParent ?? 0,
+      fav: !!tab.fav,
       isGroup: tab.isGroup,
     }
   }
@@ -523,7 +524,7 @@ function restoreTab(
       const group = typeof props.sharedParent === 'number' ? props.sharedParent : 1
       tab.reactive.sharedParent = tab.sharedParent = group
     }
-    if (props.fav) tab.fav = true
+    if (props.fav) tab.reactive.fav = tab.fav = true
   } else {
     Logs.warn(`Tabs.restoreTab: no props for: "${tab.id} i${tab.index} url${tab.url}"`)
   }

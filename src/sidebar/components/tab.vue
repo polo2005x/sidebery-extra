@@ -35,6 +35,7 @@
     .color-layer(v-if="tabColor" :style="{ '--tab-color': tabColor }")
     .flash-fx(ref="flashFxEl")
     .shared-parent-mark(v-if="tab.reactive.sharedParent" :style="sharedParentColor ? { backgroundColor: sharedParentColor } : undefined")
+    svg.fav-mark(v-if="tab.reactive.fav"): use(href="#icon_star_filled")
     .unread-mark(v-if="tab.reactive.unread")
     .fav(@dragstart.stop.prevent)
       img.fav-icon(ref="favImgEl" @error="onError" draggable="false")

@@ -89,6 +89,8 @@ export interface ReactiveTabProps {
   customColor: string | null
   /** Shared-parent group id (>= 1); 0 means "not a shared parent". */
   sharedParent: number
+  /** Marked as a "favourite" tab (shows a star marker in the tree). */
+  fav: boolean
   isGroup: boolean
 }
 

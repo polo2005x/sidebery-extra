@@ -169,6 +169,13 @@ updated when adding features — it makes pulling upstream updates much easier.
   includes `fav` so the page shows the correct star on load / reopen.
 - **Setting:** Settings → Group → "Show 'Favourites' box on the group page" (`groupFav`, default
   on). Passed via `getGroupPageInitData`; gates both the star buttons and the box.
+- **Sidebar tree marker:** a favourited tab also shows a small gold ⭐ badge on the favicon's
+  bottom-left corner in the main tab tree. Driven by a reactive `fav` prop (`ReactiveTabProps`),
+  set in the reactive builder and updated live by `setTabFav`; reuses the `#icon_star` sprite
+  already injected in `sidebar.html`. Not gated by `groupFav` (it just reflects the tab's flag).
+  Files: `fav` in `ReactiveTabProps` (`src/types/tabs.ts`) + mock in `src/defaults/mocks.tabs.fg.ts`;
+  reactive set in `src/services/tabs.fg.ts`; `.fav-mark` in `src/sidebar/components/tab.vue` and
+  `src/styles/sidebar/tab.styl`.
 - **Files:** `fav` in `src/types/tabs.ts` (`Tab`, `TabCache`, `TabSessionData`, `GroupedTabInfo`);
   persist/restore in `src/services/tabs.fg.ts` (`restoreTab`, `cacheTabsData`, `_saveTabData`);
   `getGroupedTabInfo` + `setTabFav` in `src/services/tabs.fg.groups.ts`; bg relay + `groupFav` +

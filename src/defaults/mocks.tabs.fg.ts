@@ -69,6 +69,7 @@ export class MTab implements Tab {
     branchColor: null,
     customColor: null,
     sharedParent: 0,
+    fav: false,
     isGroup: false,
   }
   sessionData?: TabSessionData | undefined
