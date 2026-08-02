@@ -1,0 +1,21 @@
+# Normalize line endings across platforms.
+# Text files are stored and checked out as LF (overrides core.autocrlf on Windows),
+# which keeps eslint's linebreak-style rule happy and stops editors from
+# rewriting whole files to CRLF.
+* text=auto eol=lf
+
+# Binary assets — never touch these.
+*.png binary
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+*.zip binary
+*.mp4 binary
+*.webm binary
