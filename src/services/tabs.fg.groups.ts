@@ -393,6 +393,23 @@ export function setTabFav(tabId: ID, value?: boolean): boolean {
   return next
 }
 
+/** Set the favourite flag on several tabs at once (context menu / keybinding). */
+export function setFavOfTabs(tabIds: ID[], value: boolean): void {
+  for (const id of tabIds) setTabFav(id, value)
+}
+
+/**
+ * Toggle favourite for the given tabs (or the active tab), based on the first
+ * tab's current state. Only acts on tabs that are inside a group — matches the
+ * group-scoped Favourites box. Used by the keybinding.
+ */
+export function toggleFav(tabIds?: ID[]): void {
+  const ids = tabIds && tabIds.length ? tabIds : [Tabs.activeId]
+  const firstTab = Tabs.byId[ids[0]]
+  if (!firstTab || !getGroupTab(firstTab)) return
+  setFavOfTabs(ids, !firstTab.fav)
+}
+
 export async function setGroupName(groupTabId: ID, newName: string) {
   Logs.info('Tabs.setGroupName', groupTabId, newName)
   const groupTab = Tabs.byId[groupTabId]

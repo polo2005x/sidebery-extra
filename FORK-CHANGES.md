@@ -169,13 +169,24 @@ updated when adding features — it makes pulling upstream updates much easier.
   includes `fav` so the page shows the correct star on load / reopen.
 - **Setting:** Settings → Group → "Show 'Favourites' box on the group page" (`groupFav`, default
   on). Passed via `getGroupPageInitData`; gates both the star buttons and the box.
-- **Sidebar tree marker:** a favourited tab also shows a small gold ⭐ badge on the favicon's
-  bottom-left corner in the main tab tree. Driven by a reactive `fav` prop (`ReactiveTabProps`),
-  set in the reactive builder and updated live by `setTabFav`; reuses the `#icon_star` sprite
-  already injected in `sidebar.html`. Not gated by `groupFav` (it just reflects the tab's flag).
-  Files: `fav` in `ReactiveTabProps` (`src/types/tabs.ts`) + mock in `src/defaults/mocks.tabs.fg.ts`;
-  reactive set in `src/services/tabs.fg.ts`; `.fav-mark` in `src/sidebar/components/tab.vue` and
-  `src/styles/sidebar/tab.styl`.
+- **Sidebar tree marker:** a favourited tab also shows a small solid gold ⭐ badge flush in the
+  tab's bottom-left corner in the main tab tree. Driven by a reactive `fav` prop
+  (`ReactiveTabProps`), set in the reactive builder, on restore (`restoreTab` sets
+  `tab.reactive.fav = tab.fav = true`, else the marker misses a browser restart), and live by
+  `setTabFav`. Uses a dedicated solid star icon `#icon_star_filled` (`src/assets/star-filled.svg`,
+  injected in `sidebar.html`). Files: `fav` in `ReactiveTabProps` (`src/types/tabs.ts`) + mock in
+  `src/defaults/mocks.tabs.fg.ts`; reactive set/restore in `src/services/tabs.fg.ts`; `.fav-mark`
+  in `src/sidebar/components/tab.vue` and `src/styles/sidebar/tab.styl`.
+- **Favourite from the tree:** right-click a tab → **"Favourite" / "Unfavourite"** (dynamic
+  label like pin/mute). Multi-select aware; only shown when the tab is **inside a group**
+  (`getGroupTab` gate — returns `undefined` to fully hide otherwise). Also a keybinding
+  `toggle_fav` ("Favourite / unfavourite tab (in a group)", unbound by default). Both use
+  `Tabs.setFavOfTabs`/`Tabs.toggleFav` (sidebar-side, no bg relay needed). Menu item must be
+  added via Context Menu Editor → Tabs. Files: `favTab` option + `setFavOfTabs`/`toggleFav` in
+  `src/services/menu.fg.options.tabs.ts` + `src/services/tabs.fg.groups.ts`; `src/defaults/menu.ts`,
+  `src/page.setup/components/menu-editor.vue`; keybinding in `src/services/keybindings.fg.ts`,
+  `src/manifest.json`, `src/page.setup/components/keybindings.vue`; labels
+  `menu.tab.favourite`/`unfavourite` in `dict.common.ts`, `KbToggleFav` in `dict.browser.json`.
 - **Files:** `fav` in `src/types/tabs.ts` (`Tab`, `TabCache`, `TabSessionData`, `GroupedTabInfo`);
   persist/restore in `src/services/tabs.fg.ts` (`restoreTab`, `cacheTabsData`, `_saveTabData`);
   `getGroupedTabInfo` + `setTabFav` in `src/services/tabs.fg.groups.ts`; bg relay + `groupFav` +

@@ -818,6 +818,17 @@
     "zh_TW": "跳到群組頂部（群組分頁）",
     "ja": "グループの先頭へ（グループタブ）"
   },
+  "KbToggleFav": {
+    "en": "Toggle group favourite (selected tab)",
+    "de": "Gruppenfavorit umschalten (ausgewählter Tab)",
+    "fr": "Basculer le favori du groupe (onglet sélectionné)",
+    "hu": "Csoport kedvenc ki/be (kijelölt lap)",
+    "pl": "Przełącz ulubiony grupy (zaznaczona karta)",
+    "ru": "Переключить избранное группы (выбранная вкладка)",
+    "zh_CN": "切换组收藏（选中的标签页）",
+    "zh_TW": "切換群組收藏（選取的分頁）",
+    "ja": "グループのお気に入りを切り替え（選択タブ）"
+  },
   "KbSwitchToUnpinnedTab0": {
     "en": "Switch to first unpinned tab of active panel",
     "de": "Zum ersten unangehefteten Tab des aktiven Panels wechseln",

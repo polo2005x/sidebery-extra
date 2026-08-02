@@ -322,6 +322,9 @@
     "switch_to_group_tab": {
       "description": "__MSG_KbSwitchToGroupTab__"
     },
+    "toggle_fav": {
+      "description": "__MSG_KbToggleFav__"
+    },
     "switch_to_unpinned_tab_0": {
       "description": "__MSG_KbSwitchToUnpinnedTab0__"
     },

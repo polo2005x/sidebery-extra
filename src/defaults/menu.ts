@@ -44,6 +44,7 @@ export const TABS_MENU: MenuConf = [
   'group',
   'flatten',
   'goToGroupTop',
+  'favTab',
   'toggleSharedParent',
   'dedupeBranchTabs',
   'dedupeSubgroupTabs',

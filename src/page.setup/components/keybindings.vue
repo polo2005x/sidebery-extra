@@ -151,6 +151,7 @@
     .info {{translate('settings.kb_switch_act_note')}}
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_parent_tab")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_group_tab")
+    KeybindingField(:keybinding="Keybindings.reactive.byName.toggle_fav")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_unpinned_tab_0")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_unpinned_tab_1")
     KeybindingField(:keybinding="Keybindings.reactive.byName.switch_to_unpinned_tab_2")

@@ -184,6 +184,7 @@ const TABS_MENU_OPTS: Record<string, string> = {
   group: 'menu.tab.group',
   flatten: 'menu.tab.flatten',
   goToGroupTop: 'menu.tab.go_to_group_top',
+  favTab: 'menu.tab.favourite',
   toggleSharedParent: 'menu.tab.set_shared_parent',
   dedupeBranchTabs: 'menu.tab.dedupe_branch',
   dedupeSubgroupTabs: 'menu.tab.dedupe_subgroup',

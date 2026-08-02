@@ -343,6 +343,21 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  favTab: () => {
+    const selected = Selection.ids()
+    const firstTab = Tabs.byId[selected[0]]
+    if (!firstTab) return
+    // Only offer this for tabs that are inside a group (matches the group page's
+    // Favourites box). Returning undefined fully hides the item otherwise.
+    if (!Tabs.getGroupTab(firstTab)) return
+    const isFav = !!firstTab.fav
+    return {
+      label: translate('menu.tab.' + (isFav ? 'unfavourite' : 'favourite')),
+      icon: 'icon_star_filled',
+      onClick: () => Tabs.setFavOfTabs(selected, !isFav),
+    }
+  },
+
   goToGroupTop: () => {
     const firstTab = Tabs.byId[Selection.getFirst()]
     const groupTab = Tabs.getGroupTab(firstTab)
