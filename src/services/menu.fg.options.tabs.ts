@@ -360,18 +360,15 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
 
   goToGroupTop: () => {
     const firstTab = Tabs.byId[Selection.getFirst()]
-    const groupTab = Tabs.getGroupTab(firstTab)
-    const option: MenuOption = {
+    if (!firstTab) return
+    // Only show when the tab actually sits inside a group (tree mode); returning
+    // undefined fully hides the item otherwise.
+    if (!Tabs.getGroupTab(firstTab)) return
+    return {
       label: translate('menu.tab.go_to_group_top'),
       icon: 'icon_group',
-      onClick: () => {
-        if (firstTab) Tabs.activateGroupTop(firstTab.id)
-      },
+      onClick: () => Tabs.activateGroupTop(firstTab.id),
     }
-    // Only meaningful when the tab actually sits inside a group (tree mode)
-    if (!groupTab) option.inactive = true
-    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
-    return option
   },
 
   toggleSharedParent: () => {

@@ -135,9 +135,9 @@ updated when adding features — it makes pulling upstream updates much easier.
 - **What:** Jump from the active (or right-clicked) tab to the **group tab** that owns it —
   the top of its group — by walking up the tree (reuses `getGroupTab`). Two independent,
   opt-in entry points: a **context-menu item** ("Go to top of group") and a **keyboard
-  shortcut** (`switch_to_group_tab`, "Go to top of group (group tab)"). Only active when the
-  tab actually sits inside a group; the menu item greys out / hides otherwise. Requires Tab
-  Tree mode (no tree = no group tab to go to).
+  shortcut** (`switch_to_group_tab`, "Go to top of group (group tab)"). The menu item is only
+  shown when the tab actually sits inside a group (`getGroupTab` gate — returns `undefined` to
+  fully hide otherwise). Requires Tab Tree mode (no tree = no group tab to go to).
 - **How to enable:** The menu item must be added via Settings → Context Menu Editor → Tabs
   (Sidebery keeps a saved menu layout, so new default items don't appear automatically). The
   shortcut is unbound by default — assign a key in Settings → Keybindings → "Go to top of
