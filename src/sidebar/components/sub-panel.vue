@@ -12,10 +12,12 @@
     @drop="onDrop")
   .sub-panel
     .header
+      .header-btn.-close(@click="Sidebar.closeSubPanel()" :title="translate('sub_panel.close_tooltip')")
+        svg.icon(): use(href="#icon_close")
+      .title {{titles[Sidebar.reactive.subPanelType]}}
       .header-btn(v-if="isSync" @click="Sync.reload")
         svg.icon.-sync(): use(href="#icon_sync")
-      .title {{titles[Sidebar.reactive.subPanelType]}}
-      .space-filler(v-if="isSync")
+      .space-filler(v-else)
     ClosedTabsSubPanel(v-if="isRecentlyClosedTabs")
     FavSubPanel(v-else-if="isFav")
     BookmarksSubPanel(v-else-if="isBookmarks && Sidebar.subPanels.bookmarks" :bookmarksPanel="Sidebar.subPanels.bookmarks")

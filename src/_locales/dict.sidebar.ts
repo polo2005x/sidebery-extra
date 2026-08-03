@@ -547,6 +547,17 @@ export const sidebarTranslations: Translations = {
     zh_TW: '最近關閉的分頁',
     ja: '最近閉じたタブ',
   },
+  'sub_panel.close_tooltip': {
+    en: 'Close',
+    de: 'Schließen',
+    fr: 'Fermer',
+    hu: 'Bezárás',
+    pl: 'Zamknij',
+    ru: 'Закрыть',
+    zh_CN: '关闭',
+    zh_TW: '關閉',
+    ja: '閉じる',
+  },
   'sub_panel.fav_panel.title': {
     en: 'Favourites',
     de: 'Favoriten',

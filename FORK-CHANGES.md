@@ -237,3 +237,12 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/defaults/settings.ts`, `src/types/settings.ts`, toggle in
   `src/page.setup/components/settings.navbar.vue`; labels `settings.sub_panel.fav` in
   `dict.setup-page.ts` and `sub_panel.fav_panel.title` in `dict.sidebar.ts`.
+
+## 13. Close button in the sub-panel header
+- **What:** A close (✕) button on the left of every sub-panel's header (`sub-panel.vue`), calling
+  `Sidebar.closeSubPanel()`. Previously a sub-panel could only be dismissed by clicking the dimmed
+  overlay, which isn't obvious. Applies to all sub-panels (recently-closed, bookmarks, history,
+  sync, favourites). The Sync panel's reload button moved from the header's left to its right to
+  keep the title centred.
+- **Files:** header markup in `src/sidebar/components/sub-panel.vue` (reuses existing `.header-btn`
+  styles + `#icon_close`); tooltip label `sub_panel.close_tooltip` in `src/_locales/dict.sidebar.ts`.
