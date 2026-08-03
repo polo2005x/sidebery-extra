@@ -17,6 +17,7 @@
       .title {{titles[Sidebar.reactive.subPanelType]}}
       .space-filler(v-if="isSync")
     ClosedTabsSubPanel(v-if="isRecentlyClosedTabs")
+    FavSubPanel(v-else-if="isFav")
     BookmarksSubPanel(v-else-if="isBookmarks && Sidebar.subPanels.bookmarks" :bookmarksPanel="Sidebar.subPanels.bookmarks")
     HistoryPanel(v-else-if="isHistory" :isSubPanel="true")
     SyncPanel(v-else-if="isSync" :isSubPanel="true")
@@ -33,6 +34,7 @@ import * as Search from 'src/services/search.fg'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Sync from 'src/services/sync.fg'
 import ClosedTabsSubPanel from './sub-panel.closed-tabs.vue'
+import FavSubPanel from './sub-panel.favourites.vue'
 import BookmarksSubPanel from './sub-panel.bookmarks.vue'
 import HistoryPanel from './panel.history.vue'
 import SyncPanel from './panel.sync.vue'
@@ -43,10 +45,14 @@ const titles: Record<SubPanelType, string> = {
   [SubPanelType.Bookmarks]: translate('sub_panel.bookmarks_panel.title'),
   [SubPanelType.History]: translate('sub_panel.history_panel.title'),
   [SubPanelType.Sync]: 'Sync',
+  [SubPanelType.Favourites]: translate('sub_panel.fav_panel.title'),
 }
 
 const isRecentlyClosedTabs = computed<boolean>(() => {
   return Sidebar.reactive.subPanelType === SubPanelType.RecentlyClosedTabs
+})
+const isFav = computed<boolean>(() => {
+  return Sidebar.reactive.subPanelType === SubPanelType.Favourites
 })
 const isBookmarks = computed<boolean>(() => {
   return Sidebar.reactive.subPanelType === SubPanelType.Bookmarks

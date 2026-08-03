@@ -85,6 +85,12 @@ section(
       dbg="subPanelSync"
       :default="DEFAULT_SETTINGS.subPanelSync"
       @update:value="Settings.saveDebounced(150)")
+    ToggleField(
+      label="settings.sub_panel.fav"
+      v-model:value="Settings.state.subPanelFav"
+      dbg="subPanelFav"
+      :default="DEFAULT_SETTINGS.subPanelFav"
+      @update:value="Settings.saveDebounced(150)")
 
   InfoField(
     label="settings.nav_bar_enabled"

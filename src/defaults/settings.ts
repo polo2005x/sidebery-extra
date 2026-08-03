@@ -48,6 +48,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   subPanelBookmarks: true,
   subPanelHistory: true,
   subPanelSync: false,
+  subPanelFav: false,
 
   // Group page
   groupLayout: 'grid',

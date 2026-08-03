@@ -1,0 +1,31 @@
+@import '../utils'
+
+// The favourites sub-panel reuses the .ClosedTabsSubPanel row styles; only the
+// extras below are specific to it.
+
+// Highlight the currently active tab's row
+.FavSubPanel .closed-tab[data-active="true"] .body
+  box-shadow: 0 0 0 1px var(--tabs-activated-fg) inset, var(--frame-el-shadow)
+
+// Unfavourite button (gold star on the right of each row)
+.FavSubPanel .closed-tab .fav-unbtn
+  position: relative
+  display: flex
+  justify-content: center
+  align-items: center
+  margin: 0 2px 0 0
+  width: calc(var(--tabs-height) - 2px)
+  height: calc(var(--tabs-height) - 2px)
+  flex-shrink: 0
+  z-index: 2
+  border-radius: calc(var(--general-border-radius) - 1px)
+  opacity: .85
+  &:hover
+    background-color: var(--frame-el-overlay-hover-bg)
+    opacity: 1
+  &:active
+    background-color: var(--frame-el-overlay-clicked-bg)
+  > svg
+    width: 14px
+    height: 14px
+    fill: #ffb300

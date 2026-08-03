@@ -37,6 +37,9 @@ export * from 'src/services/tabs.fg.badge'
 export interface TabsReactiveState {
   pinnedIds: ID[]
   recentlyRemovedLen: number
+  /** Bumped whenever any tab's favourite flag changes (or a fav tab is removed),
+   * so the favourites sub-panel re-renders. */
+  favRev: number
   inlinePreview: boolean
   inlinePreviewImg: string
   inlinePreviewTitle: string
@@ -46,6 +49,7 @@ export interface TabsReactiveState {
 export let reactive: TabsReactiveState = {
   pinnedIds: [],
   recentlyRemovedLen: 0,
+  favRev: 0,
   inlinePreview: false,
   inlinePreviewImg: '',
   inlinePreviewTitle: '',
@@ -400,6 +404,11 @@ async function restoreTabsState(src?: LoadSrc, ignoreLockedTabs?: boolean): Prom
   Sidebar.recalcTabsPanels()
   if (Settings.state.tabsTree) updateTabsTree()
   Sidebar.recalcVisibleTabs()
+
+  // Tabs (with their restored fav flags) are now in the list; refresh anything
+  // reactive on the favourites set (the favourites sub-panel button + reserved
+  // bottom-bar space), which was evaluated before the list was populated.
+  reactive.favRev++
 
   const activeTab = tabs.find(t => t.active)
   if (activeTab) {

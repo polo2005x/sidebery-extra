@@ -209,3 +209,31 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/page.setup/components/settings.group.vue`; message `confirm.group_close` in
   `src/_locales/dict.sidebar.ts`, setting label `settings.warn_on_close_group` in
   `dict.setup-page.ts`.
+
+## 12. "Favourites" sub-panel (per panel)
+- **What:** A sidebar sub-panel (like the recently-closed / bookmarks sub-panels) that lists the
+  favourited tabs **in the active panel** — surfacing the favourites (#10) beyond a single group
+  page, scoped to the current workspace. Click a row to activate that tab; click the gold star on
+  the right to unfavourite it in place. Highlights the active tab's row.
+- **Trigger:** a bottom-bar tool button (solid `#icon_star_filled`), gated by a new setting
+  Settings → Navigation bar → "Favourites sub-panel" (`subPanelFav`, default **off**). The button
+  (and, when it's the only enabled sub-panel, the whole bottom bar + its reserved space) is
+  **hidden unless the active panel has at least one favourite** — so it never shows an empty panel.
+  Opens via `Sidebar.openSubPanel(SubPanelType.Favourites, activePanel)`; the data is live, no
+  open-handling needed.
+- **Reactivity:** the list is `Tabs.list.filter(t => t.fav && t.panelId === activePanelId)`, kept
+  live by a reactive counter `Tabs.reactive.favRev` bumped in `setTabFav` (toggle) and in the
+  tab-removed handler when a favourited tab closes. `bottomBar` (`sidebar.vue`) and
+  `bottomBarSpaceNeeded` (`panel.tabs.vue`) became computeds that include `subPanelFav && <panel
+  has a favourite>`, so the bar/space appear and disappear with the active panel's favourites.
+- **Files:** `SubPanelType.Favourites` in `src/enums.ts`; `favRev` in `TabsReactiveState`
+  (`src/services/tabs.fg.ts`) + bumps in `src/services/tabs.fg.groups.ts` (`setTabFav`) and
+  `src/services/tabs.fg.handlers.ts` (removal); component `src/sidebar/components/sub-panel.favourites.vue`
+  (reuses `.ClosedTabsSubPanel` row styles) + registration/title/`isFav` in
+  `src/sidebar/components/sub-panel.vue`; bottom-bar button + `bottomBar`/`favInActivePanel`
+  computeds in `src/sidebar/sidebar.vue`; per-panel `bottomBarSpaceNeeded` in
+  `src/sidebar/components/panel.tabs.vue`; extra styles
+  `src/styles/sidebar/sub-panel.favourites.styl` (imported in `sidebar.styl`); `subPanelFav` in
+  `src/defaults/settings.ts`, `src/types/settings.ts`, toggle in
+  `src/page.setup/components/settings.navbar.vue`; labels `settings.sub_panel.fav` in
+  `dict.setup-page.ts` and `sub_panel.fav_panel.title` in `dict.sidebar.ts`.

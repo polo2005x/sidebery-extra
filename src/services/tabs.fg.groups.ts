@@ -388,6 +388,7 @@ export function setTabFav(tabId: ID, value?: boolean): boolean {
   const next = value ?? !tab.fav
   tab.fav = next
   tab.reactive.fav = next
+  Tabs.reactive.favRev++
   Tabs.saveTabData(tabId, true)
   Tabs.cacheTabsData()
   return next

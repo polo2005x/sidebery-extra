@@ -110,6 +110,10 @@
             @click="Sidebar.openSubPanel(E.SubPanelType.Sync, activePanel)")
             .dnd-layer(data-dnd-type="sspb")
             svg: use(href="#icon_sync")
+          .tool-btn.-fav(
+            v-if="Settings.state.subPanelFav && favInActivePanel"
+            @click="Sidebar.openSubPanel(E.SubPanelType.Favourites, activePanel)")
+            svg: use(href="#icon_star_filled")
 
       SubPanel
 
@@ -181,11 +185,21 @@ let navBarVertical = Settings.state.navBarLayout === 'vertical'
 let navBarLayout = navBarVertical ? Settings.state.navBarSide : Settings.state.navBarLayout
 let navBarLeft = navBarVertical && Settings.state.navBarSide === 'left'
 let navBarRight = navBarVertical && Settings.state.navBarSide === 'right'
-let bottomBar =
-  Settings.state.subPanelRecentlyClosedBar ||
-  Settings.state.subPanelBookmarks ||
-  Settings.state.subPanelHistory ||
-  Settings.state.subPanelSync
+// Does the active panel have any favourited tabs? (favourites sub-panel is
+// scoped per panel). Reactive to fav changes and active-panel switches.
+const favInActivePanel = computed<boolean>(() => {
+  void Tabs.reactive.favRev
+  const pid = Sidebar.reactive.activePanelId
+  return Tabs.list.some(t => t.fav && t.panelId === pid)
+})
+const bottomBar = computed<boolean>(
+  () =>
+    Settings.state.subPanelRecentlyClosedBar ||
+    Settings.state.subPanelBookmarks ||
+    Settings.state.subPanelHistory ||
+    Settings.state.subPanelSync ||
+    (Settings.state.subPanelFav && favInActivePanel.value)
+)
 let inlinePreview =
   Settings.state.previewTabs &&
   (Settings.state.previewTabsMode === 'i' || Settings.state.previewTabsPageModeFallback === 'i')
@@ -200,11 +214,6 @@ function recalcStaticVars() {
   navBarLayout = navBarVertical ? Settings.state.navBarSide : Settings.state.navBarLayout
   navBarLeft = navBarVertical && Settings.state.navBarSide === 'left'
   navBarRight = navBarVertical && Settings.state.navBarSide === 'right'
-  bottomBar =
-    Settings.state.subPanelRecentlyClosedBar ||
-    Settings.state.subPanelBookmarks ||
-    Settings.state.subPanelHistory ||
-    Settings.state.subPanelSync
   inlinePreview =
     Settings.state.previewTabs &&
     (Settings.state.previewTabsMode === 'i' || Settings.state.previewTabsPageModeFallback === 'i')

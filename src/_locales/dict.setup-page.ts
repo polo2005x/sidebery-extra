@@ -1825,6 +1825,16 @@ Vous pouvez également définir des préfixes pour chaque type de commande pour 
     zh: '同步子面板',
     ja: '同期サブパネル',
   },
+  'settings.sub_panel.fav': {
+    en: 'Favourites sub-panel',
+    de: 'Favoriten-Unter-Panel',
+    fr: 'Sous-panneau Favoris',
+    hu: 'Kedvencek alpanel',
+    pl: 'Podpanel ulubionych',
+    ru: 'Подпанель избранного',
+    zh: '收藏子面板',
+    ja: 'お気に入りサブパネル',
+  },
   'settings.nav_bar_enabled': {
     en: 'Enabled elements',
     de: 'Aktivierte Elemente',

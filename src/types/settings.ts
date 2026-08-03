@@ -47,6 +47,7 @@ export interface SettingsState {
   navTabsPanelMidClickAction: (typeof SETTINGS_OPTIONS.navTabsPanelMidClickAction)[number]
   navBookmarksPanelMidClickAction: (typeof SETTINGS_OPTIONS.navBookmarksPanelMidClickAction)[number]
   subPanelRecentlyClosedBar: boolean
+  subPanelFav: boolean
   subPanelBookmarks: boolean
   subPanelHistory: boolean
   subPanelSync: boolean

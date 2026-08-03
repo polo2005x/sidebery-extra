@@ -547,6 +547,17 @@ export const sidebarTranslations: Translations = {
     zh_TW: '最近關閉的分頁',
     ja: '最近閉じたタブ',
   },
+  'sub_panel.fav_panel.title': {
+    en: 'Favourites',
+    de: 'Favoriten',
+    fr: 'Favoris',
+    hu: 'Kedvencek',
+    pl: 'Ulubione',
+    ru: 'Избранное',
+    zh_CN: '收藏',
+    zh_TW: '收藏',
+    ja: 'お気に入り',
+  },
   'sub_panel.history_panel.title': {
     en: 'History',
     de: 'Chronik',

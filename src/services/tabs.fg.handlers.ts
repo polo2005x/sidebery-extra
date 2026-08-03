@@ -1336,6 +1336,7 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
   }
   delete Tabs.byId[tabId]
   Tabs.list.splice(tab.index, 1)
+  if (tab.fav) Tabs.reactive.favRev++
   Sidebar.recalcTabsPanels()
 
   // Update url counter

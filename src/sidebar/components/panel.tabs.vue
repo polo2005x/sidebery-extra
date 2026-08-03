@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { translate } from 'src/dict'
 import type { ScrollBoxComponent, TabsPanel } from 'src/types'
 import * as E from 'src/enums'
@@ -53,10 +53,20 @@ import AnimatedTabList from './animated-tab-list.vue'
 
 const props = defineProps<{ panel: TabsPanel }>()
 const scrollBox = ref<ScrollBoxComponent | null>(null)
-const bottomBarSpaceNeeded =
-  Settings.state.subPanelRecentlyClosedBar ||
-  Settings.state.subPanelBookmarks ||
-  Settings.state.subPanelHistory
+// The favourites sub-panel is scoped to this panel, so only reserve bottom-bar
+// space for it when this panel actually has favourited tabs.
+const bottomBarSpaceNeeded = computed<boolean>(() => {
+  if (
+    Settings.state.subPanelRecentlyClosedBar ||
+    Settings.state.subPanelBookmarks ||
+    Settings.state.subPanelHistory
+  ) {
+    return true
+  }
+  if (!Settings.state.subPanelFav) return false
+  void Tabs.reactive.favRev
+  return Tabs.list.some(t => t.fav && t.panelId === props.panel.id)
+})
 let scrollBoxEl: HTMLElement | null = null
 
 onMounted(() => {

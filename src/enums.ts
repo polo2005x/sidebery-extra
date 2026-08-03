@@ -73,6 +73,7 @@ export const enum SubPanelType {
   Bookmarks = 2,
   History = 3,
   Sync = 4,
+  Favourites = 5,
 }
 
 export const enum TabsPanelRemovingMode {
