@@ -87,6 +87,20 @@
     margin: 0 auto 0 0
     opacity: .7
     cursor: default
+    &:has(+ .info-mark)
+      margin-right: 4px
+
+  .info-mark
+    position: relative
+    margin: 0 auto 0 0
+    font-size: rem(13)
+    color: var(--toolbar-fg)
+    opacity: .45
+    cursor: help
+    user-select: none
+    transition: opacity var(--d-fast)
+    &:hover
+      opacity: .9
 
   .opt-btn
     position: relative

@@ -2662,6 +2662,28 @@ export const commonTranslations: Translations = {
     zh: '禁用',
     ja: '無効',
   },
+  // Hover descriptions for the fork's own tab-menu items (shown in the menu editor)
+  'menu.editor.descr.go_to_group_top': {
+    en: 'Jump from the active (or right-clicked) tab to the group tab that owns it — the top of its group. Requires Tab Tree mode and only shows for tabs inside a group. Whether it activates the group tab or just scrolls to it is set by Settings → Tabs → "Go to top of group…".',
+  },
+  'menu.editor.descr.favourite': {
+    en: 'Favourite / unfavourite the selected tab(s) (⭐). The favourite is a flag on the tab that follows URL changes and survives a browser restart, but is dropped when the tab is closed. Only available for tabs inside a group.',
+  },
+  'menu.editor.descr.set_shared_parent': {
+    en: "Assign the selected tab(s) to a shared-parent group: new tabs opened from any group member become the last child of that group's last member. Multiple groups coexist, each with its own accent colour. Requires Tab Tree mode.",
+  },
+  'menu.editor.descr.dedupe_branch': {
+    en: 'Close duplicate tabs among the nested tabs of this group/parent (the whole branch, excluding the tab itself). Respects the dedupe settings: reverse priority, keep-favourite, and loose matching.',
+  },
+  'menu.editor.descr.dedupe_subgroup': {
+    en: "Like 'Close duplicate tabs in group', but only closes duplicates that share the same parent (per subgroup), not across the whole branch.",
+  },
+  'menu.editor.descr.dedupe_branch_by_title': {
+    en: "Same as 'Close duplicate tabs in group', but matches tabs by title instead of URL (using the Title rules for loose matching). Default title rules ignore anything inside [] and ().",
+  },
+  'menu.editor.descr.dedupe_subgroup_by_title': {
+    en: "Same as 'Close duplicate tabs in subgroups', but matches tabs by title instead of URL (using the Title rules for loose matching).",
+  },
   'menu.editor.tabs_title': {
     en: 'Tabs',
     de: 'Tabs',

@@ -11,6 +11,11 @@
 
   .opt-title {{shrinkedTitle}}
 
+  span.info-mark(
+    v-if="props.descr"
+    :title="props.descr"
+    @click.stop) ⓘ
+
   .opt-btn(
     :title="translate('menu.editor.down_tooltip')"
     @click.stop="emit('downOpt', type, option)")
@@ -39,6 +44,7 @@ interface MenuEditorOptionProps {
   isTopLvl: boolean
   option: string
   groupTitle?: string
+  descr?: string
 }
 
 const props = defineProps<MenuEditorOptionProps>()

@@ -15,6 +15,7 @@
         v-for="opt in group.options"
         type="tabs"
         :title="translate(TABS_MENU_OPTS[opt])"
+        :descr="tabsOptDescr(opt)"
         :selected="state.selected === opt"
         :isTopLvl="group.type === 'list'"
         :option="opt"
@@ -28,7 +29,7 @@
     .menu-group.-dis(v-if="disabledTabsMenu.length")
       .opt(
         v-for="opt in disabledTabsMenu"
-        :title="translate(TABS_MENU_OPTS[opt])"
+        :title="tabsOptTitleWithDescr(opt)"
         @click="restoreOption('tabs', opt)")
         .opt-title {{translate(TABS_MENU_OPTS[opt])}}
 
@@ -211,6 +212,26 @@ const TABS_MENU_OPTS: Record<string, string> = {
   closeTabsAbove: 'menu.tab.close_above',
   closeTabsBelow: 'menu.tab.close_below',
   closeOtherTabs: 'menu.tab.close_other',
+}
+
+// Hover descriptions (ⓘ) for the fork's own tab-menu items, shown in this editor.
+const TABS_MENU_OPTS_DESCR: Record<string, string> = {
+  goToGroupTop: 'menu.editor.descr.go_to_group_top',
+  favTab: 'menu.editor.descr.favourite',
+  toggleSharedParent: 'menu.editor.descr.set_shared_parent',
+  dedupeBranchTabs: 'menu.editor.descr.dedupe_branch',
+  dedupeSubgroupTabs: 'menu.editor.descr.dedupe_subgroup',
+  dedupeBranchTabsByTitle: 'menu.editor.descr.dedupe_branch_by_title',
+  dedupeSubgroupTabsByTitle: 'menu.editor.descr.dedupe_subgroup_by_title',
+}
+function tabsOptDescr(opt: string): string {
+  const key = TABS_MENU_OPTS_DESCR[opt]
+  return key ? translate(key) : ''
+}
+function tabsOptTitleWithDescr(opt: string): string {
+  const descr = tabsOptDescr(opt)
+  const label = translate(TABS_MENU_OPTS[opt])
+  return descr ? `${label}\n\n${descr}` : label
 }
 
 const TABS_PANEL_MENU_OPTS: Record<string, string> = {

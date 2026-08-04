@@ -312,12 +312,20 @@ updated when adding features — it makes pulling upstream updates much easier.
   - Settings → Group: `groupSearch`, `groupSort`, `groupSortDefault` (select), `groupRecent`,
     `groupFav`, `warnOnCloseGroup`.
   - Settings → Navigation bar: `subPanelFav`.
-- **How it works:** the ⓘ is a child of `.label` (so it stays left, next to the text, and the
-  input stays right); pointer events on it are stopped so clicking/hovering the mark doesn't flip
-  the toggle or cycle the select. Descriptions are en-only dict keys (`settings.*_descr`);
-  `translate` falls back to `.en` for every locale, so no other translations are needed. Extendable
-  to any other field by adding `descr="settings.<x>_descr"` + a dict entry.
-- **Files:** `descr` prop + label markup in `src/components/toggle-field.vue` and
-  `src/components/select-field.vue`; `.info-mark` styles in `src/styles/inputs.styl`; `descr` attrs
-  in `src/page.setup/components/settings.tabs.vue`, `settings.group.vue`, `settings.navbar.vue`;
-  `settings.*_descr` entries in `src/_locales/dict.setup-page.ts`.
+- **Context Menu Editor:** the fork's own tab-menu items (which aren't settings toggles) get the
+  same ⓘ mark inside the Menu Editor rows — `goToGroupTop`, `favTab`, `toggleSharedParent`,
+  `dedupeBranchTabs`, `dedupeSubgroupTabs`, `dedupeBranchTabsByTitle`, `dedupeSubgroupTabsByTitle`.
+  Disabled (removed) items instead fold the description into their existing native row tooltip so
+  it's visible before re-enabling them.
+- **How it works:** the ⓘ is a child of `.label` / the `.opt` row (so it stays next to the text,
+  and the input/buttons stay right); pointer events on it are stopped so clicking/hovering the mark
+  doesn't flip the toggle, cycle the select, or select the menu row. Descriptions are en-only dict
+  keys (`settings.*_descr`, `menu.editor.descr.*`); `translate` falls back to `.en` for every
+  locale, so no other translations are needed. Extendable to any other field/menu item by adding a
+  `descr` + a dict entry.
+- **Files:** `descr` prop + label markup in `src/components/toggle-field.vue`,
+  `src/components/select-field.vue`, `src/page.setup/components/menu-editor.option.vue`; `.info-mark`
+  styles in `src/styles/inputs.styl` and `src/styles/page.setup/menu-editor.styl`; `descr` attrs +
+  `TABS_MENU_OPTS_DESCR` map in `src/page.setup/components/settings.tabs.vue`, `settings.group.vue`,
+  `settings.navbar.vue`, `menu-editor.vue`; `settings.*_descr` entries in
+  `src/_locales/dict.setup-page.ts` and `menu.editor.descr.*` in `src/_locales/dict.common.ts`.
