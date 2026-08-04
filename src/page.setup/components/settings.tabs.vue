@@ -29,6 +29,12 @@ section(ref="el")
     :default="DEFAULT_SETTINGS.groupTopActivate"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
+    label="settings.fav_protect"
+    dbg="favProtect"
+    v-model:value="Settings.state.favProtect"
+    :default="DEFAULT_SETTINGS.favProtect"
+    @update:value="Settings.saveDebounced(150)")
+  ToggleField(
     label="settings.activate_last_tab_on_panel_switching"
     dbg="activateLastTabOnPanelSwitching"
     :value="Settings.state.activateLastTabOnPanelSwitching"

@@ -238,6 +238,27 @@ updated when adding features — it makes pulling upstream updates much easier.
   `src/page.setup/components/settings.navbar.vue`; labels `settings.sub_panel.fav` in
   `dict.setup-page.ts` and `sub_panel.fav_panel.title` in `dict.sidebar.ts`.
 
+## 14. Protect favourites from bulk close & auto-unload
+- **What:** When enabled, favourited (⭐, feature #10) tabs are excluded from *sweep*
+  operations — the ones that act on tabs you didn't individually pick — turning the
+  favourite flag into active protection, not just a marker. Covered:
+  - **Bulk close:** "Close other tabs", "Close tabs above", "Close tabs below"
+    (`removeOtherTabs`/`removeTabsAbove`/`removeTabsBelow`) skip ⭐ tabs.
+  - **Auto/bulk unload:** non-explicit `discardTabs` (unload all / others / folded /
+    all-in-inactive-panels keybindings and the panel "Unload tabs" menu item) and the
+    fold auto-discard (`autoDiscardFolded`, both immediate and delayed) skip ⭐ tabs.
+- **Not affected (deliberate):** explicitly closing a ⭐ tab (its own Close button/menu,
+  or selecting it and pressing close) and the per-tab "Unload" menu item
+  (`discardTabs(..., explicit=true)`) still work — protection only applies to sweeps where
+  the tab wasn't individually chosen.
+- **Setting:** Settings → Tabs → "Protect favourite tabs from bulk close & auto-unload"
+  (`favProtect`, default **off**). Single toggle covering both behaviours.
+- **Files:** fav skips in `src/services/tabs.fg.rm.ts` (`removeTabsAbove`/`removeTabsBelow`/
+  `removeOtherTabs`) and `src/services/tabs.fg.ts` (`discardTabs` non-explicit filter,
+  `autoDiscardFolded`); `favProtect` in `src/defaults/settings.ts`, `src/types/settings.ts`,
+  toggle in `src/page.setup/components/settings.tabs.vue`; label `settings.fav_protect` in
+  `src/_locales/dict.setup-page.ts`.
+
 ## 13. Close button in the sub-panel header
 - **What:** A close (✕) button on the left of every sub-panel's header (`sub-panel.vue`), calling
   `Sidebar.closeSubPanel()`. Previously a sub-panel could only be dismissed by clicking the dimmed

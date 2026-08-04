@@ -132,6 +132,9 @@ export const DEFAULT_SETTINGS: SettingsState = {
   // "Go to top of group": true = switch to the group tab, false = just scroll to it
   groupTopActivate: true,
 
+  // Exclude favourited tabs from bulk close (others/above/below) and auto-unload
+  favProtect: false,
+
   // New tab position
   moveNewTabPin: 'start',
   moveNewTabParent: 'last_child',

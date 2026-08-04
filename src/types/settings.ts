@@ -132,6 +132,9 @@ export interface SettingsState {
   // "Go to top of group" action
   groupTopActivate: boolean
 
+  // Protect favourited tabs from bulk close / auto-unload
+  favProtect: boolean
+
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]
   moveNewTabParent: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]

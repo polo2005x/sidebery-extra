@@ -1187,6 +1187,11 @@ export async function discardTabs(tabIds: ID[] = [], explicit = false): Promise<
     })
   }
 
+  // Skip favourited tabs on auto/bulk unload (not on explicit unload of specific tabs)
+  if (Settings.state.favProtect && !explicit) {
+    tabIds = tabIds.filter(id => !Tabs.byId[id]?.fav)
+  }
+
   // Update succession for active tab to prevent switching to discarded tabs
   let activeTab = Tabs.byId[Tabs.activeId]
   if (activeTab) {
@@ -1695,7 +1700,9 @@ export function autoDiscardFolded(rootTab: T.Tab) {
   if (!Settings.state.discardFolded) return
 
   if (Settings.state.discardFoldedDelay === 0) {
-    const childIds = Tabs.getBranch(rootTab, false).map(t => t.id)
+    let children = Tabs.getBranch(rootTab, false)
+    if (Settings.state.favProtect) children = children.filter(t => !t.fav)
+    const childIds = children.map(t => t.id)
     if (!childIds.length) return
 
     browser.tabs.discard(childIds)
@@ -1708,7 +1715,9 @@ export function autoDiscardFolded(rootTab: T.Tab) {
     rootTab.autoUnloadFoldedTimeout = setTimeout(() => {
       const parentTab = Tabs.byId[rootTab.id]
       if (parentTab?.isParent && parentTab.folded) {
-        const childIds = Tabs.getBranch(rootTab, false).map(t => t.id)
+        let children = Tabs.getBranch(rootTab, false)
+        if (Settings.state.favProtect) children = children.filter(t => !t.fav)
+        const childIds = children.map(t => t.id)
         if (!childIds.length) return
 
         browser.tabs.discard(childIds)
