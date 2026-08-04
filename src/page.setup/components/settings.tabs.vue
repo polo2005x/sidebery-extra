@@ -18,18 +18,64 @@ section(ref="el")
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.dedup_keep_newest"
+    descr="settings.dedup_keep_newest_descr"
     dbg="dedupKeepNewest"
     v-model:value="Settings.state.dedupKeepNewest"
     :default="DEFAULT_SETTINGS.dedupKeepNewest"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
+    label="settings.dedup_keep_fav"
+    descr="settings.dedup_keep_fav_descr"
+    dbg="dedupKeepFav"
+    v-model:value="Settings.state.dedupKeepFav"
+    :default="DEFAULT_SETTINGS.dedupKeepFav"
+    @update:value="Settings.saveDebounced(150)")
+  ToggleField(
+    label="settings.dedup_loose"
+    descr="settings.dedup_loose_descr"
+    dbg="dedupLoose"
+    v-model:value="Settings.state.dedupLoose"
+    :default="DEFAULT_SETTINGS.dedupLoose"
+    @update:value="Settings.saveDebounced(150)")
+  .sub-fields
+    TextField.dedupLooseRulesField(
+      ref="dedupRulesEl"
+      label="settings.dedup_loose_rules"
+      dbg="dedupLooseRules"
+      v-model:value="Settings.state.dedupLooseRules"
+      or="---"
+      input-width="66"
+      :valid="dedupLooseRulesValid"
+      :padding="12"
+      :inactive="!Settings.state.dedupLoose"
+      :default="DEFAULT_SETTINGS.dedupLooseRules"
+      :fnote="translate('settings.dedup_loose_rules_note')"
+      @update:value="onDedupLooseRulesUpdate"
+      @blur="onDedupLooseRulesBlur")
+    TextField.dedupLooseRulesField(
+      ref="dedupTitleRulesEl"
+      label="settings.dedup_title_rules"
+      dbg="dedupTitleRules"
+      v-model:value="Settings.state.dedupTitleRules"
+      or="---"
+      input-width="66"
+      :valid="dedupTitleRulesValid"
+      :padding="12"
+      :inactive="!Settings.state.dedupLoose"
+      :default="DEFAULT_SETTINGS.dedupTitleRules"
+      :fnote="translate('settings.dedup_title_rules_note')"
+      @update:value="onDedupTitleRulesUpdate"
+      @blur="onDedupTitleRulesBlur")
+  ToggleField(
     label="settings.group_top_activate"
+    descr="settings.group_top_activate_descr"
     dbg="groupTopActivate"
     v-model:value="Settings.state.groupTopActivate"
     :default="DEFAULT_SETTINGS.groupTopActivate"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.fav_protect"
+    descr="settings.fav_protect_descr"
     dbg="favProtect"
     v-model:value="Settings.state.favProtect"
     :default="DEFAULT_SETTINGS.favProtect"
@@ -155,6 +201,7 @@ section(ref="el")
       @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.tabs_reload_batch_delay"
+    descr="settings.tabs_reload_batch_delay_descr"
     dbg="tabsReloadBatchDelay"
     v-model:value="Settings.state.tabsReloadBatchDelay"
     :default="DEFAULT_SETTINGS.tabsReloadBatchDelay"
@@ -268,6 +315,7 @@ section(ref="el")
     .sub-fields
       SelectField(
         label="settings.move_new_tab_parent_limited"
+        descr="settings.move_new_tab_parent_limited_descr"
         optLabel="settings.move_new_tab_parent_"
         dbg="moveNewTabParentLimited"
         :inactive="!Settings.state.tabsTree || Settings.state.tabsTreeLimit === 'none'"
@@ -743,6 +791,8 @@ const tabsColorEl = ref<HTMLElement | null>(null)
 const tabsPreviewEl = ref<HTMLElement | null>(null)
 const nativeTabsEl = ref<HTMLElement | null>(null)
 const badgeRulesEl = useTemplateRef<TextInputComponent>('badgeRulesEl')
+const dedupRulesEl = useTemplateRef<TextInputComponent>('dedupRulesEl')
+const dedupTitleRulesEl = useTemplateRef<TextInputComponent>('dedupTitleRulesEl')
 
 const newTabPosRelativeToActiveTab = computed<boolean>(() => {
   return (
@@ -886,6 +936,60 @@ function onTabsBadgeRulesBlur(): void {
   }
 }
 
+const dedupLooseRulesValid = ref('')
+const validateDedupLooseRulesDebounced = Utils.debounce(validateDedupLooseRules)
+function validateDedupLooseRules(value: string) {
+  for (const rule of value.split('\n')) {
+    try {
+      Tabs.parseDedupeUrlRule(rule)
+    } catch (err) {
+      if (err === 'no rule') continue
+      dedupLooseRulesValid.value = 'invalid'
+      return false
+    }
+  }
+  dedupLooseRulesValid.value = ''
+  return true
+}
+function onDedupLooseRulesUpdate(value: string): void {
+  Settings.state.dedupLooseRules = value
+  Settings.saveDebounced(500)
+  validateDedupLooseRulesDebounced(100, value)
+}
+
+function onDedupLooseRulesBlur(): void {
+  if (dedupLooseRulesValid.value === 'invalid') {
+    dedupRulesEl.value?.error()
+  }
+}
+
+const dedupTitleRulesValid = ref('')
+const validateDedupTitleRulesDebounced = Utils.debounce(validateDedupTitleRules)
+function validateDedupTitleRules(value: string) {
+  for (const rule of value.split('\n')) {
+    try {
+      Tabs.parseDedupeUrlRule(rule)
+    } catch (err) {
+      if (err === 'no rule') continue
+      dedupTitleRulesValid.value = 'invalid'
+      return false
+    }
+  }
+  dedupTitleRulesValid.value = ''
+  return true
+}
+function onDedupTitleRulesUpdate(value: string): void {
+  Settings.state.dedupTitleRules = value
+  Settings.saveDebounced(500)
+  validateDedupTitleRulesDebounced(100, value)
+}
+
+function onDedupTitleRulesBlur(): void {
+  if (dedupTitleRulesValid.value === 'invalid') {
+    dedupTitleRulesEl.value?.error()
+  }
+}
+
 onMounted(() => {
   SetupPage.registerEl('settings_tabs', el.value)
   SetupPage.registerEl('settings_new_tab_position', newTabPosEl.value)
@@ -897,5 +1001,11 @@ onMounted(() => {
 
   badgeRulesEl.value?.recalcTextHeight()
   validateTabsBadgeRules(Settings.state.tabsBadgeRules)
+
+  dedupRulesEl.value?.recalcTextHeight()
+  validateDedupLooseRules(Settings.state.dedupLooseRules)
+
+  dedupTitleRulesEl.value?.recalcTextHeight()
+  validateDedupTitleRules(Settings.state.dedupTitleRules)
 })
 </script>

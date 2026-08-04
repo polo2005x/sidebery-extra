@@ -188,6 +188,8 @@ const TABS_MENU_OPTS: Record<string, string> = {
   toggleSharedParent: 'menu.tab.set_shared_parent',
   dedupeBranchTabs: 'menu.tab.dedupe_branch',
   dedupeSubgroupTabs: 'menu.tab.dedupe_subgroup',
+  dedupeBranchTabsByTitle: 'menu.tab.dedupe_branch_by_title',
+  dedupeSubgroupTabsByTitle: 'menu.tab.dedupe_subgroup_by_title',
   urlConf: 'menu.tab.url_conf',
   syncTabs: 'menu.tab.sync',
   sortTabsByTitleAscending: 'menu.tab.sort_by_title_asc',

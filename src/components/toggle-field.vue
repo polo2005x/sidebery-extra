@@ -9,7 +9,14 @@
   @keydown="onKeyDown")
   .focus-fx
   .body
-    .label(:style="{ color: props.color }") {{translate(props.label)}}
+    .label(:style="{ color: props.color }")
+      | {{translate(props.label)}}
+      span.info-mark(
+        v-if="props.descr"
+        :title="translate(props.descr)"
+        @mousedown.stop
+        @mouseup.stop
+        @click.stop) ⓘ
     LoadingDots(v-if="loading")
     ToggleInput.input(ref="inputComponent" :value="props.value")
   .note(v-if="props.note") {{props.note}}
@@ -36,6 +43,7 @@ interface ToggleFieldProps {
   loading?: boolean
   note?: string
   noteWithLinks?: string
+  descr?: string
   dbg?: string
   default?: any
 }

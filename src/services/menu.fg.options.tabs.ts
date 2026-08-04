@@ -670,6 +670,55 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     return option
   },
 
+  dedupeBranchTabsByTitle: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const option: MenuOption = {
+      label: translate('menu.tab.dedupe_branch_by_title'),
+      icon: 'icon_dedup_tabs',
+      onClick: () => {
+        if (!firstTab) return
+        // Like dedupeBranchTabs, but matches by title instead of URL.
+        const nested = Tabs.getBranch(firstTab, false)
+        Tabs.dedupeTabs(
+          nested.map(t => t.id),
+          true
+        )
+      },
+    }
+    // Only meaningful for a group or parent tab that actually has nested tabs
+    if (!firstTab || (!firstTab.isGroup && !firstTab.isParent) || firstTab.pinned) {
+      option.inactive = true
+    }
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
+  dedupeSubgroupTabsByTitle: () => {
+    const firstTab = Tabs.byId[Selection.getFirst()]
+    const option: MenuOption = {
+      label: translate('menu.tab.dedupe_subgroup_by_title'),
+      icon: 'icon_dedup_tabs',
+      onClick: () => {
+        if (!firstTab) return
+        // Like dedupeSubgroupTabs, but matches by title instead of URL.
+        const nested = Tabs.getBranch(firstTab, false)
+        const bySubgroup = new Map<ID, ID[]>()
+        for (const t of nested) {
+          const ids = bySubgroup.get(t.parentId)
+          if (ids) ids.push(t.id)
+          else bySubgroup.set(t.parentId, [t.id])
+        }
+        for (const ids of bySubgroup.values()) Tabs.dedupeTabs(ids, true)
+      },
+    }
+    // Only meaningful for a group or parent tab that actually has nested tabs
+    if (!firstTab || (!firstTab.isGroup && !firstTab.isParent) || firstTab.pinned) {
+      option.inactive = true
+    }
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
   sortTabsByTitleAscending: () => {
     const option: MenuOption = {
       label: translate('menu.tab.sort_by_title_asc'),

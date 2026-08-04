@@ -198,6 +198,23 @@
   line-height: 18px
 
 // ---
+// -- Info mark (hover tooltip for fork-added settings)
+// -
+.ToggleField .label > .info-mark
+.SelectField .label > .info-mark
+  display: inline-block
+  margin-left: 5px
+  font-size: rem(13)
+  line-height: 1
+  opacity: .5
+  cursor: help
+  user-select: none
+  transition: opacity var(--d-fast)
+.ToggleField .label > .info-mark:hover
+.SelectField .label > .info-mark:hover
+  opacity: .9
+
+// ---
 // -- Note
 // -
 .ToggleField .note

@@ -11,7 +11,14 @@
   @blur="onBlur")
   .focus-fx
   .body
-    .label {{translate(props.label)}}
+    .label
+      | {{translate(props.label)}}
+      span.info-mark(
+        v-if="props.descr"
+        :title="translate(props.descr)"
+        @mousedown.stop
+        @mouseup.stop
+        @click.stop) ⓘ
     SelectInput(
       ref="inputComponent"
       :label="props.optLabel"
@@ -52,6 +59,7 @@ interface SelectFieldProps {
   icon?: string
   noneOpt?: string | number
   note?: string
+  descr?: string
   folded?: boolean
   dbg?: string
   default?: any

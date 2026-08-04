@@ -2798,6 +2798,114 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
     zh_TW: '反轉「關閉重複分頁」的分頁優先級',
     ja: '「重複タブを閉じる」のタブ優先順位を反転',
   },
+  'settings.dedup_loose': {
+    en: 'Loosely match duplicates (custom rules)',
+    de: 'Duplikate unscharf abgleichen (eigene Regeln)',
+    fr: 'Faire correspondre les doublons de façon approximative (règles personnalisées)',
+    hu: 'Másodpéldányok laza egyeztetése (egyéni szabályok)',
+    pl: 'Luźne dopasowywanie duplikatów (własne reguły)',
+    ru: 'Нестрогое сопоставление дубликатов (свои правила)',
+    zh_CN: '宽松匹配重复项（自定义规则）',
+    zh_TW: '寬鬆比對重複項（自訂規則）',
+    ja: '重複をあいまいに照合（カスタムルール）',
+  },
+  'settings.dedup_loose_rules': {
+    en: 'URL rules',
+    de: 'URL-Regeln',
+    fr: 'Règles URL',
+    hu: 'URL-szabályok',
+    pl: 'Reguły URL',
+    ru: 'Правила для URL',
+    zh_CN: '网址规则',
+    zh_TW: '網址規則',
+    ja: 'URLルール',
+  },
+  'settings.dedup_title_rules': {
+    en: 'Title rules',
+    de: 'Titel-Regeln',
+    fr: 'Règles de titre',
+    hu: 'Cím-szabályok',
+    pl: 'Reguły tytułu',
+    ru: 'Правила для заголовка',
+    zh_CN: '标题规则',
+    zh_TW: '標題規則',
+    ja: 'タイトルルール',
+  },
+  'settings.dedup_keep_newest_descr': {
+    en: "When closing duplicate tabs, keep the newest copy of each URL instead of the oldest. Off = the default (keeps the oldest copy). Applies to every 'Close duplicate tabs' action.",
+  },
+  'settings.dedup_keep_fav_descr': {
+    en: "When closing duplicate tabs, never close a favourited (⭐) tab. A favourite also 'covers' its URL, so non-favourite duplicates of it are closed. If several copies of a URL are favourited, all of them are kept. Overrides the newest/oldest rule for URLs that have a favourite.",
+  },
+  'settings.dedup_loose_descr': {
+    en: "Before comparing tabs for duplicates, rewrite each URL (and title, in title mode) with the custom regex rules below, so entries that differ only in a volatile part count as the same. Off = duplicates must match exactly. Applies to every 'Close duplicate tabs' action.",
+  },
+  'settings.group_top_activate_descr': {
+    en: "How 'Go to top of group' behaves: on = switch to (activate) the group tab; off = just scroll it into view without changing the active tab.",
+  },
+  'settings.fav_protect_descr': {
+    en: "Exclude favourited (⭐) tabs from sweep actions: 'Close other/above/below tabs' and bulk/auto unload (unload all/others/folded/inactive-panel, and the fold auto-discard). Explicitly closing or unloading a favourite you selected yourself still works.",
+  },
+  'settings.tabs_reload_batch_delay_descr': {
+    en: 'Slows bulk reloads per site: after every N reloads of the same domain, that site cools down for a while, while other sites keep reloading. Gentler on rate-limited / anti-bot sites. Only paces sites with more tabs than the minimum set below.',
+  },
+  'settings.move_new_tab_parent_limited_descr': {
+    en: "A second placement rule that applies only when the opener tab is already at the tree depth limit. Lets shallow tabs open children normally while the deepest tabs use a different placement. 'Inherit' = use the normal 'Place new tab opened from another tab' rule.",
+  },
+  'settings.group_search_descr': {
+    en: "Show a search bar at the top of the group page. Typing filters the group's tabs live by title or URL; space-separated terms are AND-ed and each term is a case-insensitive regex (invalid regex falls back to a literal match).",
+  },
+  'settings.group_sort_descr': {
+    en: "Show a sort dropdown on the group page that reorders the displayed tab cards (view only — it doesn't move the actual tabs). Modes: default, reverse, by domain, by title, by URL. Composes with the search filter.",
+  },
+  'settings.group_sort_default_descr': {
+    en: 'The order the group page uses on load (and the sort dropdown\'s starting value). Applies even when the sort dropdown is hidden.',
+  },
+  'settings.group_recent_descr': {
+    en: 'Show a box of the most-recently-active tabs in the group (by last-access time) between the title and the search bar. Click a row to jump to that tab; the list refreshes each time the group page becomes visible. Count is set below.',
+  },
+  'settings.group_fav_descr': {
+    en: "Show a ⭐ button on each tab card plus a 'Favourites' box on the group page. The favourite is a flag on the tab itself, so it follows URL changes and survives a browser restart — but it is dropped when the tab is closed (it is not a bookmark).",
+  },
+  'settings.warn_on_close_group_descr': {
+    en: 'Ask for confirmation when closing a group tab (a tab whose removal would close a whole group). Fires independently of the general multi-tab-close confirmation.',
+  },
+  'settings.sub_panel.fav_descr': {
+    en: 'Add a bottom-bar button that opens a sub-panel listing the favourited (⭐) tabs in the active panel. The button is hidden unless the active panel has at least one favourite, so it never shows an empty panel.',
+  },
+  'settings.dedup_title_rules_note': {
+    en: `Same format as the URL rules, but applied to the tab title when using the 'Close duplicate tabs in group/subgroups (by title)' menu items. The default strips anything inside \`[]\` and \`()\`, so titles like \`[Release] Thread (v3)\` and \`[Release] Thread (v4)\` are treated as duplicates.
+Examples:
+\`\`\`
+\\[.*?\\]
+\\(.*?\\)
+\\s*-\\s*Chapter \\d+ =>
+\`\`\``,
+  },
+  'settings.dedup_loose_rules_note': {
+    en: `A newline-separated list of URL normalization rules used only when comparing tabs for 'Close duplicate tabs'. Each tab's URL is rewritten by these rules before comparison; the real tabs and their URLs are never changed. Two URLs that normalize to the same string are treated as duplicates.
+Each rule is \`{RegExp}\` (matches are removed) or \`{RegExp} => {replacement}\`. Blank lines and lines starting with \`#\` are ignored. Invalid rules are skipped.
+Examples:
+\`\`\`
+-version-\\d+
+[?#].*$
+/page/\\d+ => /page/N
+\`\`\`
+- \`-version-\\d+\`: strip a trailing version slug, so \`.../post-version-3\` and \`.../post-version-4\` match.
+- \`[?#].*$\`: ignore the query string and #fragment.
+- \`/page/\\d+ => /page/N\`: collapse paginated URLs to one key.`,
+  },
+  'settings.dedup_keep_fav': {
+    en: "For 'Close duplicate tabs', keep a favourite copy if there is one",
+    de: "Bei 'Doppelte Tabs schließen' einen favorisierten Tab behalten, falls vorhanden",
+    fr: "Pour 'Fermer les onglets dupliqués', conserver une copie favorite s'il y en a une",
+    hu: "A 'Másodpéldányok bezárása' esetén tartsa meg a kedvenc példányt, ha van",
+    pl: "Dla 'Zamknij zduplikowane karty' zachowaj ulubioną kopię, jeśli istnieje",
+    ru: 'Для «Закрыть дубликаты» оставлять избранную копию, если она есть',
+    zh_CN: '执行“关闭重复的标签页”时，若有收藏的副本则保留它',
+    zh_TW: '執行「關閉重複分頁」時，若有收藏的副本則保留它',
+    ja: '「重複タブを閉じる」で、お気に入りの複製があればそれを残す',
+  },
   'settings.fav_protect': {
     en: 'Protect favourite tabs from bulk close & auto-unload',
     de: 'Favoriten-Tabs vor Massen-Schließen & Auto-Entladen schützen',

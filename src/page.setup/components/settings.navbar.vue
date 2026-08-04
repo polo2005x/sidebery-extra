@@ -87,6 +87,7 @@ section(
       @update:value="Settings.saveDebounced(150)")
     ToggleField(
       label="settings.sub_panel.fav"
+      descr="settings.sub_panel.fav_descr"
       v-model:value="Settings.state.subPanelFav"
       dbg="subPanelFav"
       :default="DEFAULT_SETTINGS.subPanelFav"

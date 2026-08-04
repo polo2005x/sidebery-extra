@@ -128,6 +128,10 @@ export interface SettingsState {
 
   // Duplicate tabs
   dedupKeepNewest: boolean
+  dedupKeepFav: boolean
+  dedupLoose: boolean
+  dedupLooseRules: string
+  dedupTitleRules: string
 
   // "Go to top of group" action
   groupTopActivate: boolean

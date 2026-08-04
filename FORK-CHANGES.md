@@ -14,11 +14,44 @@ updated when adding features — it makes pulling upstream updates much easier.
 - **Subgroup dedupe:** "Close duplicate tabs in subgroups" (`dedupeSubgroupTabs`) does the
   same but only closes duplicates that share the same parent (per subgroup), not across
   the whole branch. Separate context-menu item; also respects the reverse toggle.
-- **Files:** `src/services/tabs.fg.ts` (`dedupeTabs`, `getBranch`), `src/defaults/settings.ts`,
+- **Keep the favourited copy:** a second setting Settings → Tabs → "For 'Close duplicate
+  tabs', keep a favourite copy if there is one" (`dedupKeepFav`, default off). When on,
+  **favourited (⭐, feature #10) tabs are never closed by dedupe** — and a favourite also
+  "covers" its URL, so *every* non-fav duplicate of a URL that has a favourite is closed
+  (overriding the newest/oldest rule for that URL). If a URL has several favourited copies,
+  **all of them are kept**. URLs with no favourite dedupe normally (keep one per the
+  newest/oldest rule). Implemented in `dedupeTabs` with a pre-pass building a `favUrls` set,
+  then skipping fav tabs and dropping non-fav duplicates of fav URLs. Applies to all dedupe
+  entry points (whole action, branch, subgroup) since they route through `dedupeTabs`.
+- **Loose matching (regex normalization):** Settings → Tabs → "Loosely match duplicates
+  (custom rules)" (`dedupLoose`, default off) with two monospace rules textareas — **URL
+  rules** (`dedupLooseRules`) and **Title rules** (`dedupTitleRules`). Each newline-separated
+  rule is `{RegExp}` (matches removed) or `{RegExp} => {replacement}`; blank/`#` lines and
+  invalid regexes are skipped. Before comparing, each tab's compared value is rewritten by the
+  rules into a normalized *key* (the real tabs are untouched); tabs whose keys collide are
+  duplicates. URL example: `-version-\d+` collapses `.../post-version-3` and
+  `.../post-version-4`; `[?#].*$` ignores query/fragment. Applies to all dedupe entry points
+  and composes with `dedupKeepFav` (fav keys are normalized too). Rules are parsed at dedupe
+  time via `parseDedupeUrlRule` (exported, unit-tested in `src/services/tabs.fg.dedupe.test.ts`);
+  each settings field validates live and flashes on invalid regex, mirroring the badge-rules field.
+- **Match by title:** `dedupeTabs(tabIds, byTitle)` compares `tab.title` instead of `tab.url`
+  when `byTitle` is set, using the **Title rules** for loose matching. Surfaced as two per-tab
+  (group) context-menu items paralleling the URL branch/subgroup dedupe: **"Close duplicate
+  tabs in group (by title)"** (`dedupeBranchTabsByTitle`) and **"...in subgroups (by title)"**
+  (`dedupeSubgroupTabsByTitle`), both added to `TABS_MENU` (enable via Context Menu Editor →
+  Tabs; requires Tab Tree mode). The default title rules strip anything inside `[]` and `()`
+  (`\[.*?\]` / `\(.*?\)`), so e.g. `[Release] Thread (v3)` and `[Release] Thread (v4)` dedupe
+  together. Exact title matching still works with loose matching off. (Note: upstream owns the
+  base "Deduplicate" / panel "Close duplicate tabs"; the fork owns the branch/subgroup + toggles.)
+- **Files:** `src/services/tabs.fg.ts` (`dedupeTabs` + `byTitle`, `getBranch`,
+  `parseDedupeUrlRule`, `getDedupeRules`), `src/services/tabs.fg.dedupe.test.ts`,
+  `src/defaults/settings.ts` (`dedupLoose`, `dedupLooseRules`, `dedupTitleRules`),
   `src/types/settings.ts`, `src/page.setup/components/settings.tabs.vue`,
-  `src/_locales/dict.setup-page.ts`; menu in `src/services/menu.fg.options.tabs.ts`,
-  `src/defaults/menu.ts`, `src/page.setup/components/menu-editor.vue`,
-  `src/_locales/dict.common.ts`.
+  `src/styles/page.setup/settings.styl` (`.dedupLooseRulesField`),
+  `src/_locales/dict.setup-page.ts`; menu options `dedupeBranchTabsByTitle` /
+  `dedupeSubgroupTabsByTitle` in `src/services/menu.fg.options.tabs.ts`, `src/defaults/menu.ts`,
+  `src/page.setup/components/menu-editor.vue`, labels `menu.tab.dedupe_branch_by_title` /
+  `menu.tab.dedupe_subgroup_by_title` in `src/_locales/dict.common.ts`.
 
 ## 2. New-tab position: "after last tab at same level"
 - **What:** A new position option for tabs opened from another tab / the New Tab
@@ -267,3 +300,24 @@ updated when adding features — it makes pulling upstream updates much easier.
   keep the title centred.
 - **Files:** header markup in `src/sidebar/components/sub-panel.vue` (reuses existing `.header-btn`
   styles + `#icon_close`); tooltip label `sub_panel.close_tooltip` in `src/_locales/dict.sidebar.ts`.
+
+## 15. Hover info marks on fork-added settings
+- **What:** An optional `descr` prop on `ToggleField` and `SelectField` renders a small hoverable
+  **ⓘ** mark next to the setting label; hovering it shows a native tooltip (`title` attr) with a
+  precise explanation of what the setting does. Used to document the fork's own settings without
+  cluttering the page with always-visible notes. Wired for **every fork-added setting** across the
+  settings pages:
+  - Settings → Tabs: `dedupKeepNewest`, `dedupKeepFav`, `dedupLoose`, `groupTopActivate`,
+    `favProtect`, `tabsReloadBatchDelay`, `moveNewTabParentLimited` (select).
+  - Settings → Group: `groupSearch`, `groupSort`, `groupSortDefault` (select), `groupRecent`,
+    `groupFav`, `warnOnCloseGroup`.
+  - Settings → Navigation bar: `subPanelFav`.
+- **How it works:** the ⓘ is a child of `.label` (so it stays left, next to the text, and the
+  input stays right); pointer events on it are stopped so clicking/hovering the mark doesn't flip
+  the toggle or cycle the select. Descriptions are en-only dict keys (`settings.*_descr`);
+  `translate` falls back to `.en` for every locale, so no other translations are needed. Extendable
+  to any other field by adding `descr="settings.<x>_descr"` + a dict entry.
+- **Files:** `descr` prop + label markup in `src/components/toggle-field.vue` and
+  `src/components/select-field.vue`; `.info-mark` styles in `src/styles/inputs.styl`; `descr` attrs
+  in `src/page.setup/components/settings.tabs.vue`, `settings.group.vue`, `settings.navbar.vue`;
+  `settings.*_descr` entries in `src/_locales/dict.setup-page.ts`.

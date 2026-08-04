@@ -12,18 +12,21 @@ section(ref="el")
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.group_search"
+    descr="settings.group_search_descr"
     dbg="groupSearch"
     v-model:value="Settings.state.groupSearch"
     :default="DEFAULT_SETTINGS.groupSearch"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.group_sort"
+    descr="settings.group_sort_descr"
     dbg="groupSort"
     v-model:value="Settings.state.groupSort"
     :default="DEFAULT_SETTINGS.groupSort"
     @update:value="Settings.saveDebounced(150)")
   SelectField(
     label="settings.group_sort_default"
+    descr="settings.group_sort_default_descr"
     optLabel="settings.group_sort_mode_"
     dbg="groupSortDefault"
     v-model:value="Settings.state.groupSortDefault"
@@ -32,6 +35,7 @@ section(ref="el")
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.group_recent"
+    descr="settings.group_recent_descr"
     dbg="groupRecent"
     v-model:value="Settings.state.groupRecent"
     :default="DEFAULT_SETTINGS.groupRecent"
@@ -47,12 +51,14 @@ section(ref="el")
       @update:value="Settings.saveDebounced(500)")
   ToggleField(
     label="settings.group_fav"
+    descr="settings.group_fav_descr"
     dbg="groupFav"
     v-model:value="Settings.state.groupFav"
     :default="DEFAULT_SETTINGS.groupFav"
     @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.warn_on_close_group"
+    descr="settings.warn_on_close_group_descr"
     dbg="warnOnCloseGroup"
     v-model:value="Settings.state.warnOnCloseGroup"
     :default="DEFAULT_SETTINGS.warnOnCloseGroup"

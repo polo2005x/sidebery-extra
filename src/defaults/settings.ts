@@ -128,6 +128,13 @@ export const DEFAULT_SETTINGS: SettingsState = {
 
   // When closing duplicate tabs, keep the newest one instead of the oldest
   dedupKeepNewest: false,
+  // When closing duplicate tabs, keep a favourited copy if one exists (overrides above)
+  dedupKeepFav: false,
+  // Loosely match duplicates via regex normalization rules before comparing
+  dedupLoose: false,
+  dedupLooseRules: '',
+  // Title-matching dedupe rules; default strips content inside [] and ()
+  dedupTitleRules: '\\[.*?\\]\n\\(.*?\\)',
 
   // "Go to top of group": true = switch to the group tab, false = just scroll to it
   groupTopActivate: true,

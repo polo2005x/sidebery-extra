@@ -1408,23 +1408,100 @@ export function findAncestorId(tabId: ID, cb: (ancestorId: ID) => boolean): ID |
   }
 }
 
+export interface DedupeUrlRule {
+  re: RegExp
+  repl: string
+}
+
 /**
- * Close tabs duplicates
+ * Parse one "loose duplicate matching" rule line into a regex + replacement.
+ * Format per line: `pattern` (strip the match) or `pattern => replacement`.
+ * Blank lines and lines starting with `#` are ignored. Throws on empty/invalid.
  */
-export function dedupeTabs(tabIds: ID[]): void {
+export function parseDedupeUrlRule(rule: string): DedupeUrlRule {
+  const trimmed = rule.trim()
+  if (!trimmed || trimmed.startsWith('#')) throw 'no rule'
+
+  let pattern = trimmed
+  let repl = ''
+  const sep = trimmed.indexOf('=>')
+  if (sep !== -1) {
+    pattern = trimmed.slice(0, sep).trim()
+    repl = trimmed.slice(sep + 2).trim()
+  }
+  if (!pattern) throw 'no rule'
+
+  return { re: new RegExp(pattern, 'g'), repl }
+}
+
+function getDedupeRules(byTitle: boolean): DedupeUrlRule[] {
+  const rules: DedupeUrlRule[] = []
+  if (!Settings.state.dedupLoose) return rules
+  const conf = byTitle ? Settings.state.dedupTitleRules : Settings.state.dedupLooseRules
+  if (!conf) return rules
+  for (const line of conf.split('\n')) {
+    try {
+      rules.push(parseDedupeUrlRule(line))
+    } catch {
+      // Skip empty/invalid rules so dedupe never breaks
+    }
+  }
+  return rules
+}
+
+/**
+ * Close tabs duplicates. Matches by URL, or by title when `byTitle` is set.
+ */
+export function dedupeTabs(tabIds: ID[], byTitle = false): void {
   if (!tabIds || !tabIds.length) return
 
   // Keep the newest duplicate (iterate in reverse) or the oldest (forward)
   const keepNewest = Settings.state.dedupKeepNewest
+  const keepFav = Settings.state.dedupKeepFav
   const len = tabIds.length
-  const urls: string[] = []
+
+  // The value compared for duplicates: the URL, or the title in title-matching mode.
+  const valOf = (tab: T.Tab): string => (byTitle ? tab.title : tab.url)
+
+  // Optional loose matching: normalize each value with the configured regex rules before
+  // comparing, so values differing only in a volatile part are treated as duplicates.
+  const rules = getDedupeRules(byTitle)
+  const keyOf = (tab: T.Tab): string => {
+    let k = valOf(tab)
+    for (const rule of rules) k = k.replace(rule.re, rule.repl)
+    return k
+  }
+
+  // Values that have at least one favourited copy — those favourites are all kept and
+  // "cover" the value, so every non-fav duplicate of such a value is closed.
+  const favKeys: Set<string> = new Set()
+  if (keepFav) {
+    for (let n = 0; n < len; n++) {
+      const tab = Tabs.byId[tabIds[n]]
+      if (tab?.fav) favKeys.add(keyOf(tab))
+    }
+  }
+
+  const keptKeys: Set<string> = new Set()
   const toRemove = []
   for (let n = 0; n < len; n++) {
     const tab = Tabs.byId[tabIds[keepNewest ? len - 1 - n : n]]
     if (!tab) return
 
-    if (urls.includes(tab.url)) toRemove.push(tab.id)
-    else urls.push(tab.url)
+    const key = keyOf(tab)
+
+    if (keepFav) {
+      // Never close a favourited tab
+      if (tab.fav) continue
+      // A favourite already covers this value, so drop the non-fav duplicate
+      if (favKeys.has(key)) {
+        toRemove.push(tab.id)
+        continue
+      }
+    }
+
+    if (keptKeys.has(key)) toRemove.push(tab.id)
+    else keptKeys.add(key)
   }
 
   Tabs.removeTabs(toRemove)
