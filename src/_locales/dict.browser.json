@@ -829,6 +829,28 @@
     "zh_TW": "切換群組收藏（選取的分頁）",
     "ja": "グループのお気に入りを切り替え（選択タブ）"
   },
+  "KbSwitchToNextFav": {
+    "en": "Go to next favourite tab (⭐) in active panel",
+    "de": "Zum nächsten Favoriten-Tab (⭐) im aktiven Panel",
+    "fr": "Aller à l'onglet favori suivant (⭐) du panneau actif",
+    "hu": "Ugrás a következő kedvenc lapra (⭐) az aktív panelen",
+    "pl": "Przejdź do następnej ulubionej karty (⭐) w aktywnym panelu",
+    "ru": "Перейти к следующей избранной вкладке (⭐) в активной панели",
+    "zh_CN": "转到活动面板中的下一个收藏标签页（⭐）",
+    "zh_TW": "跳到使用中面板的下一個收藏分頁（⭐）",
+    "ja": "アクティブパネルの次のお気に入りタブ（⭐）へ"
+  },
+  "KbSwitchToPrevFav": {
+    "en": "Go to previous favourite tab (⭐) in active panel",
+    "de": "Zum vorherigen Favoriten-Tab (⭐) im aktiven Panel",
+    "fr": "Aller à l'onglet favori précédent (⭐) du panneau actif",
+    "hu": "Ugrás az előző kedvenc lapra (⭐) az aktív panelen",
+    "pl": "Przejdź do poprzedniej ulubionej karty (⭐) w aktywnym panelu",
+    "ru": "Перейти к предыдущей избранной вкладке (⭐) в активной панели",
+    "zh_CN": "转到活动面板中的上一个收藏标签页（⭐）",
+    "zh_TW": "跳到使用中面板的上一個收藏分頁（⭐）",
+    "ja": "アクティブパネルの前のお気に入りタブ（⭐）へ"
+  },
   "KbSwitchToUnpinnedTab0": {
     "en": "Switch to first unpinned tab of active panel",
     "de": "Zum ersten unangehefteten Tab des aktiven Panels wechseln",
@@ -1599,5 +1621,16 @@
     "zh_CN": "收藏（标记此标签页）",
     "zh_TW": "收藏（標記此分頁）",
     "ja": "お気に入り（このタブを登録）"
+  },
+  "group_fav_filter_tooltip": {
+    "en": "Show favourites only",
+    "de": "Nur Favoriten anzeigen",
+    "fr": "Afficher uniquement les favoris",
+    "hu": "Csak a kedvencek mutatása",
+    "pl": "Pokaż tylko ulubione",
+    "ru": "Показывать только избранное",
+    "zh_CN": "仅显示收藏",
+    "zh_TW": "僅顯示收藏",
+    "ja": "お気に入りのみ表示"
   }
 }

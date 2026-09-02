@@ -186,6 +186,35 @@ body[data-pin="true"] .controls-box
 .sort-select:focus
   border-color: var(--group-search-border-focus)
 
+// "Favourites only" filter toggle (shown when the Favourites feature is on)
+.fav-filter
+  flex: none
+  display: flex
+  align-items: center
+  justify-content: center
+  width: var(--group-search-height)
+  height: var(--group-search-height)
+  color: var(--group-search-fg)
+  background-color: var(--group-search-bg)
+  border: 2px solid var(--group-search-border)
+  border-radius: var(--group-search-radius)
+  box-sizing: border-box
+  cursor: pointer
+  transition: border-color .15s, background-color .15s
+.fav-filter:hover
+  border-color: #999b
+.fav-filter-icon
+  width: 20px
+  height: 20px
+  fill: var(--group-search-fg)
+  opacity: .55
+  transition: fill .15s, opacity .15s
+.fav-filter[data-active="true"]
+  border-color: var(--group-search-border-focus)
+.fav-filter[data-active="true"] .fav-filter-icon
+  fill: #e6b800
+  opacity: 1
+
 // ---
 // -- Recently active tabs box
 // -
@@ -222,6 +251,24 @@ body[data-pin="true"] .recent-box
 .recent-box[data-collapsed="true"] .recent-title:before
   transform: rotate(0deg)
 .recent-box[data-collapsed="true"] .recent-tabs
+  display: none
+
+// Small count pill next to the Favourites box title
+.fav-count
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  min-width: 16px
+  height: 16px
+  padding: 0 5px
+  box-sizing: border-box
+  font-size: .8rem
+  font-weight: 700
+  line-height: 1
+  color: #3a2f00
+  background-color: #e6b800
+  border-radius: 8px
+.fav-count:empty
   display: none
 
 // Compact, double-column list of short rows (takes little vertical space)

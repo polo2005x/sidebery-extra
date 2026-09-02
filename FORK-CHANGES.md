@@ -329,3 +329,33 @@ updated when adding features — it makes pulling upstream updates much easier.
   `TABS_MENU_OPTS_DESCR` map in `src/page.setup/components/settings.tabs.vue`, `settings.group.vue`,
   `settings.navbar.vue`, `menu-editor.vue`; `settings.*_descr` entries in
   `src/_locales/dict.setup-page.ts` and `menu.editor.descr.*` in `src/_locales/dict.common.ts`.
+
+## 16. Cycle to next/prev favourite (keybinding)
+- **What:** Two keybindings that jump between favourited (⭐, feature #10) tabs in the active panel,
+  cycling around the ends. If the active tab isn't a favourite, it jumps to the nearest favourite in
+  that direction. Both unbound by default — assign keys in Settings → Keybindings ("Go to
+  next/previous favourite tab (⭐) in active panel").
+- **Files:** `Tabs.switchToFav(dir)` in `src/services/tabs.fg.groups.ts`; handlers for
+  `switch_to_next_fav` / `switch_to_prev_fav` in `src/services/keybindings.fg.ts`; commands in
+  `src/manifest.json`; list entries in `src/page.setup/components/keybindings.vue`; labels
+  `KbSwitchToNextFav` / `KbSwitchToPrevFav` in `src/_locales/dict.browser.json`.
+
+## 17. Favourite count on the group page
+- **What:** The group-page **Favourites** box title shows a small gold count pill of how many tabs
+  in the group are favourited (updates live as you star/unstar). Rendered in `renderFav`.
+- **Files:** `#fav_title_text` + `#fav_count` split in `src/page.group/group.html`; `favCountEl`
+  update in `renderFav`, text target in `setupFav` (`src/page.group/group.ts`); `.fav-count` styles
+  in `src/styles/page.group/group.styl`.
+
+## 18. Filter the group page to favourites only
+- **What:** A star toggle button in the group page's controls row (next to search/sort) that, when
+  active, shows only favourited tab cards. Composes with the search filter and the sort order, and
+  works even when the search bar is disabled. Shown only when the Favourites feature (`groupFav`) is
+  on. Unfavouriting a card while the filter is active hides it immediately.
+- **How it works:** the old `applySearch` became `applyFilters` — it no longer early-returns when the
+  search bar is off, and drops any non-favourite when the filter is active (`favFilterActive && !tab.fav`).
+  The toggle button flips `favFilterActive` and re-runs `applyFilters`; `toggleFav` also re-runs it.
+- **Files:** `#fav_filter` button in `src/page.group/group.html`; `favFilterActive` + `setupFavFilter`
+  + `applyFilters` (renamed) + call in init/`toggleFav` in `src/page.group/group.ts`; `.fav-filter`
+  styles in `src/styles/page.group/group.styl`; label `group_fav_filter_tooltip` in
+  `src/services/tabs.bg.ts` (group-page labels) and `src/_locales/dict.browser.json`.

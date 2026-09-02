@@ -37,6 +37,10 @@ let recentTabsEl: HTMLElement | null = null
 let favEnabled = false
 let favBoxEl: HTMLElement | null = null
 let favTabsEl: HTMLElement | null = null
+let favTitleTextEl: HTMLElement | null = null
+let favCountEl: HTMLElement | null = null
+let favFilterActive = false
+let favFilterBtnEl: HTMLButtonElement | null = null
 
 async function main() {
   try {
@@ -151,6 +155,7 @@ async function main() {
 
   if (initData.groupSearch) setupSearch()
   if (initData.groupSort) setupSort()
+  if (initData.groupFav) setupFavFilter()
   if (initData.groupRecent) setupRecent(initData.groupRecentCount)
 
   if (sortMode !== 'default') applySort()
@@ -247,7 +252,7 @@ export function onGroupUpdMsg(upd: T.GroupUpdMsg) {
   if (upd.removedTab !== undefined) onTabRemoved(upd.removedTab)
 
   applySort()
-  applySearch()
+  applyFilters()
   renderRecent()
   renderFav()
 }
@@ -267,14 +272,14 @@ function setupSearch(): void {
 
   searchInputEl.addEventListener('input', () => {
     searchQuery = searchInputEl?.value ?? ''
-    applySearch()
+    applyFilters()
   })
   searchInputEl.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       e.stopPropagation()
       if (searchInputEl) searchInputEl.value = ''
       searchQuery = ''
-      applySearch()
+      applyFilters()
     }
   })
   searchInputEl.addEventListener('mousedown', e => e.stopPropagation())
@@ -306,12 +311,12 @@ function parseSearchTerms(query: string): RegExp[] {
 }
 
 /**
- * Show only tabs whose title or url match every search term (AND). Empty = show all.
+ * Show only tabs matching every active filter: the search terms (title/url, AND-ed)
+ * and, when the "favourites only" toggle is on, the favourite flag. Empty = show all.
+ * Runs even when the search bar is disabled, so the fav filter works on its own.
  */
-function applySearch(): void {
-  if (!searchEnabled) return
-
-  const query = searchQuery.trim()
+function applyFilters(): void {
+  const query = searchEnabled ? searchQuery.trim() : ''
   const matchers = query ? parseSearchTerms(query) : []
 
   let shown = 0
@@ -322,12 +327,32 @@ function applySearch(): void {
       const hay = `${tab.title}\n${tab.url}`
       match = matchers.every(re => re.test(hay))
     }
+    if (favFilterActive && !tab.fav) match = false
     // Inline style beats the stylesheet's per-layout .tab rules; '' restores default
     tab.el.style.display = match ? '' : 'none'
     if (match) shown++
   }
 
   if (searchCountEl) searchCountEl.textContent = query ? `${shown} / ${tabs.length}` : ''
+}
+
+/**
+ * Set up the "favourites only" filter toggle (shown when the Favourites feature is on).
+ */
+function setupFavFilter(): void {
+  favFilterBtnEl = document.getElementById('fav_filter') as HTMLButtonElement | null
+  if (!favFilterBtnEl || !favEnabled) return
+
+  favFilterBtnEl.title = getLabel('group_fav_filter_tooltip')
+  favFilterBtnEl.style.display = ''
+  favFilterBtnEl.setAttribute('data-active', 'false')
+
+  favFilterBtnEl.addEventListener('mousedown', e => e.stopPropagation())
+  favFilterBtnEl.addEventListener('click', () => {
+    favFilterActive = !favFilterActive
+    favFilterBtnEl?.setAttribute('data-active', String(favFilterActive))
+    applyFilters()
+  })
 }
 
 /**
@@ -506,10 +531,12 @@ function setupFav(): void {
   favBoxEl = document.getElementById('fav_box')
   favTabsEl = document.getElementById('fav_tabs')
   const titleEl = document.getElementById('fav_title')
+  favTitleTextEl = document.getElementById('fav_title_text')
+  favCountEl = document.getElementById('fav_count')
   if (!favBoxEl || !favTabsEl) return
 
   favEnabled = true
-  if (titleEl) titleEl.textContent = getLabel('group_fav_title')
+  if (favTitleTextEl) favTitleTextEl.textContent = getLabel('group_fav_title')
 
   // Collapsible; remember the state across sessions
   let collapsed = false
@@ -544,6 +571,7 @@ function renderFav(): void {
   while (favTabsEl.lastChild) favTabsEl.removeChild(favTabsEl.lastChild)
   for (const info of marked) favTabsEl.appendChild(createRecentCard(info))
 
+  if (favCountEl) favCountEl.textContent = marked.length ? String(marked.length) : ''
   if (favBoxEl) favBoxEl.style.display = marked.length ? '' : 'none'
 }
 
@@ -556,12 +584,14 @@ function toggleFav(info: T.GroupedTabInfo): void {
   info.fav = next
   info.el?.setAttribute('data-favourite', String(next))
   renderFav()
+  if (favFilterActive) applyFilters()
   IPPC.bg('setTabFav', info.id, next).catch(err => {
     // Roll back the optimistic change if persistence failed
     Logs.err('group: setTabFav failed', err)
     info.fav = !next
     info.el?.setAttribute('data-favourite', String(!next))
     renderFav()
+    if (favFilterActive) applyFilters()
   })
 }
 

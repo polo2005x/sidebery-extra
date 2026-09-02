@@ -411,6 +411,39 @@ export function toggleFav(tabIds?: ID[]): void {
   setFavOfTabs(ids, !firstTab.fav)
 }
 
+/**
+ * Activate the next (dir=1) or previous (dir=-1) favourited (⭐) tab in the active
+ * panel, cycling around the ends. If the active tab isn't a favourite, jumps to the
+ * nearest favourite in that direction. Used by the switch_to_next/prev_fav keybindings.
+ */
+export function switchToFav(dir: 1 | -1): void {
+  const panel = Sidebar.panelsById[Sidebar.activePanelId]
+  if (!Utils.isTabsPanel(panel)) return
+
+  const favs = panel.tabs.filter(t => t.fav)
+  if (!favs.length) return
+
+  const activeTab = Tabs.byId[Tabs.activeId]
+  let target: T.Tab | undefined
+
+  const curPos = activeTab ? favs.findIndex(t => t.id === activeTab.id) : -1
+  if (curPos !== -1) {
+    target = favs[(curPos + dir + favs.length) % favs.length]
+  } else if (activeTab) {
+    // Active tab isn't a favourite: pick the nearest favourite in the direction
+    if (dir > 0) target = favs.find(t => t.index > activeTab.index) ?? favs[0]
+    else target = favs.filter(t => t.index < activeTab.index).pop() ?? favs[favs.length - 1]
+  } else {
+    target = dir > 0 ? favs[0] : favs[favs.length - 1]
+  }
+
+  if (target) {
+    browser.tabs.update(target.id, { active: true }).catch(err => {
+      Logs.err('Tabs.switchToFav: Cannot activate tab', err)
+    })
+  }
+}
+
 export async function setGroupName(groupTabId: ID, newName: string) {
   Logs.info('Tabs.setGroupName', groupTabId, newName)
   const groupTab = Tabs.byId[groupTabId]

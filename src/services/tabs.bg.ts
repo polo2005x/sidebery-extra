@@ -750,6 +750,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
       group_recent_title: browser.i18n.getMessage('group_recent_title'),
       group_fav_title: browser.i18n.getMessage('group_fav_title'),
       group_tab_fav_tooltip: browser.i18n.getMessage('group_tab_fav_tooltip'),
+      group_fav_filter_tooltip: browser.i18n.getMessage('group_fav_filter_tooltip'),
     },
   }
 }

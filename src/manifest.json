@@ -325,6 +325,12 @@
     "toggle_fav": {
       "description": "__MSG_KbToggleFav__"
     },
+    "switch_to_next_fav": {
+      "description": "__MSG_KbSwitchToNextFav__"
+    },
+    "switch_to_prev_fav": {
+      "description": "__MSG_KbSwitchToPrevFav__"
+    },
     "switch_to_unpinned_tab_0": {
       "description": "__MSG_KbSwitchToUnpinnedTab0__"
     },

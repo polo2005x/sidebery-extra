@@ -243,6 +243,10 @@ function onCmd(name: string): void {
     Tabs.activateGroupTop(Selection.ids()[0])
   } else if (name === 'toggle_fav') {
     Tabs.toggleFav(Selection.ids())
+  } else if (name === 'switch_to_next_fav') {
+    Tabs.switchToFav(1)
+  } else if (name === 'switch_to_prev_fav') {
+    Tabs.switchToFav(-1)
   } else if (name === 'switch_to_last_tab') {
     onKeySwitchToTab()
   } else if (name.startsWith('switch_to_tab_')) {
