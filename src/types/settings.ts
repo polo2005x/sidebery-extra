@@ -139,6 +139,9 @@ export interface SettingsState {
   // Protect favourited tabs from bulk close / auto-unload
   favProtect: boolean
 
+  // Placement of pasted (cut) tabs relative to the target
+  pasteTabsPosition: (typeof SETTINGS_OPTIONS.pasteTabsPosition)[number]
+
   // New tab position
   moveNewTabPin: (typeof SETTINGS_OPTIONS.moveNewTabPin)[number]
   moveNewTabParent: (typeof SETTINGS_OPTIONS.moveNewTabParent)[number]

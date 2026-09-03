@@ -2043,6 +2043,28 @@ export const commonTranslations: Translations = {
     zh_TW: '關閉子群組內重複的分頁',
     ja: 'サブグループ内の重複タブを閉じる',
   },
+  'menu.tab.cut': {
+    en: 'Cut tabs',
+    de: 'Tabs ausschneiden',
+    fr: 'Couper les onglets',
+    hu: 'Lapok kivágása',
+    pl: 'Wytnij karty',
+    ru: 'Вырезать вкладки',
+    zh_CN: '剪切标签页',
+    zh_TW: '剪下分頁',
+    ja: 'タブを切り取り',
+  },
+  'menu.tab.paste_cut': {
+    en: 'Paste tabs',
+    de: 'Tabs einfügen',
+    fr: 'Coller les onglets',
+    hu: 'Lapok beillesztése',
+    pl: 'Wklej karty',
+    ru: 'Вставить вкладки',
+    zh_CN: '粘贴标签页',
+    zh_TW: '貼上分頁',
+    ja: 'タブを貼り付け',
+  },
   'menu.tab.dedupe_branch_by_title': {
     en: 'Close duplicate tabs in group (by title)',
     de: 'Doppelte Tabs in Gruppe schließen (nach Titel)',
@@ -2683,6 +2705,12 @@ export const commonTranslations: Translations = {
   },
   'menu.editor.descr.dedupe_subgroup_by_title': {
     en: "Same as 'Close duplicate tabs in subgroups', but matches tabs by title instead of URL (using the Title rules for loose matching).",
+  },
+  'menu.editor.descr.cut_tabs': {
+    en: 'Stash the selected tabs for a move: they are dimmed in the tree until you Paste them onto another tab. Alternative to drag-and-drop for moving tabs across long distances or between panels.',
+  },
+  'menu.editor.descr.paste_cut_tabs': {
+    en: "Move the previously cut tabs to the right-clicked tab. Where they land (first/last child, same level after, or before the target) is set by Settings → Tabs → \"Paste tabs position\". Only shown when tabs have been cut.",
   },
   'menu.editor.tabs_title': {
     en: 'Tabs',

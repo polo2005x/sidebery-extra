@@ -142,6 +142,9 @@ export const DEFAULT_SETTINGS: SettingsState = {
   // Exclude favourited tabs from bulk close (others/above/below) and auto-unload
   favProtect: false,
 
+  // Where "Paste tabs" places the cut tabs relative to the target tab
+  pasteTabsPosition: 'sibling',
+
   // New tab position
   moveNewTabPin: 'start',
   moveNewTabParent: 'last_child',
@@ -384,6 +387,7 @@ export const SETTINGS_OPTIONS = {
   ],
   moveNewTab: ['start', 'end', 'before', 'after', 'after_last_sibling', 'first_child', 'last_child', 'none'],
   moveNewTabActivePin: ['start', 'end'],
+  pasteTabsPosition: ['first_child', 'last_child', 'sibling', 'before'],
   warnOnMultiTabClose: ['any', 'collapsed', 'none'],
   warnOnMultiBookmarkDelete: ['any', 'collapsed', 'none'],
   navBarLayout: ['horizontal', 'vertical', 'hidden'],

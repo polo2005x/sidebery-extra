@@ -20,6 +20,7 @@
   :data-colorized="!!tabColor"
   :data-unread="tab.reactive.unread"
   :data-shared-parent="tab.reactive.sharedParent"
+  :data-cut="tab.reactive.cut"
   :data-edit="tab.reactive.customTitleEdit"
   :title="tab.reactive.tooltip"
   :draggable="!tab.reactive.customTitleEdit"

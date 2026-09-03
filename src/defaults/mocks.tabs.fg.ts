@@ -70,6 +70,7 @@ export class MTab implements Tab {
     customColor: null,
     sharedParent: 0,
     fav: false,
+    cut: false,
     isGroup: false,
   }
   sessionData?: TabSessionData | undefined

@@ -180,6 +180,8 @@ const TABS_MENU_OPTS: Record<string, string> = {
   copyTabsTitles: 'menu.copy_titles',
   copyTabsByTemplates: 'menu.copy_by_templates',
   pasteTabs: 'menu.paste',
+  cutTabs: 'menu.tab.cut',
+  pasteCutTabs: 'menu.tab.paste_cut',
   editTabTitle: 'menu.tab.edit_title',
   colorizeTab: 'menu.tab.colorize_colors',
   group: 'menu.tab.group',
@@ -223,6 +225,8 @@ const TABS_MENU_OPTS_DESCR: Record<string, string> = {
   dedupeSubgroupTabs: 'menu.editor.descr.dedupe_subgroup',
   dedupeBranchTabsByTitle: 'menu.editor.descr.dedupe_branch_by_title',
   dedupeSubgroupTabsByTitle: 'menu.editor.descr.dedupe_subgroup_by_title',
+  cutTabs: 'menu.editor.descr.cut_tabs',
+  pasteCutTabs: 'menu.editor.descr.paste_cut_tabs',
 }
 function tabsOptDescr(opt: string): string {
   const key = TABS_MENU_OPTS_DESCR[opt]

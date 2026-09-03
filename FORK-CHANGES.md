@@ -359,3 +359,30 @@ updated when adding features — it makes pulling upstream updates much easier.
   + `applyFilters` (renamed) + call in init/`toggleFav` in `src/page.group/group.ts`; `.fav-filter`
   styles in `src/styles/page.group/group.styl`; label `group_fav_filter_tooltip` in
   `src/services/tabs.bg.ts` (group-page labels) and `src/_locales/dict.browser.json`.
+
+## 19. Cut & paste tabs (context menu)
+- **What:** Move tabs by cut/paste instead of drag-and-drop — handy across long distances or between
+  panels. **Cut tabs** stashes the selected tabs in a buffer and dims them in the tree; **Paste tabs**
+  (shown only when the buffer is non-empty) moves them to the right-clicked target tab. Both are
+  per-tab context-menu items (enable via Context Menu Editor → Tabs).
+- **Placement setting:** Settings → Tabs → **"Paste tabs position"** (`pasteTabsPosition`, default
+  `sibling` = same level, after the target) — a select with **First child / Last child / Same level
+  (after) / Before**, reusing the existing `settings.move_new_tab_parent_*` labels. So there's ONE
+  paste item and the placement is a preference (matches Sidebery's new-tab-placement pattern), with
+  the child-first/child-last choice being just two options in the dropdown. Has the fork ⓘ info mark.
+- **How it works:** `Tabs.cutTabs`/`pasteCutTabs`/`clearCutBuffer` + `cutBuffer` in
+  `src/services/tabs.fg.groups.ts`. Paste reuses the drag-and-drop move engine (`Tabs.move(items, src,
+  dst)`) — it computes `dst` `{parentId, index}` from the target and the setting (`getBranch` gives the
+  target's subtree length for the "after subtree" index). Guards: skips tabs that no longer exist and
+  the target itself + its ancestors (can't paste a tab into its own subtree); clears the buffer after.
+  The dim marker is a reactive `cut` flag on the tab (mirrors the `fav` marker): `cut` in
+  `ReactiveTabProps` (`src/types/tabs.ts`) + reactive builder (`src/services/tabs.fg.ts`) + mock
+  (`src/defaults/mocks.tabs.fg.ts`), `:data-cut` on `.Tab` (`src/sidebar/components/tab.vue`) dimmed in
+  `src/styles/sidebar/tab.styl`.
+- **Files:** logic in `src/services/tabs.fg.groups.ts`; menu options `cutTabs` / `pasteCutTabs` in
+  `src/services/menu.fg.options.tabs.ts`, `src/defaults/menu.ts`,
+  `src/page.setup/components/menu-editor.vue` (+ `menu.editor.descr.*` info-mark text); labels
+  `menu.tab.cut` / `menu.tab.paste_cut` in `src/_locales/dict.common.ts`; setting `pasteTabsPosition`
+  in `src/defaults/settings.ts` (+ `SETTINGS_OPTIONS`), `src/types/settings.ts`,
+  `src/page.setup/components/settings.tabs.vue`, labels `settings.paste_tabs_position(_descr)` in
+  `src/_locales/dict.setup-page.ts`.

@@ -80,6 +80,15 @@ section(ref="el")
     v-model:value="Settings.state.favProtect"
     :default="DEFAULT_SETTINGS.favProtect"
     @update:value="Settings.saveDebounced(150)")
+  SelectField(
+    label="settings.paste_tabs_position"
+    descr="settings.paste_tabs_position_descr"
+    optLabel="settings.move_new_tab_parent_"
+    dbg="pasteTabsPosition"
+    v-model:value="Settings.state.pasteTabsPosition"
+    :default="DEFAULT_SETTINGS.pasteTabsPosition"
+    :opts="Settings.getOpts('pasteTabsPosition')"
+    @update:value="Settings.saveDebounced(150)")
   ToggleField(
     label="settings.activate_last_tab_on_panel_switching"
     dbg="activateLastTabOnPanelSwitching"

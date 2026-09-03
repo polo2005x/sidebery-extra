@@ -2846,6 +2846,20 @@ Przykłady: "*", "ctrl+$", "ctrl+alt+g"`,
   'settings.fav_protect_descr': {
     en: "Exclude favourited (⭐) tabs from sweep actions: 'Close other/above/below tabs' and bulk/auto unload (unload all/others/folded/inactive-panel, and the fold auto-discard). Explicitly closing or unloading a favourite you selected yourself still works.",
   },
+  'settings.paste_tabs_position': {
+    en: 'Paste tabs position',
+    de: 'Position beim Einfügen von Tabs',
+    fr: 'Position de collage des onglets',
+    hu: 'Beillesztett lapok helye',
+    pl: 'Pozycja wklejanych kart',
+    ru: 'Расположение вставляемых вкладок',
+    zh_CN: '粘贴标签页的位置',
+    zh_TW: '貼上分頁的位置',
+    ja: 'タブを貼り付ける位置',
+  },
+  'settings.paste_tabs_position_descr': {
+    en: "Where the 'Paste tabs' context-menu item places the cut tabs relative to the right-clicked tab: as its first or last child, at the same level right after it, or right before it. (Cut tabs via the 'Cut tabs' menu item.)",
+  },
   'settings.tabs_reload_batch_delay_descr': {
     en: 'Slows bulk reloads per site: after every N reloads of the same domain, that site cools down for a while, while other sites keep reloading. Gentler on rate-limited / anti-bot sites. Only paces sites with more tabs than the minimum set below.',
   },

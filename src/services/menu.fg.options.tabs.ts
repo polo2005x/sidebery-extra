@@ -568,6 +568,30 @@ export const tabsMenuOptions: Record<string, () => MenuOption | MenuOption[] | u
     }
   },
 
+  cutTabs: () => {
+    const selected = Selection.ids()
+    const option: MenuOption = {
+      label: translate('menu.tab.cut'),
+      icon: 'icon_move',
+      onClick: () => Tabs.cutTabs(selected),
+    }
+    if (!selected.length) option.inactive = true
+    if (!Settings.state.ctxMenuRenderInact && option.inactive) return
+    return option
+  },
+
+  pasteCutTabs: () => {
+    // Only meaningful when tabs have been cut; hide otherwise.
+    if (!Tabs.cutBuffer.length) return
+    const target = Tabs.byId[Selection.getFirst()]
+    if (!target) return
+    return {
+      label: translate('menu.tab.paste_cut'),
+      icon: 'icon_paste',
+      onClick: () => Tabs.pasteCutTabs(target.id),
+    }
+  },
+
   colorizeTab: () => {
     const opts: MenuOption[] = []
     const selected = Selection.ids()

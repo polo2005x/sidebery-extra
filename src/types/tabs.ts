@@ -91,6 +91,8 @@ export interface ReactiveTabProps {
   sharedParent: number
   /** Marked as a "favourite" tab (shows a star marker in the tree). */
   fav: boolean
+  /** In the cut buffer, awaiting paste (shows a dimmed marker in the tree). */
+  cut: boolean
   isGroup: boolean
 }
 

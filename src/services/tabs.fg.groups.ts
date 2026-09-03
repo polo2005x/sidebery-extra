@@ -444,6 +444,89 @@ export function switchToFav(dir: 1 | -1): void {
   }
 }
 
+// --- Cut & paste tabs -----------------------------------------------------
+// "Cut" stashes the selected tabs in a buffer (and dims them in the tree);
+// "Paste" moves them to the right-clicked target using Tabs.move, placed per
+// the pasteTabsPosition setting. Reuses the same move engine as drag-and-drop.
+
+export let cutBuffer: ID[] = []
+
+function setCutMark(ids: ID[], value: boolean): void {
+  for (const id of ids) {
+    const tab = Tabs.byId[id]
+    if (tab) tab.reactive.cut = value
+  }
+}
+
+/** Stash the given tabs (or the active tab) in the cut buffer for a later paste. */
+export function cutTabs(tabIds?: ID[]): void {
+  const ids = (tabIds && tabIds.length ? tabIds : [Tabs.activeId]).filter(id => Tabs.byId[id])
+  setCutMark(cutBuffer, false)
+  cutBuffer = ids.slice()
+  setCutMark(cutBuffer, true)
+}
+
+/** Clear the cut buffer and remove the dim marks. */
+export function clearCutBuffer(): void {
+  setCutMark(cutBuffer, false)
+  cutBuffer = []
+}
+
+/**
+ * Move the cut tabs to the target tab, placed per the `pasteTabsPosition` setting
+ * (first/last child of target, same level after it, or before it). Skips tabs that
+ * no longer exist or that are the target or an ancestor of it (would corrupt the
+ * tree). Clears the buffer afterwards.
+ */
+export function pasteCutTabs(targetId?: ID): void {
+  if (!cutBuffer.length) return
+  const target = Tabs.byId[targetId ?? Tabs.activeId]
+  if (!target) return
+
+  // Reject the target itself and its ancestors (can't paste a tab into its own subtree)
+  const forbidden = new Set<ID>()
+  let a: T.Tab | undefined = target
+  while (a) {
+    forbidden.add(a.id)
+    a = a.parentId !== NOID ? Tabs.byId[a.parentId] : undefined
+  }
+
+  const ids = cutBuffer.filter(id => Tabs.byId[id] && !forbidden.has(id))
+  clearCutBuffer()
+  if (!ids.length) return
+
+  Tabs.sortTabIds(ids)
+  const items = Tabs.getTabsInfo(ids)
+  const firstTab = Tabs.byId[ids[0]]
+  const src: T.SrcPlaceInfo = {
+    panelId: firstTab?.panelId,
+    pinned: false,
+    windowId: Windows.id,
+  }
+
+  const branchLen = Tabs.getBranch(target, false).length
+  const afterBranchIndex = target.index + 1 + branchLen
+
+  let dst: T.DstPlaceInfo
+  switch (Settings.state.pasteTabsPosition) {
+    case 'first_child':
+      dst = { panelId: target.panelId, parentId: target.id, index: target.index + 1 }
+      break
+    case 'last_child':
+      dst = { panelId: target.panelId, parentId: target.id, index: afterBranchIndex }
+      break
+    case 'before':
+      dst = { panelId: target.panelId, parentId: target.parentId, index: target.index }
+      break
+    case 'sibling':
+    default:
+      dst = { panelId: target.panelId, parentId: target.parentId, index: afterBranchIndex }
+      break
+  }
+
+  Tabs.move(items, src, dst).catch(err => Logs.err('Tabs.pasteCutTabs: Cannot move', err))
+}
+
 export async function setGroupName(groupTabId: ID, newName: string) {
   Logs.info('Tabs.setGroupName', groupTabId, newName)
   const groupTab = Tabs.byId[groupTabId]

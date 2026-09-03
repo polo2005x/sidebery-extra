@@ -121,6 +121,10 @@
     margin: 0
     padding: 0
 
+  // Dimmed while in the cut buffer (awaiting paste)
+  &[data-cut="true"] > .body
+    opacity: .5
+
   &[data-active="true"]
     z-index: 20
 

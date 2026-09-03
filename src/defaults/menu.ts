@@ -39,6 +39,8 @@ export const TABS_MENU: MenuConf = [
   'discard',
   'copyTabsUrls',
   'copyTabsTitles',
+  'cutTabs',
+  'pasteCutTabs',
   'editTabTitle',
   'separator-3',
   'group',

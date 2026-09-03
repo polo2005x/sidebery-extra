@@ -165,6 +165,7 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
       color: null,
       sharedParent: tab.sharedParent ?? 0,
       fav: !!tab.fav,
+      cut: false,
       isGroup: tab.isGroup,
     }
   }
